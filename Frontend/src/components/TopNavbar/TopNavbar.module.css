@@ -1,0 +1,89 @@
+.topbar {
+  height: var(--topbar-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  border-bottom: 1px solid var(--border-color-soft);
+  background-color: var(--bg-app);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.link {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: color 0.15s ease;
+}
+
+.link:hover {
+  color: var(--text-primary);
+}
+
+.linkActive {
+  color: var(--accent-teal);
+  font-weight: 600;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.iconButton {
+  position: relative;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.iconButton:hover {
+  background-color: var(--bg-card-hover);
+  color: var(--text-primary);
+}
+
+.dot {
+  position: absolute;
+  top: 7px;
+  right: 8px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--accent-red);
+}
+
+@media (max-width: 768px) {
+  .topbar {
+    padding: 0 20px;
+  }
+
+  .links {
+    gap: 16px;
+  }
+
+  .link {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 560px) {
+  .links {
+    display: none;
+  }
+}

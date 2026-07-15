@@ -1,0 +1,27 @@
+.badge {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+}
+
+.active {
+  background-color: var(--accent-teal-soft);
+  color: var(--accent-teal);
+  border-color: rgba(45, 212, 191, 0.25);
+}
+
+.draft {
+  background-color: var(--accent-purple-soft);
+  color: var(--accent-purple);
+  border-color: rgba(139, 124, 246, 0.25);
+}
+
+.closed {
+  background-color: var(--accent-red-soft);
+  color: var(--accent-red);
+  border-color: rgba(240, 87, 107, 0.25);
+}

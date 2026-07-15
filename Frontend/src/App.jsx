@@ -19,9 +19,11 @@ import { CVManager } from './pages/candidate/CVManager';
 import { MyApplications as CandidateApplications } from './pages/candidate/MyApplications';
 import { Dashboard as CompanyDashboard } from './pages/company/Dashboard';
 import { ATSBoard } from './pages/company/ATSBoard';
+import { JobPosts } from './pages/company/JobPosts';
 import { Dashboard as AdminDashboard } from './pages/admin/Dashboard';
 import { Users as AdminUsers } from './pages/admin/Users';
 import { Companies as AdminCompanies } from './pages/admin/Companies';
+
 
 // Temporary mock user and links
 const mockUser = { name: 'Sarah Ahmed', role: 'Candidate', avatar: 'https://via.placeholder.com/40' };
@@ -42,7 +44,7 @@ const candidateLinks = [
 const companyLinks = [
   { path: '/company/dashboard', icon: 'dashboard', label: 'Dashboard' },
   { path: '/company/ats', icon: 'view_kanban', label: 'ATS Board' },
-  { path: '/company/jobs', icon: 'work', label: 'Job Posts' },
+  { path: '/company/post-job', icon: 'work', label: 'Job Posts' },
   { path: '/schedule', icon: 'calendar_today', label: 'Schedule' },
   { path: '/chat', icon: 'chat', label: 'Chat' },
 ];
@@ -66,6 +68,8 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/companies" element={<ForCompanies />} />
           <Route path="/candidates" element={<ForCandidates />} />
+
+
         </Route>
 
         <Route element={<DashboardLayout sidebarLinks={candidateLinks} user={mockUser} />}>
@@ -83,12 +87,15 @@ function App() {
         <Route element={<DashboardLayout sidebarLinks={companyLinks} user={mockCompanyUser} />}>
           <Route path="/company/dashboard" element={<CompanyDashboard />} />
           <Route path="/company/ats" element={<ATSBoard />} />
+                    <Route path="/company/post-job" element={<JobPosts />} />
+
         </Route>
 
         <Route element={<DashboardLayout sidebarLinks={adminLinks} user={mockAdminUser} />}>
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/users" element={<AdminUsers />} />
           <Route path="/admin/companies" element={<AdminCompanies />} />
+          
         </Route>
       </Routes>
       <ToastContainer theme="dark" position="bottom-right" />

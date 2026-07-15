@@ -1,0 +1,31 @@
+.jobPostsTheme {
+  --bg-app: #0b1622;
+  --bg-sidebar: #091320;
+  --bg-card: #101f32;
+  --bg-card-hover: #16283f;
+  --bg-input: #0f1e30;
+  --bg-elevated: #16283f;
+
+  --border-color: #1e2f43;
+  --border-color-soft: #182839;
+
+  --text-primary: #f2f5f8;
+  --text-secondary: #8b9bb0;
+  --text-muted: #5c7085;
+
+  --accent-teal: #2dd4bf;
+  --accent-teal-soft: rgba(45, 212, 191, 0.14);
+  --accent-blue: #3b82f6;
+  --accent-blue-hover: #2f6fdb;
+  --accent-blue-soft: rgba(59, 130, 246, 0.14);
+  --accent-purple: #8b7cf6;
+  --accent-purple-soft: rgba(139, 124, 246, 0.14);
+  --accent-red: #f0576b;
+  --accent-red-soft: rgba(240, 87, 107, 0.14);
+  --accent-orange: #f5a35a;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.25);
+}
