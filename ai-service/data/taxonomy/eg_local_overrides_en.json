@@ -1,0 +1,26 @@
+{
+  "metadata": {
+    "name": "egyptian_overrides_en",
+    "version": "1.0.0",
+    "language": "en",
+    "license": "Project-owned",
+    "market": "EG",
+    "description": "English aliases commonly used in Egyptian accounting and employment contexts."
+  },
+  "skills": {
+    "erp software": ["erp", "erp software", "erp system", "erp systems", "odoo", "quickbooks"],
+    "pivot tables": ["pivot table", "pivot tables", "excel pivot table", "excel pivot tables"],
+    "vlookup": ["vlookup"],
+    "financial reporting": ["financial reporting", "financial statements", "income statements", "balance sheets"],
+    "accounts payable": ["accounts payable", "account payable"],
+    "accounts receivable": ["accounts receivable", "account receivable"],
+    "bank reconciliation": ["bank reconciliation", "bank reconciliations", "reconcile bank statements", "reconciles bank statements", "reconciled bank statements", "reconciling bank statements"],
+    "general ledger": ["general ledger"],
+    "tax compliance": ["tax compliance", "tax regulations", "egyptian tax regulations", "local egyptian tax regulations", "vat", "vat filing", "value added tax", "withholding tax", "eta portal", "egyptian tax authority"],
+    "auditing": ["auditing", "external audit", "external audits", "internal financial review", "internal financial reviews"],
+    "financial analysis": ["financial analysis"],
+    "accounting": ["accounting"],
+    "e-invoicing": ["e-invoice", "e-invoicing", "electronic invoice", "electronic invoicing", "egyptian e-invoice system"],
+    "social insurance": ["social insurance", "egyptian social insurance"]
+  }
+}

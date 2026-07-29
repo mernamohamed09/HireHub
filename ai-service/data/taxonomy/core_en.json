@@ -1,0 +1,30 @@
+{
+  "metadata": {
+    "name": "core_en",
+    "version": "1.0.0",
+    "language": "en",
+    "license": "Project-owned",
+    "description": "Small dependable English fallback. ESCO extends this base when an official export is installed."
+  },
+  "skills": {
+    "analytical thinking": ["analytical thinking", "analytical skills"],
+    "problem solving": ["problem solving", "problem-solving"],
+    "project management": ["project management"],
+    "agile": ["agile"],
+    "scrum": ["scrum"],
+    "jira": ["jira"],
+    "customer service": ["customer service", "customer support"],
+    "recruiting": ["recruiting", "recruitment", "talent acquisition"],
+    "salesforce": ["salesforce"],
+    "crm": ["crm", "customer relationship management"],
+    "figma": ["figma"],
+    "photoshop": ["photoshop", "adobe photoshop"],
+    "illustrator": ["illustrator", "adobe illustrator"],
+    "ui design": ["ui design", "user interface design"],
+    "ux design": ["ux design", "user experience design"],
+    "seo": ["seo", "search engine optimization"],
+    "content marketing": ["content marketing"],
+    "digital marketing": ["digital marketing"],
+    "google analytics": ["google analytics", "ga4"]
+  }
+}
