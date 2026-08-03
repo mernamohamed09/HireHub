@@ -6,6 +6,9 @@ import { applicationService } from '../../services/applicationService';
 import { chatService } from '../../services/chatService';
 import { useSocket } from '../../context/SocketContext';
 import { formatPostedAt } from '../../utils/dateUtils';
+import AssessmentStatusView from '../../components/Assessment/AssessmentStatusView';
+import { api } from '../../services/api';
+import { toast } from 'react-toastify';
 
 const COLUMNS = [
   { key: 'pending', title: 'Pending' },
@@ -55,8 +58,47 @@ const AiSkillTags = ({ skills }) => {
   );
 };
 
-const CandidateCard = ({ candidate, onStatusChange, onMessageClick, onViewCv, onReanalyze }) => {
+const CandidateCard = ({ candidate, availableAssessments, onStatusChange, onMessageClick, onViewCv, onReanalyze }) => {
   const matchBadge = getMatchBadge(candidate.aiAnalysis);
+  const [showAssessments, setShowAssessments] = useState(false);
+  const [invitations, setInvitations] = useState([]);
+  const [loadingInvites, setLoadingInvites] = useState(false);
+  const [invitingAssesmentId, setInvitingAssesmentId] = useState('');
+  const [isInviting, setIsInviting] = useState(false);
+
+  const fetchInvitations = async () => {
+    setLoadingInvites(true);
+    try {
+      const response = await api.get(`/applications/${candidate._id}/invitations`);
+      setInvitations(response.data.invitations);
+    } catch (err) {
+      toast.error('Failed to load invitations');
+    } finally {
+      setLoadingInvites(false);
+    }
+  };
+
+  const toggleAssessments = () => {
+    if (!showAssessments && invitations.length === 0) {
+      fetchInvitations();
+    }
+    setShowAssessments(!showAssessments);
+  };
+
+  const handleInvite = async () => {
+    if (!invitingAssesmentId) return;
+    setIsInviting(true);
+    try {
+      const response = await api.post(`/applications/${candidate._id}/assessments/${invitingAssesmentId}/invite`);
+      toast.success('Candidate invited successfully');
+      setInvitations([response.data.invitation, ...invitations]);
+      setInvitingAssesmentId('');
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to invite candidate');
+    } finally {
+      setIsInviting(false);
+    }
+  };
 
   return (
   <div className="bg-surface-container border border-outline-variant rounded-xl p-md shadow-md hover:border-primary-container transition-all">
@@ -95,7 +137,7 @@ const CandidateCard = ({ candidate, onStatusChange, onMessageClick, onViewCv, on
       className="w-full py-xs border border-outline-variant rounded-lg font-caption text-caption bg-surface-container-low text-on-surface-variant px-sm outline-none"
     >
       {COLUMNS.map(col => (
-        <option key={col.key} value={col.key}>{col.title}</option>
+        <option key={col.key} value={col.key} className="bg-surface text-on-surface font-bold">{col.title}</option>
       ))}
     </select>
     <div className="flex gap-sm mt-sm">
@@ -135,11 +177,64 @@ const CandidateCard = ({ candidate, onStatusChange, onMessageClick, onViewCv, on
         <span className="material-symbols-outlined text-[16px]">refresh</span>
       </button>
     </div>
+
+    {/* Assessments Section */}
+    <div className="mt-md border-t border-outline-variant pt-sm">
+      <button 
+        onClick={toggleAssessments}
+        className="w-full text-left text-sm font-medium text-blue-600 flex items-center justify-between"
+      >
+        <span>Assessments {showAssessments || invitations.length > 0 ? `(${invitations.length})` : ''}</span>
+        <span className="material-symbols-outlined text-[16px]">{showAssessments ? 'expand_less' : 'expand_more'}</span>
+      </button>
+
+      {showAssessments && (
+        <div className="mt-sm space-y-3">
+          {loadingInvites ? (
+            <p className="text-xs text-gray-500">Loading invitations...</p>
+          ) : (
+            <>
+              {invitations.map(inv => (
+                <div key={inv._id} className="border border-gray-200 rounded p-2">
+                  <p className="text-xs font-bold text-gray-700 mb-1">{inv.assessment?.title}</p>
+                  <AssessmentStatusView 
+                    invitationId={inv._id} 
+                    applicationId={candidate._id}
+                    initialStatus={{ status: inv.status, score: inv.score, passed: inv.passed }}
+                  />
+                </div>
+              ))}
+              {invitations.length === 0 && <p className="text-xs text-gray-500">No assessments sent yet.</p>}
+              
+              <div className="flex gap-2 items-center mt-2">
+                <select 
+                  className="flex-1 text-xs p-1 border border-outline-variant rounded bg-surface-container-low text-on-surface-variant outline-none"
+                  value={invitingAssesmentId}
+                  onChange={(e) => setInvitingAssesmentId(e.target.value)}
+                >
+                  <option value="">Select assessment to invite...</option>
+                  {availableAssessments.filter(a => !invitations.some(inv => inv.assessment?._id === a._id)).map(a => (
+                    <option key={a._id} value={a._id}>{a.title}</option>
+                  ))}
+                </select>
+                <button 
+                  onClick={handleInvite}
+                  disabled={!invitingAssesmentId || isInviting}
+                  className="bg-blue-600 text-white px-2 py-1 text-xs rounded disabled:opacity-50"
+                >
+                  {isInviting ? 'Inviting...' : 'Invite'}
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+      )}
+    </div>
   </div>
   );
 };
 
-const KanbanColumn = ({ title, items, onStatusChange, onMessageClick, onViewCv, onReanalyze }) => (
+const KanbanColumn = ({ title, items, availableAssessments, onStatusChange, onMessageClick, onViewCv, onReanalyze }) => (
   <section className="min-w-[280px] max-w-[320px] flex flex-col h-[calc(100vh-200px)]">
     <div className="flex items-center justify-between mb-md px-xs">
       <div className="flex items-center gap-sm">
@@ -151,7 +246,7 @@ const KanbanColumn = ({ title, items, onStatusChange, onMessageClick, onViewCv, 
     </div>
     <div className="flex-1 space-y-md overflow-y-auto custom-scrollbar pr-xs">
       {items.map(candidate => (
-        <CandidateCard key={candidate._id} candidate={candidate} onStatusChange={onStatusChange} onMessageClick={onMessageClick} onViewCv={onViewCv} onReanalyze={onReanalyze} />
+        <CandidateCard key={candidate._id} candidate={candidate} availableAssessments={availableAssessments} onStatusChange={onStatusChange} onMessageClick={onMessageClick} onViewCv={onViewCv} onReanalyze={onReanalyze} />
       ))}
     </div>
   </section>
@@ -168,6 +263,7 @@ export function ATSBoard() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [sortMode, setSortMode] = useState('latest');
+  const [availableAssessments, setAvailableAssessments] = useState([]);
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -191,28 +287,32 @@ export function ATSBoard() {
   // stays correct once these lists paginate). Toggling sort does not refetch -
   // the memo below re-orders what's already loaded - so switching stays instant
   // and never resets scroll position.
-  useEffect(() => {
-    const fetchApplicants = async () => {
-      if (!selectedJobId) {
-        setApplicants([]);
-        return;
-      }
-      try {
-        setIsLoading(true);
-        setError(null);
-        const data = await applicationService.getApplicantsForJob(
-          selectedJobId,
-          sortMode === 'ai_score' ? 'ai_score' : undefined
-        );
-        setApplicants(data.applicants || []);
-      } catch {
-        setError('Failed to load applicants for this job.');
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const fetchJobData = async () => {
+    if (!selectedJobId) {
+      setApplicants([]);
+      setAvailableAssessments([]);
+      return;
+    }
+    try {
+      setIsLoading(true);
+      setError(null);
+      const data = await applicationService.getApplicantsForJob(
+        selectedJobId,
+        sortMode === 'ai_score' ? 'ai_score' : undefined
+      );
+      setApplicants(data.applicants || []);
 
-    fetchApplicants();
+      const assessmentRes = await api.get(`/jobs/${selectedJobId}/assessments`);
+      setAvailableAssessments(assessmentRes.data.assessments || []);
+    } catch {
+      setError('Failed to load data for this job.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchJobData();
     // sortMode is intentionally not a dependency: re-sorting is done client-side.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedJobId]);
@@ -311,7 +411,7 @@ export function ATSBoard() {
   return (
     <div className="flex flex-col h-full overflow-hidden w-full relative">
       {/* Top Navigation / Header */}
-      <header className="bg-surface-container/50 backdrop-blur-md border-b border-outline-variant/30 h-16 flex items-center justify-between px-md w-full mb-lg -mt-lg mx-[-24px] lg:mx-[-32px] w-[calc(100%+48px)] lg:w-[calc(100%+64px)] z-40 relative">
+      <header className="bg-surface-container/50 backdrop-blur-md border-b border-outline-variant/30 h-16 flex items-center justify-between px-md w-full mb-lg rounded-xl z-40 relative">
         <div className="flex items-center gap-md">
           <span className="material-symbols-outlined text-tertiary">work_history</span>
           <select
@@ -319,9 +419,9 @@ export function ATSBoard() {
             onChange={(e) => setSelectedJobId(e.target.value)}
             className="font-h3 text-h3 text-on-surface bg-transparent outline-none"
           >
-            {myJobs.length === 0 && <option value="">No jobs posted yet</option>}
+            {myJobs.length === 0 && <option value="" className="bg-surface text-on-surface">No jobs posted yet</option>}
             {myJobs.map(job => (
-              <option key={job._id} value={job._id}>{job.title}</option>
+              <option key={job._id} value={job._id} className="bg-surface text-on-surface">{job.title}</option>
             ))}
           </select>
           {selectedJob && (
@@ -330,14 +430,23 @@ export function ATSBoard() {
             </span>
           )}
         </div>
-        <select
-          value={sortMode}
-          onChange={(e) => setSortMode(e.target.value)}
-          className="font-caption text-caption text-on-surface-variant bg-surface-container-highest rounded-lg px-sm py-1 outline-none border border-outline-variant"
-        >
-          <option value="latest">Sort by: Latest Applied</option>
-          <option value="ai_score">Sort by: AI Match Score</option>
-        </select>
+        <div className="flex items-center gap-sm">
+          <button
+            onClick={fetchJobData}
+            title="Refresh Board"
+            className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-surface-container-highest text-tertiary transition-colors"
+          >
+            <span className="material-symbols-outlined text-[20px]">refresh</span>
+          </button>
+          <select
+            value={sortMode}
+            onChange={(e) => setSortMode(e.target.value)}
+            className="font-caption text-caption text-on-surface-variant bg-surface-container-highest rounded-lg px-sm py-1 outline-none border border-outline-variant"
+          >
+            <option value="latest">Sort by: Latest Applied</option>
+            <option value="ai_score">Sort by: AI Match Score</option>
+          </select>
+        </div>
       </header>
 
       {error && (
@@ -362,6 +471,7 @@ export function ATSBoard() {
                 key={col.key}
                 title={col.title}
                 items={sortedApplicants.filter(a => a.status === col.key)}
+                availableAssessments={availableAssessments}
                 onStatusChange={handleStatusChange}
                 onMessageClick={handleMessageClick}
                 onViewCv={handleViewCv}

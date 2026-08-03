@@ -11,6 +11,7 @@ const TYPE_CONFIG = {
   interview_scheduled: { borderColor: 'border-yellow-400', icon: 'event', iconBg: 'bg-surface-container-high text-tertiary' },
   interview_reminder: { borderColor: 'border-yellow-400', icon: 'alarm', iconBg: 'bg-surface-container-high text-tertiary' },
   message: { borderColor: 'border-tertiary', icon: 'chat', iconBg: 'bg-secondary-container/20 text-secondary' },
+  assessment_update: { borderColor: 'border-purple-500', icon: 'assignment_turned_in', iconBg: 'bg-primary-container/20 text-primary' },
   system: { borderColor: 'border-outline', icon: 'info', iconBg: 'bg-surface-container-high' },
 };
 
@@ -25,6 +26,7 @@ export function Notifications() {
 
   // Where a notification takes you when clicked.
   const destinationFor = (n) => {
+    if (n.title === 'New Assessment Invitation') return 'gmail';
     switch (n.type) {
       case 'message':
         return '/chat';
@@ -35,6 +37,8 @@ export function Notifications() {
         return '/company/ats';
       case 'application_update':
         return '/candidate/applications';
+      case 'assessment_update':
+        return '/company/results';
       default:
         return null;
     }
@@ -100,8 +104,16 @@ export function Notifications() {
 
   const handleNotificationClick = (n) => {
     if (!n.isRead) markRead(n._id);
+    
+    if (n.title === 'New Assessment Invitation') {
+      window.open('https://mail.google.com/', '_blank', 'noopener,noreferrer');
+      return;
+    }
+
     const destination = destinationFor(n);
-    if (destination) navigate(destination);
+    if (destination && destination !== 'gmail') {
+      navigate(destination);
+    }
   };
 
   const filteredNotifications = notifications.filter(n => {

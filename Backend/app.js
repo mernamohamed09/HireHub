@@ -28,7 +28,7 @@ app.use('/uploads/avatars', express.static(path.join(__dirname, 'uploads', 'avat
 // under NODE_ENV=test so the verification suite doesn't rate-limit itself.
 const authLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
-    max: 10,
+    max: 1000, // TODO: revert back to 10
     standardHeaders: true,
     legacyHeaders: false,
     skip: () => process.env.NODE_ENV === 'test',
@@ -67,7 +67,7 @@ const applicationRoutes = require("./Routes/applicationRoute");
 const notificationRoutes = require('./Routes/notificationRoute');
 const chatRoutes = require('./Routes/chatRoute');
 const interviewRoutes = require('./Routes/interviewRoute');
-
+const assessmentRoutes = require('./Routes/assessmentRoutes');
 app.use("/api/register", authLimiter);
 app.use("/api/login", authLimiter);
 app.use("/api", authRoutes);
@@ -79,7 +79,7 @@ app.use('/api/applications', applicationRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/interviews', interviewRoutes);
-
+app.use('/api', assessmentRoutes);
 // Global error handler: last line of defence for anything a controller's
 // try/catch missed. Logs the real error server-side and returns a generic
 // message in production so internal details don't leak to clients.
@@ -99,6 +99,8 @@ require('./socket').init(server);
 dbconnection().then((connected) => {
     if (!connected) return;
     const { startApplicationAiWorker } = require('./services/applicationAiWorker');
+    const { startAssessmentPoller } = require('./services/assessmentPoller');
     startApplicationAiWorker();
+    startAssessmentPoller();
 });
 server.listen(PORT, () => console.log(`Server Running on port ${PORT}`));

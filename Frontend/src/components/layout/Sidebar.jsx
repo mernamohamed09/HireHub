@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { logout } from '../../store/slices/authSlice';
 import { useSocket } from '../../context/SocketContext';
 import { avatarUrl, avatarInitial } from '../../utils/avatar';
+import { notificationService } from '../../services/notificationService';
 
 export function Sidebar({ links = [], user }) {
   const location = useLocation();
@@ -11,12 +12,26 @@ export function Sidebar({ links = [], user }) {
   const dispatch = useDispatch();
   const socket = useSocket();
 
-  const [hasUnreadNotification, setHasUnreadNotification] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  useEffect(() => {
+    const fetchCount = async () => {
+      try {
+        const data = await notificationService.getUnreadCount();
+        setUnreadCount(data.count || 0);
+      } catch (err) {
+        console.error('Failed to fetch unread count', err);
+      }
+    };
+    if (user) {
+      fetchCount();
+    }
+  }, [user]);
 
   useEffect(() => {
     if (!socket) return;
 
-    const onNotification = () => setHasUnreadNotification(true);
+    const onNotification = () => setUnreadCount(prev => prev + 1);
     socket.on('newNotification', onNotification);
 
     return () => socket.off('newNotification', onNotification);
@@ -51,14 +66,16 @@ export function Sidebar({ links = [], user }) {
               }`}
               onClick={() => {
                 if (link.path.includes('notifications')) {
-                  setHasUnreadNotification(false);
+                  setUnreadCount(0);
                 }
               }}
             >
               <span className="material-symbols-outlined">{link.icon}</span>
               <span className="font-body text-body">{link.label || link.name}</span>
-              {link.path.includes('notifications') && hasUnreadNotification && (
-                <span className="absolute right-4 top-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-error rounded-full"></span>
+              {link.path.includes('notifications') && unreadCount > 0 && (
+                <span className="ml-auto bg-error text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full flex items-center justify-center min-w-[20px]">
+                  {unreadCount > 99 ? '99+' : unreadCount}
+                </span>
               )}
             </Link>
           );

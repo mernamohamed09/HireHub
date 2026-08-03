@@ -24,10 +24,13 @@ const CandidateDashboard = page(() => import('./pages/candidate/Dashboard'), 'Da
 const CandidateProfile = page(() => import('./pages/candidate/Profile'), 'Profile');
 const CVManager = page(() => import('./pages/candidate/CVManager'), 'CVManager');
 const CandidateApplications = page(() => import('./pages/candidate/MyApplications'), 'MyApplications');
+const CandidateResultsList = page(() => import('./pages/candidate/ResultsList'), 'default');
 const CompanyDashboard = page(() => import('./pages/company/Dashboard'), 'Dashboard');
 const ATSBoard = page(() => import('./pages/company/ATSBoard'), 'ATSBoard');
 const CompanyJobPosts = page(() => import('./pages/company/JobPosts'), 'JobPosts');
 const CompanyProfile = page(() => import('./pages/company/Profile'), 'Profile');
+const CompanyResultsList = page(() => import('./pages/company/ResultsList'), 'default');
+const ApplicationResults = page(() => import('./pages/company/ApplicationResults'), 'default');
 const AdminDashboard = page(() => import('./pages/admin/Dashboard'), 'Dashboard');
 const AdminUsers = page(() => import('./pages/admin/Users'), 'Users');
 const AdminCompanies = page(() => import('./pages/admin/Companies'), 'Companies');
@@ -36,6 +39,7 @@ const candidateLinks = [
   { path: '/candidate/dashboard', icon: 'dashboard', label: 'Dashboard' },
   { path: '/jobs', icon: 'work', label: 'Browse Jobs' },
   { path: '/candidate/applications', icon: 'description', label: 'My Applications' },
+  { path: '/candidate/results', icon: 'assessment', label: 'Assessment Results' },
   { path: '/candidate/profile', icon: 'person', label: 'Profile' },
   { path: '/candidate/cv', icon: 'folder_shared', label: 'CV Manager' },
   { path: '/schedule', icon: 'calendar_today', label: 'Schedule' },
@@ -47,6 +51,7 @@ const companyLinks = [
   { path: '/company/dashboard', icon: 'dashboard', label: 'Dashboard' },
   { path: '/company/ats', icon: 'view_kanban', label: 'ATS Board' },
   { path: '/company/jobs', icon: 'work', label: 'Job Posts' },
+  { path: '/company/results', icon: 'assessment', label: 'Assessment Results' },
   { path: '/company/profile', icon: 'business', label: 'Company Profile' },
   { path: '/schedule', icon: 'calendar_today', label: 'Schedule' },
   { path: '/chat', icon: 'chat', label: 'Chat' },
@@ -112,6 +117,7 @@ function App() {
             <Route path="/candidate/profile" element={<CandidateProfile />} />
             <Route path="/candidate/cv" element={<CVManager />} />
             <Route path="/candidate/applications" element={<CandidateApplications />} />
+            <Route path="/candidate/results" element={<CandidateResultsList />} />
           </Route>
 
           {/* Company-only routes */}
@@ -120,6 +126,8 @@ function App() {
             <Route path="/company/ats" element={<ATSBoard />} />
             <Route path="/company/jobs" element={<CompanyJobPosts />} />
             <Route path="/company/profile" element={<CompanyProfile />} />
+            <Route path="/company/results" element={<CompanyResultsList />} />
+            <Route path="/company/applications/:applicationId/results" element={<ApplicationResults />} />
           </Route>
 
           {/* Admin-only routes */}

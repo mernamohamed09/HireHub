@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { Button } from '../../components/ui/Button';
 import { jobService } from '../../services/jobService';
 import { formatPostedAt } from '../../utils/dateUtils';
+import CreateAssessment from '../../components/Assessment/CreateAssessment';
 
 function EditJobForm({ job, onCancel, onSaved }) {
   const [form, setForm] = useState({
@@ -60,6 +61,7 @@ export function JobPosts() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editingId, setEditingId] = useState(null);
+  const [assessmentJobId, setAssessmentJobId] = useState(null);
   const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
@@ -135,10 +137,23 @@ export function JobPosts() {
                       {job.salary ? `EGP ${job.salary.toLocaleString()}` : 'Salary not disclosed'} • {formatPostedAt(job.createdAt)}
                     </p>
                   </div>
-                  <div className="flex gap-sm shrink-0">
+                  <div className="flex gap-sm shrink-0 flex-wrap justify-end">
+                    <Button variant="outline" size="sm" onClick={() => setAssessmentJobId(job._id === assessmentJobId ? null : job._id)}>
+                      {assessmentJobId === job._id ? 'Cancel Assessment' : 'Add Assessment'}
+                    </Button>
                     <Button variant="outline" size="sm" onClick={() => setEditingId(job._id)}>Edit</Button>
                     <Button variant="danger" size="sm" onClick={() => handleDelete(job._id)}>Delete</Button>
                   </div>
+                </div>
+              )}
+
+              {/* Assessment Creation UI */}
+              {assessmentJobId === job._id && !editingId && (
+                <div className="mt-md pt-md border-t border-outline-variant">
+                  <CreateAssessment 
+                    jobId={job._id} 
+                    onSuccess={() => setAssessmentJobId(null)} 
+                  />
                 </div>
               )}
             </div>
