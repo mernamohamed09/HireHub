@@ -4,6 +4,7 @@ import { Button } from '../../components/ui/Button';
 import { jobService } from '../../services/jobService';
 import { formatPostedAt } from '../../utils/dateUtils';
 import CreateAssessment from '../../components/Assessment/CreateAssessment';
+import { Briefcase, MapPin, Building, DollarSign, Calendar, Edit2, Trash2, ClipboardList, Loader2, RefreshCw } from 'lucide-react';
 
 function EditJobForm({ job, onCancel, onSaved }) {
   const [form, setForm] = useState({
@@ -37,18 +38,18 @@ function EditJobForm({ job, onCancel, onSaved }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-surface-container-high rounded-lg p-md space-y-sm">
-      {error && <p className="text-error text-caption">{Array.isArray(error) ? error.join(', ') : error}</p>}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-sm">
-        <input required placeholder="Job title" className="bg-surface-container-low border border-outline-variant rounded-lg px-md py-sm outline-none focus:border-tertiary" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
-        <input required placeholder="Company name" className="bg-surface-container-low border border-outline-variant rounded-lg px-md py-sm outline-none focus:border-tertiary" value={form.company} onChange={(e) => setForm({ ...form, company: e.target.value })} />
-        <input required placeholder="Location" className="bg-surface-container-low border border-outline-variant rounded-lg px-md py-sm outline-none focus:border-tertiary" value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} />
-        <input placeholder="Salary (optional)" type="number" className="bg-surface-container-low border border-outline-variant rounded-lg px-md py-sm outline-none focus:border-tertiary" value={form.salary} onChange={(e) => setForm({ ...form, salary: e.target.value })} />
+    <form onSubmit={handleSubmit} className="glass-panel p-6 space-y-4">
+      {error && <p className="text-neon-pink bg-neon-pink/10 border border-neon-pink/20 p-2 rounded-lg text-xs font-bold">{Array.isArray(error) ? error.join(', ') : error}</p>}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <input required placeholder="Job title" className="bg-surface-container border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-neon-purple focus:shadow-glow-purple transition-all" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
+        <input required placeholder="Company name" className="bg-surface-container border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-neon-purple focus:shadow-glow-purple transition-all" value={form.company} onChange={(e) => setForm({ ...form, company: e.target.value })} />
+        <input required placeholder="Location" className="bg-surface-container border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-neon-purple focus:shadow-glow-purple transition-all" value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} />
+        <input placeholder="Salary (optional)" type="number" className="bg-surface-container border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-neon-purple focus:shadow-glow-purple transition-all" value={form.salary} onChange={(e) => setForm({ ...form, salary: e.target.value })} />
       </div>
-      <textarea required placeholder="Job description" rows={3} className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-md py-sm outline-none focus:border-tertiary" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
-      <div className="flex gap-sm">
-        <Button type="submit" variant="primary" size="sm" disabled={isSaving}>{isSaving ? 'Saving...' : 'Save Changes'}</Button>
-        <Button type="button" variant="outline" size="sm" onClick={onCancel}>Cancel</Button>
+      <textarea required placeholder="Job description" rows={3} className="w-full bg-surface-container border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-neon-purple focus:shadow-glow-purple transition-all" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
+      <div className="flex gap-3 pt-2">
+        <Button type="submit" variant="primary" disabled={isSaving}>{isSaving ? 'Saving...' : 'Save Changes'}</Button>
+        <Button type="button" variant="ghost" className="border border-white/10" onClick={onCancel}>Cancel</Button>
       </div>
     </form>
   );
@@ -92,33 +93,40 @@ export function JobPosts() {
   };
 
   return (
-    <div className="w-full">
-      <header className="flex justify-between items-center mb-xl">
-        <div>
-          <h1 className="font-h2 text-h2 text-on-surface">Job Posts</h1>
-          <p className="text-on-surface-variant mt-sm">Manage the jobs your company has posted.</p>
+    <div className="w-full max-w-5xl mx-auto p-4">
+      <header className="flex justify-between items-center mb-8 glass-card-purple p-6 rounded-2xl relative overflow-hidden">
+        <div className="absolute -top-10 -right-10 w-48 h-48 bg-neon-purple/20 blur-[60px] rounded-full pointer-events-none"></div>
+        <div className="relative z-10">
+          <h1 className="font-bold text-3xl md:text-4xl text-white">Job Posts</h1>
+          <p className="text-on-surface-variant font-medium mt-2">Manage the jobs your company has posted.</p>
         </div>
-        <Button variant="outline" onClick={() => setReloadKey(k => k + 1)}>Refresh</Button>
+        <button 
+          onClick={() => setReloadKey(k => k + 1)}
+          className="flex items-center gap-2 px-4 py-2 bg-surface-container border border-white/10 hover:border-neon-cyan hover:text-neon-cyan rounded-xl text-sm font-bold text-white transition-all relative z-10 shadow-md"
+        >
+          <RefreshCw size={14} /> Refresh
+        </button>
       </header>
 
       {error && (
-        <div className="bg-error-container/20 border border-error/30 text-error rounded-xl p-lg text-center mb-lg">
+        <div className="bg-neon-pink/10 border border-neon-pink/30 text-neon-pink shadow-glow-pink rounded-xl p-4 text-center mb-6 text-sm font-bold">
           {error}
         </div>
       )}
 
       {isLoading ? (
-        <div className="flex items-center justify-center py-3xl">
-          <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+        <div className="flex items-center justify-center py-32">
+          <Loader2 size={40} className="animate-spin text-neon-purple" />
         </div>
       ) : myJobs.length === 0 ? (
-        <div className="bg-surface-container border border-outline-variant rounded-xl p-xl text-center text-on-surface-variant">
-          You haven't posted any jobs yet. Post one from your Dashboard.
+        <div className="glass-card p-10 text-center text-on-surface-variant flex flex-col items-center justify-center">
+          <Briefcase size={48} className="text-white/10 mb-4" />
+          <p>You haven't posted any jobs yet. Post one from your Dashboard.</p>
         </div>
       ) : (
-        <div className="space-y-md">
+        <div className="space-y-4">
           {myJobs.map(job => (
-            <div key={job._id} className="bg-surface-container rounded-xl border border-outline-variant p-lg">
+            <div key={job._id} className="glass-card p-6 relative overflow-hidden group hover:border-neon-purple/50 transition-all">
               {editingId === job._id ? (
                 <EditJobForm
                   job={job}
@@ -129,27 +137,61 @@ export function JobPosts() {
                   }}
                 />
               ) : (
-                <div className="flex justify-between items-start gap-md">
-                  <div>
-                    <h3 className="font-h3 text-h3 text-on-surface">{job.title}</h3>
-                    <p className="text-on-surface-variant text-body">{job.company} • {job.location}</p>
-                    <p className="text-on-surface-variant text-caption mt-xs">
-                      {job.salary ? `EGP ${job.salary.toLocaleString()}` : 'Salary not disclosed'} • {formatPostedAt(job.createdAt)}
-                    </p>
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 relative z-10">
+                  <div className="flex-1">
+                    <h3 className="font-bold text-xl text-white mb-2">{job.title}</h3>
+                    
+                    <div className="flex flex-wrap gap-4 text-xs text-on-surface-variant font-medium">
+                      <span className="flex items-center gap-1.5 bg-surface-container-high px-2.5 py-1 rounded-md border border-white/5">
+                        <Building size={14} className="text-neon-cyan" /> {job.company}
+                      </span>
+                      <span className="flex items-center gap-1.5 bg-surface-container-high px-2.5 py-1 rounded-md border border-white/5">
+                        <MapPin size={14} className="text-neon-orange" /> {job.location}
+                      </span>
+                      <span className="flex items-center gap-1.5 bg-surface-container-high px-2.5 py-1 rounded-md border border-white/5">
+                        <DollarSign size={14} className="text-neon-mint" /> {job.salary ? `EGP ${job.salary.toLocaleString()}` : 'Not disclosed'}
+                      </span>
+                      <span className="flex items-center gap-1.5 bg-surface-container-high px-2.5 py-1 rounded-md border border-white/5">
+                        <Calendar size={14} className="text-neon-purple" /> {formatPostedAt(job.createdAt)}
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex gap-sm shrink-0 flex-wrap justify-end">
-                    <Button variant="outline" size="sm" onClick={() => setAssessmentJobId(job._id === assessmentJobId ? null : job._id)}>
-                      {assessmentJobId === job._id ? 'Cancel Assessment' : 'Add Assessment'}
-                    </Button>
-                    <Button variant="outline" size="sm" onClick={() => setEditingId(job._id)}>Edit</Button>
-                    <Button variant="danger" size="sm" onClick={() => handleDelete(job._id)}>Delete</Button>
+                  
+                  <div className="flex items-center gap-3 shrink-0 w-full md:w-auto">
+                    <button 
+                      onClick={() => setAssessmentJobId(job._id === assessmentJobId ? null : job._id)}
+                      className={`flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 border rounded-xl text-sm font-bold transition-all ${
+                        assessmentJobId === job._id 
+                          ? 'bg-neon-pink/10 border-neon-pink text-neon-pink shadow-glow-pink'
+                          : 'bg-surface-container border-white/10 text-white hover:border-neon-mint hover:text-neon-mint'
+                      }`}
+                    >
+                      <ClipboardList size={16} />
+                      {assessmentJobId === job._id ? 'Cancel' : 'Assessments'}
+                    </button>
+                    
+                    <button 
+                      onClick={() => setEditingId(job._id)}
+                      className="flex items-center justify-center p-2.5 bg-surface-container border border-white/10 rounded-xl text-on-surface-variant hover:text-white hover:border-white transition-all"
+                      title="Edit Job"
+                    >
+                      <Edit2 size={16} />
+                    </button>
+                    
+                    <button 
+                      onClick={() => handleDelete(job._id)}
+                      className="flex items-center justify-center p-2.5 bg-surface-container border border-white/10 rounded-xl text-on-surface-variant hover:text-neon-pink hover:border-neon-pink/50 hover:bg-neon-pink/10 transition-all"
+                      title="Delete Job"
+                    >
+                      <Trash2 size={16} />
+                    </button>
                   </div>
                 </div>
               )}
 
               {/* Assessment Creation UI */}
               {assessmentJobId === job._id && !editingId && (
-                <div className="mt-md pt-md border-t border-outline-variant">
+                <div className="mt-6 pt-6 border-t border-white/10 relative z-10">
                   <CreateAssessment 
                     jobId={job._id} 
                     onSuccess={() => setAssessmentJobId(null)} 

@@ -4,15 +4,16 @@ import { toast } from 'react-toastify';
 import { notificationService } from '../services/notificationService';
 import { useSocket } from '../context/SocketContext';
 import { formatPostedAt } from '../utils/dateUtils';
+import { CheckCheck, BellOff, Loader2, Briefcase, UserPlus, Calendar, Clock, MessageSquare, ClipboardCheck, Info } from 'lucide-react';
 
 const TYPE_CONFIG = {
-  application_update: { borderColor: 'border-green-500', icon: 'work', iconBg: 'bg-primary-container/20 text-primary' },
-  new_application: { borderColor: 'border-blue-500', icon: 'person_add', iconBg: 'bg-secondary-container/20 text-secondary' },
-  interview_scheduled: { borderColor: 'border-yellow-400', icon: 'event', iconBg: 'bg-surface-container-high text-tertiary' },
-  interview_reminder: { borderColor: 'border-yellow-400', icon: 'alarm', iconBg: 'bg-surface-container-high text-tertiary' },
-  message: { borderColor: 'border-tertiary', icon: 'chat', iconBg: 'bg-secondary-container/20 text-secondary' },
-  assessment_update: { borderColor: 'border-purple-500', icon: 'assignment_turned_in', iconBg: 'bg-primary-container/20 text-primary' },
-  system: { borderColor: 'border-outline', icon: 'info', iconBg: 'bg-surface-container-high' },
+  application_update: { borderColor: 'border-neon-mint', icon: Briefcase, iconBg: 'bg-neon-mint/20 text-neon-mint' },
+  new_application: { borderColor: 'border-neon-cyan', icon: UserPlus, iconBg: 'bg-neon-cyan/20 text-neon-cyan' },
+  interview_scheduled: { borderColor: 'border-neon-orange', icon: Calendar, iconBg: 'bg-neon-orange/20 text-neon-orange' },
+  interview_reminder: { borderColor: 'border-neon-orange', icon: Clock, iconBg: 'bg-neon-orange/20 text-neon-orange' },
+  message: { borderColor: 'border-neon-pink', icon: MessageSquare, iconBg: 'bg-neon-pink/20 text-neon-pink' },
+  assessment_update: { borderColor: 'border-neon-purple', icon: ClipboardCheck, iconBg: 'bg-neon-purple/20 text-neon-purple' },
+  system: { borderColor: 'border-white/10', icon: Info, iconBg: 'bg-white/10 text-white' },
 };
 
 export function Notifications() {
@@ -127,82 +128,91 @@ export function Notifications() {
   const unreadCount = notifications.filter(n => !n.isRead).length;
 
   return (
-    <div className="w-full">
+    <div className="w-full relative">
       {/* Header Section */}
-      <header className="bg-surface-container/80 backdrop-blur-md border-b border-outline-variant/30 sticky top-0 z-40 -mt-lg -mx-[24px] lg:-mx-[32px] px-xl py-lg flex flex-col gap-md mb-xl">
-        <div className="flex justify-between items-center w-full">
-          <div className="flex items-center gap-md">
-            <h1 className="font-h2 text-h2 text-on-surface">Notifications</h1>
+      <header className="glass-panel border-b border-white/10 sticky top-0 z-40 -mt-8 -mx-[24px] lg:-mx-[32px] px-8 py-6 flex flex-col gap-4 mb-8 bg-background/80 backdrop-blur-xl">
+        <div className="absolute top-0 right-10 w-48 h-48 bg-neon-purple/10 blur-[100px] rounded-full"></div>
+        <div className="flex justify-between items-center w-full relative z-10">
+          <div className="flex items-center gap-4">
+            <h1 className="font-bold text-3xl text-white">Notifications</h1>
             {unreadCount > 0 && (
-              <span className="bg-tertiary text-on-tertiary text-[10px] font-bold px-2 py-0.5 rounded-full">{unreadCount} new</span>
+              <span className="bg-neon-pink/20 text-neon-pink border border-neon-pink/50 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider shadow-glow-pink">{unreadCount} new</span>
             )}
           </div>
           <button
             onClick={markAllRead}
-            className="flex items-center gap-xs text-primary font-body text-body hover:underline transition-all"
+            className="flex items-center gap-2 text-neon-cyan text-sm font-bold hover:text-white transition-all group"
           >
-            <span className="material-symbols-outlined text-[18px]">done_all</span>
+            <CheckCheck size={18} className="group-hover:drop-shadow-[0_0_8px_rgba(0,255,255,0.8)]" />
             <span>Mark all as read</span>
           </button>
         </div>
-        <div className="flex gap-sm flex-wrap">
-          {filters.map(f => (
-            <button
-              key={f}
-              onClick={() => setFilter(f)}
-              className={`px-md py-xs rounded-full font-label-tag text-label-tag uppercase border transition-all ${
-                filter === f
-                  ? 'bg-tertiary-container text-tertiary border-tertiary/30'
-                  : 'bg-surface-container-high text-on-surface-variant border-transparent hover:text-on-surface'
-              }`}
-            >
-              {f}
-            </button>
-          ))}
+        <div className="flex gap-2 flex-wrap relative z-10 mt-2">
+          {filters.map(f => {
+            let activeClass = 'bg-neon-purple/20 text-neon-purple border-neon-purple/50 shadow-glow-purple';
+            if (f === 'Unread') activeClass = 'bg-neon-orange/20 text-neon-orange border-neon-orange/50 drop-shadow-[0_0_8px_rgba(255,165,0,0.3)]';
+            else if (f === 'Applications') activeClass = 'bg-neon-cyan/20 text-neon-cyan border-neon-cyan/50 shadow-glow-cyan';
+            else if (f === 'Messages') activeClass = 'bg-neon-pink/20 text-neon-pink border-neon-pink/50 shadow-glow-pink';
+
+            return (
+              <button
+                key={f}
+                onClick={() => setFilter(f)}
+                className={`px-4 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider border transition-all ${
+                  filter === f
+                    ? activeClass
+                    : 'bg-surface-container text-on-surface-variant border-transparent hover:text-white hover:border-white/10'
+                }`}
+              >
+                {f}
+              </button>
+            );
+          })}
         </div>
       </header>
 
       {/* Notification List */}
-      <div className="space-y-md max-w-3xl">
+      <div className="space-y-4 max-w-3xl relative z-10">
         {isLoading ? (
-          <div className="flex items-center justify-center py-3xl">
-            <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+          <div className="flex items-center justify-center py-32">
+            <Loader2 size={40} className="animate-spin text-neon-purple" />
           </div>
         ) : filteredNotifications.length === 0 ? (
-          <div className="text-center py-xl">
-            <span className="material-symbols-outlined text-[48px] text-on-surface-variant">notifications_off</span>
-            <p className="text-on-surface-variant font-body mt-md">No notifications here</p>
+          <div className="glass-card rounded-2xl p-12 text-center flex flex-col items-center">
+            <BellOff size={48} className="text-white/20 mb-4" />
+            <p className="text-on-surface-variant text-sm font-medium">No notifications here</p>
           </div>
         ) : (
           filteredNotifications.map(n => {
             const config = TYPE_CONFIG[n.type] || TYPE_CONFIG.system;
+            const Icon = config.icon;
             const clickable = destinationFor(n) !== null;
             return (
               <div
                 key={n._id}
                 onClick={() => handleNotificationClick(n)}
                 role={clickable ? 'button' : undefined}
-                className={`bg-surface-container rounded-xl p-md border-l-4 ${config.borderColor} flex gap-md items-start shadow-sm hover:translate-x-1 transition-transform duration-200 ${(clickable || !n.isRead) ? 'cursor-pointer' : ''} ${n.isRead ? 'opacity-80' : ''}`}
+                className={`glass-card p-4 border-l-4 ${config.borderColor} flex gap-4 items-start hover:border-white/20 hover:bg-white/5 hover:translate-x-1 transition-all duration-200 ${(clickable || !n.isRead) ? 'cursor-pointer' : ''} ${n.isRead ? 'opacity-70' : 'shadow-lg'}`}
               >
-                <div className={`w-12 h-12 rounded-lg ${config.iconBg} flex items-center justify-center shrink-0 text-on-surface border border-outline-variant`}>
-                  <span className="material-symbols-outlined">{config.icon}</span>
+                <div className={`w-12 h-12 rounded-xl ${config.iconBg} flex items-center justify-center shrink-0 border border-current shadow-inner`}>
+                  <Icon size={20} />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="flex justify-between items-start gap-md">
-                    <h3 className="font-body text-body font-bold text-on-surface">{n.title}</h3>
-                    <span className="font-caption text-caption text-on-surface-variant shrink-0">{formatPostedAt(n.createdAt)}</span>
+                  <div className="flex justify-between items-start gap-4">
+                    <h3 className="text-sm font-bold text-white leading-snug">{n.title}</h3>
+                    <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider shrink-0">{formatPostedAt(n.createdAt)}</span>
                   </div>
-                  <p className="font-body text-body text-on-surface-variant mt-xs">{n.body}</p>
-                  <div className="mt-md flex gap-md flex-wrap items-center">
+                  <p className="text-xs text-on-surface-variant mt-1 leading-relaxed">{n.body}</p>
+                  <div className="mt-2 flex gap-4 flex-wrap items-center justify-end">
                     <button
                       onClick={(e) => { e.stopPropagation(); dismiss(n._id); }}
-                      className="text-on-surface-variant font-body text-body hover:text-on-surface ml-auto"
+                      className="text-xs font-bold text-on-surface-variant hover:text-neon-pink transition-colors"
                     >
                       Dismiss
                     </button>
                   </div>
                 </div>
-                {!n.isRead && <div className="w-2 h-2 rounded-full bg-tertiary mt-2 shrink-0"></div>}
+                {!n.isRead && <div className="w-2.5 h-2.5 rounded-full bg-neon-purple shadow-glow-purple mt-1 shrink-0"></div>}
               </div>
             );
           })

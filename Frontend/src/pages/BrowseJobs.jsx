@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { jobService } from '../services/jobService';
 import { formatPostedAt } from '../utils/dateUtils';
+import { Search, MapPin, Building2, Briefcase, Loader2, ChevronLeft, ChevronRight, DollarSign, Filter } from 'lucide-react';
 
 const SORT_OPTIONS = [
   { value: 'latest', label: 'Newest First' },
@@ -72,39 +73,45 @@ export function BrowseJobs() {
 
   return (
     <>
-      <div className="max-w-container_max_width mx-auto px-gutter pb-lg w-full">
+      <div className="max-w-7xl mx-auto px-4 pb-12 w-full pt-8">
         {/* Header Section */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-xl gap-md">
-          <div>
-            <h1 className="font-h1 text-h1 text-on-surface mb-xs">Find Your Dream Role</h1>
-            <p className="font-body text-body text-on-surface-variant">Showing {jobs.length} job{jobs.length !== 1 ? 's' : ''}{total > jobs.length ? ` of ${total}` : ''} available now.</p>
-          </div>
-          <div className="flex items-center gap-sm">
-            <span className="font-label-tag text-label-tag uppercase text-on-surface-variant">Sort by:</span>
-            <select
-              className="bg-surface-container-high border-none rounded-lg text-body px-md py-sm focus:ring-2 focus:ring-tertiary outline-none"
-              value={sort}
-              onChange={(e) => { setSort(e.target.value); setPage(1); setAppliedFilters(prev => ({ ...prev, sort: e.target.value, page: 1 })); }}
-            >
-              {SORT_OPTIONS.map(opt => (
-                <option key={opt.value} value={opt.value}>{opt.label}</option>
-              ))}
-            </select>
+        <div className="glass-panel p-8 rounded-2xl mb-8 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-neon-purple/20 blur-[100px] rounded-full"></div>
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 relative z-10">
+            <div>
+              <h1 className="font-bold text-3xl text-white mb-2">Find Your Dream Role</h1>
+              <p className="text-on-surface-variant text-sm">Showing {jobs.length} job{jobs.length !== 1 ? 's' : ''}{total > jobs.length ? ` of ${total}` : ''} available now.</p>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Sort by:</span>
+              <select
+                className="bg-surface-container border border-white/10 rounded-xl text-white text-sm px-4 py-2 focus:border-neon-purple focus:shadow-glow-purple outline-none transition-all"
+                value={sort}
+                onChange={(e) => { setSort(e.target.value); setPage(1); setAppliedFilters(prev => ({ ...prev, sort: e.target.value, page: 1 })); }}
+              >
+                {SORT_OPTIONS.map(opt => (
+                  <option key={opt.value} value={opt.value}>{opt.label}</option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-lg items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Filters Sidebar */}
-          <aside className="lg:col-span-3 space-y-lg">
-            <div className="bg-surface-container p-md rounded-xl border border-outline-variant">
-              <h3 className="font-h3 text-h3 text-on-surface mb-md">Filters</h3>
+          <aside className="lg:col-span-3 space-y-6">
+            <div className="glass-panel p-6 rounded-2xl relative overflow-hidden">
+              <div className="flex items-center gap-2 mb-6">
+                <Filter size={18} className="text-neon-cyan" />
+                <h3 className="font-bold text-white text-lg">Filters</h3>
+              </div>
 
-              <div className="mb-lg">
-                <label className="font-label-tag text-label-tag text-on-surface-variant block mb-sm">SEARCH KEYWORD</label>
+              <div className="mb-6">
+                <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider block mb-2">SEARCH KEYWORD</label>
                 <div className="relative">
-                  <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+                  <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" />
                   <input
-                    className="w-full pl-10 pr-4 py-2 bg-background border border-outline-variant rounded-lg focus:border-tertiary focus:ring-1 focus:ring-tertiary outline-none text-on-surface transition-all"
+                    className="w-full pl-10 pr-4 py-2.5 bg-background border border-white/10 rounded-xl focus:border-neon-purple focus:shadow-glow-purple outline-none text-white transition-all text-sm"
                     type="text"
                     placeholder="Job title, keyword..."
                     value={q}
@@ -114,12 +121,12 @@ export function BrowseJobs() {
                 </div>
               </div>
 
-              <div className="mb-lg">
-                <label className="font-label-tag text-label-tag text-on-surface-variant block mb-sm">LOCATION</label>
+              <div className="mb-6">
+                <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider block mb-2">LOCATION</label>
                 <div className="relative">
-                  <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">location_on</span>
+                  <MapPin size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" />
                   <input
-                    className="w-full pl-10 pr-4 py-2 bg-background border border-outline-variant rounded-lg focus:border-tertiary focus:ring-1 focus:ring-tertiary outline-none text-on-surface"
+                    className="w-full pl-10 pr-4 py-2.5 bg-background border border-white/10 rounded-xl focus:border-neon-purple focus:shadow-glow-purple outline-none text-white transition-all text-sm"
                     type="text"
                     placeholder="e.g. Cairo, Remote..."
                     value={location}
@@ -129,25 +136,25 @@ export function BrowseJobs() {
                 </div>
               </div>
 
-              <div className="mb-lg">
-                <div className="flex justify-between items-center mb-sm">
-                  <label className="font-label-tag text-label-tag text-on-surface-variant">MIN SALARY</label>
-                  <span className="text-tertiary font-body text-body font-bold">{minSalary > 0 ? `EGP ${minSalary / 1000}k+` : 'Any'}</span>
+              <div className="mb-8">
+                <div className="flex justify-between items-center mb-3">
+                  <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">MIN SALARY</label>
+                  <span className="text-neon-mint font-bold text-xs">{minSalary > 0 ? `EGP ${minSalary / 1000}k+` : 'Any'}</span>
                 </div>
                 <input
-                  className="cursor-pointer w-full"
+                  className="w-full accent-neon-mint cursor-pointer"
                   max="100000" min="0" step="5000"
                   type="range"
                   value={minSalary}
                   onChange={(e) => setMinSalary(Number(e.target.value))}
                 />
-                <div className="flex justify-between mt-xs font-caption text-caption text-outline">
+                <div className="flex justify-between mt-2 text-[10px] text-on-surface-variant font-bold">
                   <span>Any</span>
                   <span>100k</span>
                 </div>
               </div>
 
-              <Button variant="primary" className="w-full" onClick={applyFilters}>
+              <Button variant="primary" className="w-full bg-gradient-to-r from-neon-purple to-neon-cyan border-none shadow-[0_0_15px_rgba(0,255,255,0.4)]" onClick={applyFilters}>
                 Apply Filters
               </Button>
             </div>
@@ -156,54 +163,54 @@ export function BrowseJobs() {
           {/* Job Grid */}
           <div className="lg:col-span-9">
             {isLoading && (
-              <div className="flex items-center justify-center py-3xl">
-                <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+              <div className="flex items-center justify-center py-32">
+                <Loader2 size={40} className="animate-spin text-neon-purple" />
               </div>
             )}
 
             {!isLoading && error && (
-              <div className="bg-error-container/20 border border-error/30 text-error rounded-xl p-lg text-center">
+              <div className="bg-neon-pink/10 border border-neon-pink/30 text-neon-pink shadow-glow-pink rounded-xl p-6 text-center font-bold">
                 {error}
               </div>
             )}
 
             {!isLoading && !error && jobs.length === 0 && (
-              <div className="bg-surface-container border border-outline-variant rounded-xl p-xl text-center text-on-surface-variant">
-                No jobs match your filters. Try broadening your search.
+              <div className="glass-card rounded-2xl p-12 text-center text-on-surface-variant flex flex-col items-center">
+                <Briefcase size={48} className="text-white/10 mb-4" />
+                <p>No jobs match your filters. Try broadening your search.</p>
               </div>
             )}
 
             {!isLoading && !error && jobs.length > 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-lg">
+              <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
                 {jobs.map(job => (
-                  <div key={job._id} className="bg-surface-container border border-outline-variant rounded-xl p-md hover:border-tertiary/50 transition-all group flex flex-col h-full">
-                    <div className="flex justify-between items-start mb-md">
-                      <div className="w-14 h-14 rounded-lg bg-surface-container-high flex items-center justify-center p-sm overflow-hidden">
-                        <span className="material-symbols-outlined text-on-surface-variant text-[28px]">corporate_fare</span>
+                  <div key={job._id} className="glass-card p-6 relative overflow-hidden group hover:border-neon-purple/50 hover:bg-neon-purple/5 transition-all flex flex-col h-full">
+                    <div className="flex justify-between items-start mb-4 relative z-10">
+                      <div className="w-14 h-14 rounded-xl bg-surface-container border border-white/10 shadow-inner flex items-center justify-center shrink-0">
+                        <Building2 size={28} className="text-neon-cyan" />
                       </div>
                     </div>
-                    <div className="mb-md flex-1">
-                      <h3 className="font-h3 text-h3 text-on-surface group-hover:text-primary transition-colors">{job.title}</h3>
-                      <div className="flex items-center gap-xs text-on-surface-variant font-body text-body mb-sm">
-                        <span>{job.company}</span>
-                        <span>•</span>
-                        <span className="flex items-center"><span className="material-symbols-outlined text-[16px] mr-1">location_on</span>{job.location}</span>
+                    <div className="mb-6 flex-1 relative z-10">
+                      <h3 className="font-bold text-xl text-white group-hover:text-neon-cyan transition-colors mb-2 line-clamp-2">{job.title}</h3>
+                      <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-on-surface-variant mb-4">
+                        <span className="bg-surface-container-high px-2 py-1 rounded-md border border-white/5">{job.company}</span>
+                        <span className="flex items-center gap-1 bg-surface-container-high px-2 py-1 rounded-md border border-white/5"><MapPin size={12} className="text-neon-orange" />{job.location}</span>
                       </div>
-                      <div className="flex items-center gap-sm mt-md">
+                      <div className="flex items-center gap-2">
                         {job.salary ? (
                           <>
-                            <span className="font-body text-body font-bold text-tertiary">EGP {job.salary.toLocaleString()}</span>
-                            <span className="text-outline text-caption">/ month</span>
+                            <span className="text-sm font-bold text-neon-mint flex items-center gap-1"><DollarSign size={14} /> {job.salary.toLocaleString()}</span>
+                            <span className="text-[10px] text-on-surface-variant uppercase tracking-wider font-bold mt-0.5">/ month</span>
                           </>
                         ) : (
-                          <span className="font-body text-body text-on-surface-variant">Salary not disclosed</span>
+                          <span className="text-xs text-on-surface-variant italic">Salary not disclosed</span>
                         )}
                       </div>
                     </div>
-                    <div className="flex items-center justify-between pt-md border-t border-outline-variant">
-                      <span className="font-caption text-caption text-outline">{formatPostedAt(job.createdAt)}</span>
+                    <div className="flex items-center justify-between pt-4 border-t border-white/10 relative z-10">
+                      <span className="text-[10px] text-on-surface-variant uppercase tracking-wider font-bold">{formatPostedAt(job.createdAt)}</span>
                       <Link to={`/jobs/${job._id}`}>
-                        <Button variant="primary" size="sm" className="bg-primary-container text-on-primary-container hover:bg-primary-container/80 shadow-none">Apply Now</Button>
+                        <Button variant="ghost" size="sm" className="border border-neon-cyan/50 text-neon-cyan hover:bg-neon-cyan hover:text-black">Apply Now</Button>
                       </Link>
                     </div>
                   </div>
@@ -215,21 +222,21 @@ export function BrowseJobs() {
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="mt-xl flex items-center justify-center gap-sm">
+          <div className="mt-12 flex items-center justify-center gap-4">
             <button
               onClick={() => goToPage(page - 1)}
               disabled={page <= 1}
-              className="w-10 h-10 flex items-center justify-center rounded-lg border border-outline-variant text-on-surface-variant hover:bg-surface-container transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              className="w-10 h-10 flex items-center justify-center rounded-xl bg-surface-container border border-white/10 text-white hover:border-neon-purple hover:text-neon-purple hover:shadow-glow-purple transition-all disabled:opacity-40 disabled:hover:border-white/10 disabled:hover:shadow-none disabled:hover:text-white"
             >
-              <span className="material-symbols-outlined">chevron_left</span>
+              <ChevronLeft size={20} />
             </button>
-            <span className="font-body text-body text-on-surface-variant px-md">Page {page} of {totalPages}</span>
+            <span className="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Page <span className="text-white">{page}</span> of {totalPages}</span>
             <button
               onClick={() => goToPage(page + 1)}
               disabled={page >= totalPages}
-              className="w-10 h-10 flex items-center justify-center rounded-lg border border-outline-variant text-on-surface-variant hover:bg-surface-container transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              className="w-10 h-10 flex items-center justify-center rounded-xl bg-surface-container border border-white/10 text-white hover:border-neon-purple hover:text-neon-purple hover:shadow-glow-purple transition-all disabled:opacity-40 disabled:hover:border-white/10 disabled:hover:shadow-none disabled:hover:text-white"
             >
-              <span className="material-symbols-outlined">chevron_right</span>
+              <ChevronRight size={20} />
             </button>
           </div>
         )}

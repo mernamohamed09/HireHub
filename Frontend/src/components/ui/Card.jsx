@@ -2,7 +2,7 @@ import { cn } from '../../utils/cn';
 
 export function Card({ className, children, ...props }) {
   return (
-    <div className={cn('glass-card rounded-xl overflow-hidden', className)} {...props}>
+    <div className={cn('glass-card overflow-hidden', className)} {...props}>
       {children}
     </div>
   );
@@ -10,7 +10,7 @@ export function Card({ className, children, ...props }) {
 
 export function CardHeader({ className, children, ...props }) {
   return (
-    <div className={cn('p-md border-b border-outline-variant/50', className)} {...props}>
+    <div className={cn('p-5 border-b border-white/[0.06]', className)} {...props}>
       {children}
     </div>
   );
@@ -18,7 +18,7 @@ export function CardHeader({ className, children, ...props }) {
 
 export function CardTitle({ className, children, ...props }) {
   return (
-    <h3 className={cn('font-h3 text-h3 text-on-surface', className)} {...props}>
+    <h3 className={cn('font-semibold text-lg text-white', className)} {...props}>
       {children}
     </h3>
   );
@@ -26,8 +26,9 @@ export function CardTitle({ className, children, ...props }) {
 
 export function CardContent({ className, children, ...props }) {
   return (
-    <div className={cn('p-md', className)} {...props}>
+    <div className={cn('p-5', className)} {...props}>
       {children}
     </div>
   );
 }
+

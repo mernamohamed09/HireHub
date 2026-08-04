@@ -3,6 +3,7 @@ import { Button } from '../../components/ui/Button';
 import { UserDetailModal } from '../../components/UserDetailModal';
 import { userService } from '../../services/userService';
 import { jobService } from '../../services/jobService';
+import { RefreshCw, Loader2, Users, Building2, UserCircle2, Briefcase, Search, Trash2 } from 'lucide-react';
 
 export function Dashboard() {
   const [users, setUsers] = useState([]);
@@ -54,63 +55,73 @@ export function Dashboard() {
 
   if (isLoading) {
     return (
-      <div className="w-full flex items-center justify-center py-3xl">
-        <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+      <div className="w-full flex items-center justify-center py-20">
+        <Loader2 className="animate-spin text-neon-cyan" size={32} />
       </div>
     );
   }
 
   return (
     <div className="w-full relative">
+      <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-neon-cyan/5 blur-[120px] rounded-full pointer-events-none -z-10 translate-x-1/3 -translate-y-1/3"></div>
+      
       {/* Floating Glassmorphic Header */}
-      <header className="sticky top-0 z-40 mb-xl flex justify-between items-center bg-surface/80 backdrop-blur-md py-md border-b border-outline-variant/30 -mt-lg mx-[-24px] lg:mx-[-32px] px-md lg:px-xl w-[calc(100%+48px)] lg:w-[calc(100%+64px)]">
+      <header className="sticky top-0 z-40 mb-8 flex justify-between items-center glass-panel backdrop-blur-xl py-4 px-6 lg:px-8 border-b border-white/10 -mt-6 mx-[-24px] lg:mx-[-32px] w-[calc(100%+48px)] lg:w-[calc(100%+64px)] shadow-lg">
         <div>
-          <h2 className="font-h2 text-h2 text-on-surface">Admin Overview</h2>
-          <p className="text-on-surface-variant font-caption text-caption">Real-time system users and jobs.</p>
+          <h2 className="font-bold text-2xl text-white">Admin Overview</h2>
+          <p className="text-on-surface-variant text-xs font-bold uppercase tracking-widest mt-1">Real-time system users and jobs.</p>
         </div>
-        <Button variant="primary" className="shadow-lg active:scale-95" onClick={() => setReloadKey(k => k + 1)}>
+        <button 
+          onClick={() => setReloadKey(k => k + 1)}
+          className="flex items-center gap-2 bg-neon-cyan/20 border border-neon-cyan/30 text-neon-cyan px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-neon-cyan/30 transition-all shadow-glow-cyan active:scale-95 group"
+        >
+          <RefreshCw size={14} className="group-hover:rotate-180 transition-transform duration-500" />
           Refresh
-        </Button>
+        </button>
       </header>
 
       {error && (
-        <div className="bg-error-container/20 border border-error/30 text-error rounded-xl p-lg text-center mb-xl">
+        <div className="bg-neon-pink/10 border border-neon-pink/30 text-neon-pink rounded-xl p-4 text-center mb-8 text-sm font-bold shadow-glow-pink">
           {error}
         </div>
       )}
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-md mb-xl">
-        <div className="glass-panel p-lg rounded-xl flex flex-col gap-xs group hover:border-tertiary transition-colors">
-          <span className="material-symbols-outlined text-tertiary">group</span>
-          <span className="text-on-surface-variant font-label-tag text-label-tag uppercase">Total Users</span>
-          <span className="font-h2 text-h2 text-on-surface">{users.length}</span>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className="glass-card p-6 rounded-2xl border border-white/5 hover:border-white/20 transition-all flex flex-col gap-2 group shadow-lg overflow-hidden relative">
+          <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div className="w-10 h-10 rounded-xl bg-surface-container border border-white/10 flex items-center justify-center mb-2 shadow-inner group-hover:scale-110 transition-transform relative z-10"><Users className="text-white/40" size={20} /></div>
+          <span className="text-white/40 text-[10px] font-bold uppercase tracking-widest relative z-10">Total Users</span>
+          <span className="font-bold text-3xl text-white relative z-10">{users.length}</span>
         </div>
-        <div className="glass-panel p-lg rounded-xl flex flex-col gap-xs group hover:border-primary transition-colors">
-          <span className="material-symbols-outlined text-primary">domain</span>
-          <span className="text-on-surface-variant font-label-tag text-label-tag uppercase">Companies</span>
-          <span className="font-h2 text-h2 text-on-surface">{companyCount}</span>
+        <div className="glass-card p-6 rounded-2xl border border-white/5 hover:border-neon-cyan/30 transition-all flex flex-col gap-2 group shadow-lg overflow-hidden relative">
+          <div className="absolute inset-0 bg-gradient-to-br from-neon-cyan/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div className="w-10 h-10 rounded-xl bg-neon-cyan/20 border border-neon-cyan/30 flex items-center justify-center mb-2 shadow-glow-cyan group-hover:scale-110 transition-transform relative z-10"><Building2 className="text-neon-cyan" size={20} /></div>
+          <span className="text-neon-cyan text-[10px] font-bold uppercase tracking-widest relative z-10">Companies</span>
+          <span className="font-bold text-3xl text-white relative z-10">{companyCount}</span>
         </div>
-        <div className="glass-panel p-lg rounded-xl flex flex-col gap-xs group hover:border-secondary transition-colors">
-          <span className="material-symbols-outlined text-secondary">person</span>
-          <span className="text-on-surface-variant font-label-tag text-label-tag uppercase">Candidates</span>
-          <span className="font-h2 text-h2 text-on-surface">{candidateCount}</span>
+        <div className="glass-card p-6 rounded-2xl border border-white/5 hover:border-neon-purple/30 transition-all flex flex-col gap-2 group shadow-lg overflow-hidden relative">
+          <div className="absolute inset-0 bg-gradient-to-br from-neon-purple/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div className="w-10 h-10 rounded-xl bg-neon-purple/20 border border-neon-purple/30 flex items-center justify-center mb-2 shadow-glow-purple group-hover:scale-110 transition-transform relative z-10"><UserCircle2 className="text-neon-purple" size={20} /></div>
+          <span className="text-neon-purple text-[10px] font-bold uppercase tracking-widest relative z-10">Candidates</span>
+          <span className="font-bold text-3xl text-white relative z-10">{candidateCount}</span>
         </div>
-        <div className="glass-panel p-lg rounded-xl flex flex-col gap-xs group hover:border-on-surface transition-colors">
-          <span className="material-symbols-outlined text-on-surface">work_outline</span>
-          <span className="text-on-surface-variant font-label-tag text-label-tag uppercase">Active Jobs</span>
-          <span className="font-h2 text-h2 text-on-surface">{jobCount}</span>
+        <div className="glass-card p-6 rounded-2xl border border-white/5 hover:border-neon-pink/30 transition-all flex flex-col gap-2 group shadow-lg overflow-hidden relative">
+          <div className="absolute inset-0 bg-gradient-to-br from-neon-pink/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div className="w-10 h-10 rounded-xl bg-neon-pink/20 border border-neon-pink/30 flex items-center justify-center mb-2 shadow-glow-pink group-hover:scale-110 transition-transform relative z-10"><Briefcase className="text-neon-pink" size={20} /></div>
+          <span className="text-neon-pink text-[10px] font-bold uppercase tracking-widest relative z-10">Active Jobs</span>
+          <span className="font-bold text-3xl text-white relative z-10">{jobCount}</span>
         </div>
       </div>
 
       {/* Users Table */}
-      <section className="glass-panel rounded-xl overflow-hidden mb-xl hover:scale-[1.01] transition-transform duration-300">
-        <div className="p-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-md border-b border-outline-variant/30">
-          <h3 className="font-h3 text-h3 text-on-surface">All Users</h3>
-          <div className="flex items-center bg-surface-container rounded-lg px-md py-xs border border-outline-variant/50 flex-1 md:flex-none">
-            <span className="material-symbols-outlined text-on-surface-variant text-[20px] mr-sm">search</span>
+      <section className="glass-card rounded-3xl border border-white/5 overflow-hidden mb-8 shadow-2xl transition-all duration-300">
+        <div className="p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-white/10 bg-surface-container/30">
+          <h3 className="font-bold text-xl text-white">All Users</h3>
+          <div className="flex items-center bg-surface-container/50 rounded-xl px-4 py-2 border border-white/10 flex-1 md:flex-none focus-within:border-neon-cyan focus-within:shadow-glow-cyan transition-all">
+            <Search className="text-white/40 mr-3" size={16} />
             <input
-              className="bg-transparent border-none focus:ring-0 text-body text-on-surface placeholder-on-surface-variant w-full md:w-48 outline-none"
+              className="bg-transparent border-none focus:ring-0 text-sm text-white placeholder-white/20 w-full md:w-64 outline-none"
               placeholder="Search users..."
               type="text"
               value={search}
@@ -119,54 +130,66 @@ export function Dashboard() {
           </div>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left">
-            <thead className="bg-surface-container-high/50 text-on-surface-variant font-label-tag text-label-tag uppercase">
+        <div className="overflow-x-auto custom-scrollbar">
+          <table className="w-full text-left min-w-[600px]">
+            <thead className="bg-surface-container/50 border-b border-white/10">
               <tr>
-                <th className="px-lg py-md">User</th>
-                <th className="px-lg py-md">Email</th>
-                <th className="px-lg py-md">Role</th>
-                <th className="px-lg py-md text-right">Actions</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">User</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Email</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Role</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-outline-variant/30">
+            <tbody className="divide-y divide-white/5">
               {filteredUsers.map(user => (
-                <tr key={user._id} className="hover:bg-surface-container-highest transition-colors group">
-                  <td className="px-lg py-md">
-                    <button className="flex items-center gap-md" onClick={() => setSelectedUserId(user._id)}>
-                      <div className="w-8 h-8 rounded-full bg-primary-container text-surface flex items-center justify-center font-bold text-sm">
+                <tr key={user._id} className="hover:bg-white/5 transition-colors group">
+                  <td className="px-6 py-4">
+                    <button className="flex items-center gap-4" onClick={() => setSelectedUserId(user._id)}>
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-sm shadow-inner group-hover:scale-110 transition-transform ${
+                        user.role === 'candidate' ? 'bg-neon-purple/20 text-neon-purple border border-neon-purple/30 shadow-glow-purple' :
+                        user.role === 'company' ? 'bg-neon-cyan/20 text-neon-cyan border border-neon-cyan/30 shadow-glow-cyan' :
+                        'bg-neon-pink/20 text-neon-pink border border-neon-pink/30 shadow-glow-pink'
+                      }`}>
                         {user.name?.[0]?.toUpperCase() || '?'}
                       </div>
-                      <span className="font-body text-body font-bold text-on-surface whitespace-nowrap hover:underline">{user.name}</span>
+                      <span className={`font-bold transition-colors ${
+                        user.role === 'candidate' ? 'text-white group-hover:text-neon-purple' :
+                        user.role === 'company' ? 'text-white group-hover:text-neon-cyan' :
+                        'text-white group-hover:text-neon-pink'
+                      }`}>{user.name}</span>
                     </button>
                   </td>
-                  <td className="px-lg py-md font-body text-body text-on-surface-variant whitespace-nowrap">{user.email}</td>
-                  <td className="px-lg py-md">
-                    <span className={`px-sm py-xs rounded-full font-label-tag text-[10px] uppercase ${user.role === 'candidate' ? 'bg-tertiary-container/30 text-tertiary' : user.role === 'company' ? 'bg-primary-container/30 text-primary' : 'bg-secondary-container/30 text-secondary'}`}>
+                  <td className="px-6 py-4 text-sm text-on-surface-variant font-medium">{user.email}</td>
+                  <td className="px-6 py-4">
+                    <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border ${
+                      user.role === 'candidate' ? 'bg-neon-purple/10 text-neon-purple border-neon-purple/30 shadow-glow-purple' :
+                      user.role === 'company' ? 'bg-neon-cyan/10 text-neon-cyan border-neon-cyan/30 shadow-glow-cyan' :
+                      'bg-neon-pink/10 text-neon-pink border-neon-pink/30 shadow-glow-pink'
+                    }`}>
                       {user.role}
                     </span>
                   </td>
-                  <td className="px-lg py-md text-right">
+                  <td className="px-6 py-4 text-right">
                     <button
                       onClick={() => handleDelete(user._id)}
-                      className="text-on-surface-variant hover:text-error transition-all"
+                      className="w-8 h-8 rounded-lg bg-surface-container border border-white/10 flex items-center justify-center text-on-surface-variant hover:text-neon-pink hover:border-neon-pink/30 hover:bg-neon-pink/10 hover:shadow-glow-pink transition-all ml-auto"
                       title="Delete user"
                     >
-                      <span className="material-symbols-outlined">delete</span>
+                      <Trash2 size={14} />
                     </button>
                   </td>
                 </tr>
               ))}
               {filteredUsers.length === 0 && (
                 <tr>
-                  <td colSpan={4} className="px-lg py-lg text-center text-on-surface-variant">No users found.</td>
+                  <td colSpan={4} className="px-6 py-12 text-center text-on-surface-variant font-medium bg-surface-container/30">No users found.</td>
                 </tr>
               )}
             </tbody>
           </table>
         </div>
-        <div className="p-lg bg-surface-container-low flex justify-between items-center text-on-surface-variant font-caption text-caption border-t border-outline-variant/30">
-          <span>Showing {filteredUsers.length} of {users.length} users</span>
+        <div className="p-6 bg-surface-container/30 flex justify-between items-center border-t border-white/10">
+          <span className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Showing {filteredUsers.length} of {users.length} users</span>
         </div>
       </section>
 

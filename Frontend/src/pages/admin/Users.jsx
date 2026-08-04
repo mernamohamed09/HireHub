@@ -3,6 +3,7 @@ import { DashboardHeader } from '../../components/layout/DashboardHeader';
 import { Button } from '../../components/ui/Button';
 import { UserDetailModal } from '../../components/UserDetailModal';
 import { userService } from '../../services/userService';
+import { RefreshCw, Loader2, UserSearch, Trash2 } from 'lucide-react';
 
 export function Users() {
   const [candidates, setCandidates] = useState([]);
@@ -40,70 +41,82 @@ export function Users() {
   return (
     <>
       <DashboardHeader />
-      <div className="w-full px-md md:px-lg max-w-6xl mx-auto space-y-lg py-xl">
-        <div className="flex justify-between items-center">
+      <div className="w-full px-4 md:px-8 max-w-6xl mx-auto space-y-8 py-8 relative">
+        <div className="absolute top-0 left-0 w-[400px] h-[400px] bg-neon-purple/5 blur-[120px] rounded-full pointer-events-none -z-10 -translate-x-1/3 -translate-y-1/3"></div>
+        
+        <div className="flex justify-between items-end">
           <div>
-            <h1 className="font-h2 text-h2 text-on-surface">Manage Candidates</h1>
-            <p className="text-on-surface-variant mt-sm">View and manage all registered candidates in the system.</p>
+            <h1 className="font-bold text-3xl md:text-4xl text-white">Manage Candidates</h1>
+            <p className="text-on-surface-variant mt-2 font-medium">View and manage all registered candidates in the system.</p>
           </div>
-          <Button variant="outline" className="hidden md:flex" onClick={() => setReloadKey(k => k + 1)}>Refresh</Button>
+          <button 
+            onClick={() => setReloadKey(k => k + 1)}
+            className="hidden md:flex items-center gap-2 bg-surface-container/50 border border-white/10 text-white px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-white/5 transition-all shadow-lg active:scale-95 group"
+          >
+            <RefreshCw size={14} className="group-hover:rotate-180 transition-transform duration-500" />
+            Refresh
+          </button>
         </div>
 
         {error && (
-          <div className="bg-error-container/20 border border-error/30 text-error rounded-xl p-lg text-center">
+          <div className="bg-neon-pink/10 border border-neon-pink/30 text-neon-pink rounded-xl p-4 text-center text-sm font-bold shadow-glow-pink">
             {error}
           </div>
         )}
 
         {isLoading ? (
-          <div className="flex items-center justify-center py-3xl">
-            <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+          <div className="flex items-center justify-center py-20">
+            <Loader2 className="animate-spin text-neon-purple" size={32} />
           </div>
         ) : candidates.length === 0 ? (
-          <div className="bg-surface-container rounded-xl border border-outline-variant p-xl flex flex-col items-center justify-center text-center min-h-[400px]">
-            <span className="material-symbols-outlined text-[64px] text-outline mb-md">person_search</span>
-            <h3 className="font-h3 text-h3 text-on-surface mb-sm">No Candidates Yet</h3>
-            <p className="text-on-surface-variant max-w-md mx-auto">
+          <div className="glass-card rounded-3xl border border-white/5 p-12 flex flex-col items-center justify-center text-center min-h-[400px] shadow-2xl">
+            <div className="w-20 h-20 bg-surface-container/50 rounded-2xl border border-white/10 flex items-center justify-center mb-6 shadow-inner">
+              <UserSearch className="text-white/20" size={40} />
+            </div>
+            <h3 className="font-bold text-2xl text-white mb-2">No Candidates Yet</h3>
+            <p className="text-on-surface-variant font-medium max-w-md mx-auto">
               Registered candidates will appear here once they create accounts.
             </p>
           </div>
         ) : (
-          <div className="bg-surface-container rounded-xl border border-outline-variant overflow-hidden">
-            <table className="w-full text-left">
-              <thead className="bg-surface-container-high/50 text-on-surface-variant font-label-tag text-label-tag uppercase">
-                <tr>
-                  <th className="px-lg py-md">Name</th>
-                  <th className="px-lg py-md">Email</th>
-                  <th className="px-lg py-md">Location</th>
-                  <th className="px-lg py-md text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-outline-variant/30">
-                {candidates.map(c => (
-                  <tr key={c._id} className="hover:bg-surface-container-highest transition-colors">
-                    <td className="px-lg py-md">
-                      <button className="flex items-center gap-md" onClick={() => setSelectedUserId(c._id)}>
-                        <div className="w-8 h-8 rounded-full bg-tertiary-container text-tertiary flex items-center justify-center font-bold text-sm">
-                          {c.name?.[0]?.toUpperCase() || '?'}
-                        </div>
-                        <span className="font-body font-bold text-on-surface hover:underline">{c.name}</span>
-                      </button>
-                    </td>
-                    <td className="px-lg py-md text-on-surface-variant">{c.email}</td>
-                    <td className="px-lg py-md text-on-surface-variant">{c.location || '-'}</td>
-                    <td className="px-lg py-md text-right">
-                      <button
-                        onClick={() => handleDelete(c._id)}
-                        className="text-on-surface-variant hover:text-error transition-all"
-                        title="Delete candidate"
-                      >
-                        <span className="material-symbols-outlined">delete</span>
-                      </button>
-                    </td>
+          <div className="glass-card rounded-3xl border border-white/5 overflow-hidden shadow-2xl">
+            <div className="overflow-x-auto custom-scrollbar">
+              <table className="w-full text-left min-w-[600px]">
+                <thead className="bg-surface-container/50 border-b border-white/10">
+                  <tr>
+                    <th className="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Name</th>
+                    <th className="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Email</th>
+                    <th className="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Location</th>
+                    <th className="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest text-right">Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-white/5">
+                  {candidates.map(c => (
+                    <tr key={c._id} className="hover:bg-white/5 transition-colors group">
+                      <td className="px-6 py-4">
+                        <button className="flex items-center gap-4" onClick={() => setSelectedUserId(c._id)}>
+                          <div className="w-10 h-10 rounded-xl bg-neon-purple/20 text-neon-purple border border-neon-purple/30 flex items-center justify-center font-bold text-sm shadow-glow-purple group-hover:scale-110 transition-transform">
+                            {c.name?.[0]?.toUpperCase() || '?'}
+                          </div>
+                          <span className="font-bold text-white group-hover:text-neon-purple transition-colors">{c.name}</span>
+                        </button>
+                      </td>
+                      <td className="px-6 py-4 text-sm text-on-surface-variant font-medium">{c.email}</td>
+                      <td className="px-6 py-4 text-sm text-on-surface-variant font-medium">{c.location || '-'}</td>
+                      <td className="px-6 py-4 text-right">
+                        <button
+                          onClick={() => handleDelete(c._id)}
+                          className="w-8 h-8 rounded-lg bg-surface-container border border-white/10 flex items-center justify-center text-on-surface-variant hover:text-neon-pink hover:border-neon-pink/30 hover:bg-neon-pink/10 hover:shadow-glow-pink transition-all ml-auto"
+                          title="Delete candidate"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
       </div>

@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Button } from '../../components/ui/Button';
 import { candidateService } from '../../services/candidateService';
 import { cvFileMeta } from '../../utils/fileDisplay';
+import { UploadCloud, CheckCircle2, Trash2, ExternalLink, FileText, Lightbulb, Loader2 } from 'lucide-react';
 
 const ACCEPTED_EXTENSIONS = ['.pdf', '.docx'];
 
@@ -118,18 +119,18 @@ export function CVManager() {
   return (
     <div className="flex flex-col h-full w-full">
       {/* Header */}
-      <header className="flex justify-between items-center mb-xl">
+      <header className="flex justify-between items-center mb-8">
         <div>
-          <h2 className="font-h2 text-h2 text-on-surface">CV Manager</h2>
-          <p className="text-on-surface-variant">Upload and manage your professional resume</p>
+          <h2 className="font-bold text-3xl md:text-4xl text-white">CV Manager</h2>
+          <p className="text-on-surface-variant font-medium mt-2">Upload and manage your professional resume</p>
         </div>
         <Button
           variant="primary"
-          className="flex items-center gap-sm shadow-md active:scale-95"
+          className="flex items-center gap-2 shadow-lg bg-surface-container/50 border border-white/10 hover:border-white/30 hover:bg-white/5 text-white/90 transition-all"
           onClick={() => fileInputRef.current?.click()}
           disabled={isUploading}
         >
-          <span className="material-symbols-outlined">upload</span>
+          <UploadCloud size={18} />
           {isUploading ? 'Uploading...' : resumeUrl ? 'Replace CV' : 'Upload New'}
         </Button>
         <input
@@ -142,34 +143,34 @@ export function CVManager() {
       </header>
 
       {error && (
-        <div className="bg-error-container/20 border border-error/30 text-error rounded-xl p-lg text-center mb-lg">
+        <div className="bg-neon-pink/10 border border-neon-pink/30 text-neon-pink shadow-glow-pink rounded-xl p-6 text-center mb-6 font-bold">
           {error}
         </div>
       )}
 
       {isLoading ? (
-        <div className="flex items-center justify-center py-3xl">
-          <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+        <div className="flex items-center justify-center py-32">
+          <Loader2 size={40} className="animate-spin text-neon-purple" />
         </div>
       ) : (
-        <div className="grid grid-cols-12 gap-lg flex-1">
-          <div className="col-span-12 flex flex-col gap-lg">
+        <div className="grid grid-cols-12 gap-8 flex-1">
+          <div className="col-span-12 flex flex-col gap-8">
             {/* Drag-and-drop zone */}
             <div
               onClick={() => !isUploading && fileInputRef.current?.click()}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
-              className={`border-2 border-dashed rounded-xl bg-surface-container p-xl flex flex-col items-center justify-center text-center transition-all ${
+              className={`border-2 border-dashed rounded-2xl p-12 flex flex-col items-center justify-center text-center transition-all ${
                 isDragging
-                  ? 'border-tertiary bg-tertiary/10'
-                  : 'border-outline-variant hover:border-tertiary hover:bg-tertiary/5'
+                  ? 'border-neon-purple bg-neon-purple/10 shadow-glow-purple'
+                  : 'border-white/20 hover:border-neon-cyan hover:bg-neon-cyan/5 hover:shadow-glow-cyan glass-panel'
               } ${isUploading ? 'cursor-wait opacity-80' : 'cursor-pointer'}`}
             >
-              <div className="w-16 h-16 rounded-full bg-tertiary-container/20 flex items-center justify-center mb-md">
-                <span className="material-symbols-outlined text-tertiary text-4xl">cloud_upload</span>
+              <div className="w-20 h-20 rounded-full bg-surface-container border border-white/10 shadow-inner flex items-center justify-center mb-6">
+                <UploadCloud size={40} className="text-neon-cyan" />
               </div>
-              <h3 className="font-h3 text-h3 text-on-surface mb-xs">
+              <h3 className="font-bold text-2xl text-white mb-2">
                 {isUploading
                   ? 'Uploading your CV…'
                   : isDragging
@@ -178,100 +179,100 @@ export function CVManager() {
                       ? 'Replace your CV'
                       : 'Upload your CV'}
               </h3>
-              <p className="text-caption text-on-surface-variant mb-md">
+              <p className="text-sm text-on-surface-variant mb-6">
                 Drag and drop, or browse — PDF or DOCX up to 5MB
               </p>
               {isUploading ? (
                 <div className="w-full max-w-xs">
-                  <div className="h-2 w-full bg-surface-container-highest rounded-full overflow-hidden">
+                  <div className="h-3 w-full bg-surface-container-high rounded-full overflow-hidden border border-white/10">
                     <div
-                      className="h-full bg-tertiary transition-all duration-200"
+                      className="h-full bg-neon-purple transition-all duration-200 shadow-glow-purple"
                       style={{ width: `${uploadProgress}%` }}
                     />
                   </div>
-                  <p className="text-caption text-on-surface-variant mt-xs">{uploadProgress}%</p>
+                  <p className="text-xs font-bold text-neon-purple mt-2">{uploadProgress}%</p>
                 </div>
               ) : (
-                <div className="px-md py-xs bg-surface-container-highest rounded-full text-label-tag text-tertiary border border-tertiary/30">
+                <div className="px-6 py-2 bg-surface-container border border-white/10 hover:border-neon-cyan hover:text-neon-cyan rounded-xl text-xs font-bold text-white transition-all shadow-md uppercase tracking-wider">
                   BROWSE FILES
                 </div>
               )}
             </div>
 
             {/* Current CV */}
-            <div className="bg-surface-container rounded-xl overflow-hidden border border-outline-variant">
-              <div className="px-md py-sm border-b border-outline-variant bg-surface-container-high flex justify-between items-center">
-                <span className="font-bold text-on-surface text-sm">Current CV</span>
+            <div className="glass-panel rounded-2xl overflow-hidden group hover:border-neon-purple/50 transition-all relative">
+              <div className="px-6 py-4 border-b border-white/10 bg-surface-container-high/50 flex justify-between items-center">
+                <span className="font-bold text-white text-sm">Current CV</span>
               </div>
               {resumeUrl ? (
-                <div className="p-md flex items-center gap-md">
+                <div className="p-6 flex items-center gap-6">
                   <a
                     href="#"
                     onClick={openResume}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex items-center gap-md flex-1 overflow-hidden group"
+                    className="flex items-center gap-4 flex-1 overflow-hidden group/link"
                   >
-                    <div className={`w-10 h-10 rounded flex items-center justify-center shrink-0 ${cvMeta?.isPdf ? 'bg-red-900/20 text-error' : 'bg-blue-900/20 text-blue-400'}`}>
-                      <span className="material-symbols-outlined">{cvMeta?.icon || 'description'}</span>
+                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 border ${cvMeta?.isPdf ? 'bg-red-900/20 text-neon-pink border-neon-pink/30 shadow-glow-pink' : 'bg-blue-900/20 text-neon-cyan border-neon-cyan/30 shadow-glow-cyan'}`}>
+                      <FileText size={24} />
                     </div>
                     <div className="flex-1 overflow-hidden">
-                      <div className="flex items-center gap-sm">
-                        <p className="font-bold text-on-surface text-sm truncate group-hover:text-tertiary transition-colors">
+                      <div className="flex items-center gap-3 mb-1">
+                        <p className="font-bold text-white text-base truncate group-hover/link:text-neon-cyan transition-colors">
                           {cvMeta?.label || 'My Resume'}
                         </p>
-                        <span className="shrink-0 text-[10px] font-bold uppercase tracking-wider px-sm py-0.5 rounded-full bg-surface-container-highest text-on-surface-variant border border-outline-variant">
+                        <span className="shrink-0 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-surface-container-high text-neon-mint border border-neon-mint/30 shadow-glow-mint">
                           {cvMeta?.ext || 'FILE'}
                         </span>
                       </div>
-                      <p className="text-caption text-tertiary">
+                      <p className="text-xs text-on-surface-variant font-medium">
                         Active • Click to view{cvMeta?.uploadedLabel ? ` • Uploaded ${cvMeta.uploadedLabel}` : ''}
                       </p>
                     </div>
-                    <span className="material-symbols-outlined text-on-surface-variant">open_in_new</span>
+                    <ExternalLink size={20} className="text-on-surface-variant group-hover/link:text-neon-cyan transition-colors" />
                   </a>
                   <button
                     onClick={handleDelete}
                     disabled={isDeleting}
                     title="Delete CV"
                     aria-label="Delete CV"
-                    className="w-10 h-10 rounded-lg flex items-center justify-center text-on-surface-variant hover:text-error hover:bg-error/10 transition-colors disabled:opacity-50"
+                    className="w-12 h-12 rounded-xl flex items-center justify-center text-on-surface-variant hover:text-neon-pink hover:bg-neon-pink/10 hover:border-neon-pink/50 hover:shadow-glow-pink border border-transparent transition-all disabled:opacity-50"
                   >
-                    <span className="material-symbols-outlined">{isDeleting ? 'hourglass_empty' : 'delete'}</span>
+                    {isDeleting ? <Loader2 size={20} className="animate-spin" /> : <Trash2 size={20} />}
                   </button>
                 </div>
               ) : (
-                <p className="p-md text-on-surface-variant text-sm">No CV uploaded yet.</p>
+                <p className="p-6 text-on-surface-variant text-sm font-medium">No CV uploaded yet.</p>
               )}
             </div>
 
             {/* CV Tips Card */}
-            <div className="bg-surface-container-high rounded-xl p-lg border border-outline-variant relative overflow-hidden">
-              <div className="absolute -right-4 -top-4 w-24 h-24 bg-tertiary/10 rounded-full blur-2xl"></div>
-              <div className="flex items-center gap-sm mb-md text-tertiary">
-                <span className="material-symbols-outlined">lightbulb</span>
-                <h4 className="font-bold text-sm uppercase tracking-wider">Expert CV Tips</h4>
+            <div className="glass-card rounded-2xl p-8 relative overflow-hidden">
+              <div className="absolute -right-10 -top-10 w-32 h-32 bg-neon-cyan/20 blur-3xl rounded-full"></div>
+              <div className="flex items-center gap-3 mb-6 relative z-10">
+                <Lightbulb size={24} className="text-neon-cyan" />
+                <h4 className="font-bold text-sm uppercase tracking-wider text-white">Expert CV Tips</h4>
               </div>
-              <ul className="space-y-md">
-                <li className="flex gap-md items-start">
-                  <span className="material-symbols-outlined text-tertiary text-sm mt-1">check_circle</span>
+              <ul className="space-y-6 relative z-10">
+                <li className="flex gap-4 items-start">
+                  <CheckCircle2 size={20} className="text-neon-cyan shrink-0 mt-0.5" />
                   <div className="flex-1">
-                    <p className="text-on-surface text-sm font-semibold">Use keywords</p>
-                    <p className="text-caption text-on-surface-variant">Match your skills with job descriptions to pass ATS filters.</p>
+                    <p className="text-white text-sm font-bold mb-1">Use keywords</p>
+                    <p className="text-xs text-on-surface-variant">Match your skills with job descriptions to pass ATS filters.</p>
                   </div>
                 </li>
-                <li className="flex gap-md items-start">
-                  <span className="material-symbols-outlined text-tertiary text-sm mt-1">check_circle</span>
+                <li className="flex gap-4 items-start">
+                  <CheckCircle2 size={20} className="text-neon-cyan shrink-0 mt-0.5" />
                   <div className="flex-1">
-                    <p className="text-on-surface text-sm font-semibold">Quantify results</p>
-                    <p className="text-caption text-on-surface-variant">Use numbers (e.g., "Increased sales by 20%") to show impact.</p>
+                    <p className="text-white text-sm font-bold mb-1">Quantify results</p>
+                    <p className="text-xs text-on-surface-variant">Use numbers (e.g., "Increased sales by 20%") to show impact.</p>
                   </div>
                 </li>
-                <li className="flex gap-md items-start">
-                  <span className="material-symbols-outlined text-tertiary text-sm mt-1">check_circle</span>
+                <li className="flex gap-4 items-start">
+                  <CheckCircle2 size={20} className="text-neon-cyan shrink-0 mt-0.5" />
                   <div className="flex-1">
-                    <p className="text-on-surface text-sm font-semibold">Keep it to 2 pages</p>
-                    <p className="text-caption text-on-surface-variant">Conciseness is key. Focus on the last 10 years of experience.</p>
+                    <p className="text-white text-sm font-bold mb-1">Keep it to 2 pages</p>
+                    <p className="text-xs text-on-surface-variant">Conciseness is key. Focus on the last 10 years of experience.</p>
                   </div>
                 </li>
               </ul>

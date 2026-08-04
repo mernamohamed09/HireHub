@@ -4,6 +4,8 @@ import { toast } from 'react-toastify';
 import { chatService } from '../services/chatService';
 import { useSocket } from '../context/SocketContext';
 import { formatPostedAt } from '../utils/dateUtils';
+import { MessageSquare, Send, Loader2, Smile } from 'lucide-react';
+import EmojiPicker from 'emoji-picker-react';
 
 export function ChatInbox() {
   const { user } = useSelector((state) => state.auth);
@@ -12,6 +14,7 @@ export function ChatInbox() {
   const [activeConversation, setActiveConversation] = useState(null);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [messagesLoading, setMessagesLoading] = useState(false);
   const [isConnected, setIsConnected] = useState(Boolean(socket?.connected));
@@ -168,23 +171,26 @@ export function ChatInbox() {
   };
 
   return (
-    <div className="flex -mt-lg -mx-[24px] lg:-mx-[32px] h-[calc(100vh-80px)]">
+    <div className="flex -mt-lg -mx-[24px] lg:-mx-[32px] h-[calc(100vh-80px)] bg-background relative overflow-hidden">
+      <div className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-neon-purple/10 blur-[120px] rounded-full pointer-events-none z-0"></div>
+      <div className="absolute bottom-0 left-1/4 w-[400px] h-[400px] bg-neon-cyan/10 blur-[120px] rounded-full pointer-events-none z-0"></div>
+      
       {/* Inbox Panel (Left ~30%) */}
-      <section className="w-[280px] lg:w-[30%] h-full bg-surface-container-low border-r border-outline-variant flex flex-col shrink-0">
-        <div className="p-md space-y-md">
+      <section className="w-[280px] lg:w-[30%] h-full glass-panel border-r border-white/10 flex flex-col shrink-0 relative z-10">
+        <div className="p-6 border-b border-white/10 shrink-0">
           <div className="flex justify-between items-center">
-            <h2 className="font-h3 text-h3 text-on-surface">Messages</h2>
+            <h2 className="font-bold text-xl text-white">Messages</h2>
           </div>
         </div>
-        <div className="flex-grow overflow-y-auto custom-scrollbar px-sm pb-lg space-y-1">
+        <div className="flex-grow overflow-y-auto custom-scrollbar p-4 space-y-2">
           {isLoading ? (
-            <div className="flex items-center justify-center py-xl">
-              <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="animate-spin text-neon-cyan" size={32} />
             </div>
           ) : conversations.length === 0 ? (
-            <div className="text-center py-xl px-md">
-              <span className="material-symbols-outlined text-[40px] text-on-surface-variant">chat_bubble_outline</span>
-              <p className="text-on-surface-variant font-body mt-md">No conversations yet</p>
+            <div className="text-center py-12 px-6">
+              <MessageSquare className="mx-auto text-white/20 mb-4" size={48} />
+              <p className="text-on-surface-variant font-medium">No conversations yet</p>
             </div>
           ) : (
             conversations.map(conv => {
@@ -194,25 +200,25 @@ export function ChatInbox() {
                 <div
                   key={conv._id}
                   onClick={() => selectConversation(conv)}
-                  className={`p-md rounded-xl cursor-pointer transition-all ${isActive
-                    ? 'bg-primary-container/20 border-l-4 border-tertiary'
-                    : 'hover:bg-surface-container-high'}`}
+                  className={`p-4 rounded-xl cursor-pointer transition-all border ${isActive
+                    ? 'bg-neon-purple/20 border-neon-purple/50 shadow-glow-purple'
+                    : 'bg-surface-container/30 border-white/5 hover:bg-white/5 hover:border-white/10'}`}
                 >
-                  <div className="flex gap-md">
+                  <div className="flex gap-4">
                     <div className="relative shrink-0">
-                      <div className="w-12 h-12 rounded-full bg-primary-container text-surface flex items-center justify-center font-bold text-lg">
+                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-bold text-lg shadow-inner ${isActive ? 'bg-gradient-to-br from-neon-purple to-neon-cyan text-white shadow-glow-purple' : 'bg-surface-container border border-white/10 text-white'}`}>
                         {other.name?.[0]?.toUpperCase() || '?'}
                       </div>
                     </div>
                     <div className="flex-grow min-w-0">
                       <div className="flex justify-between items-start">
-                        <h4 className="font-body font-bold text-on-surface truncate">{other.name}</h4>
-                        <span className="font-caption text-caption text-on-surface-variant shrink-0">
+                        <h4 className="font-bold text-white truncate">{other.name}</h4>
+                        <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider shrink-0">
                           {conv.lastMessage?.timestamp ? formatPostedAt(conv.lastMessage.timestamp) : ''}
                         </span>
                       </div>
-                      <p className="font-caption text-caption text-tertiary font-medium">{other.role}</p>
-                      <p className="font-body text-body truncate mt-1 text-on-surface-variant">
+                      <p className={`text-[10px] font-bold uppercase tracking-wider ${isActive ? 'text-neon-cyan' : 'text-neon-purple'}`}>{other.role}</p>
+                      <p className="text-xs truncate mt-1 text-on-surface-variant font-medium">
                         {conv.lastMessage?.text || 'No messages yet'}
                       </p>
                     </div>
@@ -225,28 +231,28 @@ export function ChatInbox() {
       </section>
 
       {/* Thread Panel (Right ~70%) */}
-      <section className="flex-1 h-full flex flex-col bg-surface relative min-w-0">
+      <section className="flex-1 h-full flex flex-col relative z-10 min-w-0">
         {!activeConversation ? (
           <div className="flex-1 flex items-center justify-center">
-            <div className="text-center">
-              <span className="material-symbols-outlined text-[64px] text-on-surface-variant">forum</span>
-              <p className="text-on-surface-variant font-body mt-md">Select a conversation to start chatting</p>
+            <div className="text-center glass-card p-12 rounded-3xl border border-white/10">
+              <MessageSquare className="mx-auto text-white/20 mb-6" size={64} />
+              <p className="text-on-surface-variant font-medium text-lg">Select a conversation to start chatting</p>
             </div>
           </div>
         ) : (
           <>
             {/* Thread Header */}
-            <header className="bg-surface/80 backdrop-blur-md border-b border-outline-variant/30 h-20 px-lg flex items-center justify-between shrink-0 z-10">
-              <div className="flex items-center gap-md">
-                <div className="w-10 h-10 rounded-lg bg-primary-container text-surface p-1 flex items-center justify-center font-bold text-xl">
+            <header className="glass-panel border-b border-white/10 h-20 px-8 flex items-center justify-between shrink-0 z-10">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-neon-purple to-neon-cyan text-white shadow-glow-purple flex items-center justify-center font-bold text-xl border border-white/20">
                   {getOtherParticipant(activeConversation).name?.[0]?.toUpperCase() || '?'}
                 </div>
                 <div>
-                  <h3 className="font-h3 text-h3 text-on-surface">{getOtherParticipant(activeConversation).name}</h3>
-                  <p className="font-caption text-caption text-on-surface-variant">
+                  <h3 className="font-bold text-lg text-white">{getOtherParticipant(activeConversation).name}</h3>
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant mt-0.5">
                     {getOtherParticipant(activeConversation).email}
                   </p>
-                  <p className={`text-xs ${isConnected ? 'text-emerald-400' : 'text-amber-400'}`}>
+                  <p className={`text-[10px] font-bold uppercase tracking-wider mt-1 ${isConnected ? 'text-neon-mint drop-shadow-[0_0_5px_rgba(0,255,170,0.8)]' : 'text-neon-pink drop-shadow-[0_0_5px_rgba(255,0,128,0.8)]'}`}>
                     {isConnected ? (typingUser ? 'Typing…' : 'Connected') : 'Reconnecting…'}
                   </p>
                 </div>
@@ -254,42 +260,74 @@ export function ChatInbox() {
             </header>
 
             {/* Messages Area */}
-            <div className="flex-grow overflow-y-auto custom-scrollbar p-lg space-y-xl">
+            <div className="flex-grow overflow-y-auto custom-scrollbar p-8 space-y-6">
               {messagesLoading ? (
-                <div className="flex items-center justify-center py-xl">
-                  <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+                <div className="flex items-center justify-center py-12">
+                  <Loader2 className="animate-spin text-neon-purple" size={32} />
                 </div>
               ) : messages.length === 0 ? (
-                <div className="text-center py-xl">
-                  <p className="text-on-surface-variant">No messages yet. Say hello!</p>
+                <div className="text-center py-12 glass-card rounded-2xl border border-white/5 mx-auto max-w-sm">
+                  <p className="text-on-surface-variant font-medium">No messages yet. Say hello!</p>
                 </div>
               ) : (
                 messages.map(msg => {
                   const isMe = msg.sender?._id === user?._id;
+                  
+                  // Telegram-style emoji sizing logic
+                  const strippedText = (msg.text || "").replace(/\s/g, '');
+                  const isOnlyEmoji = strippedText.length > 0 && 
+                                      !/[a-zA-Z0-9.,!?;"'()\[\]{}_\-+=/\\|<>@#$%^&*`~]/.test(strippedText) && 
+                                      /[\p{Extended_Pictographic}\p{Emoji_Component}]/u.test(strippedText);
+                  
+                  let emojiCount = 0;
+                  if (isOnlyEmoji) {
+                    try {
+                      const segmenter = new Intl.Segmenter('en', { granularity: 'grapheme' });
+                      emojiCount = Array.from(segmenter.segment(strippedText)).length;
+                    } catch (e) {
+                      emojiCount = Array.from(strippedText).length; // fallback
+                    }
+                  }
+                  
+                  let bubbleStyle = isMe ? { borderRadius: '16px 16px 4px 16px' } : { borderRadius: '4px 16px 16px 16px' };
+                  let bubbleClasses = "";
+                  let textClasses = "";
+                  
+                  if (isOnlyEmoji) {
+                    bubbleClasses = "bg-transparent border-none shadow-none p-0 text-left";
+                    textClasses = emojiCount === 1 ? "text-[48px] leading-none drop-shadow-md" : "text-[32px] leading-none drop-shadow-md";
+                    bubbleStyle = {}; // No border radius needed for pure emoji
+                  } else {
+                    bubbleClasses = isMe 
+                      ? "bg-neon-purple/20 border border-neon-purple/30 text-white p-4 shadow-lg text-left backdrop-blur-md" 
+                      : "bg-surface-container/50 border border-white/10 p-4 text-white shadow-lg backdrop-blur-md";
+                    textClasses = "text-lg md:text-xl leading-relaxed";
+                  }
+
                   return isMe ? (
-                    <div key={msg._id} className="flex flex-row-reverse gap-md max-w-[80%] ml-auto">
-                      <div className="w-8 h-8 rounded-full bg-tertiary text-on-tertiary flex items-center justify-center font-bold text-sm shrink-0 mt-1 ring-2 ring-primary/40">
+                    <div key={msg._id} className="flex flex-row-reverse gap-4 max-w-[80%] ml-auto group">
+                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-neon-purple to-neon-cyan text-white shadow-glow-purple border border-white/20 flex items-center justify-center font-bold text-sm shrink-0 mt-1">
                         {user?.name?.[0]?.toUpperCase() || 'M'}
                       </div>
                       <div className="space-y-1 text-right">
-                        <div className="bg-primary-container text-on-primary-container p-md shadow-md text-left" style={{ borderRadius: '12px 12px 2px 12px' }}>
-                          <p className="text-body">{msg.text}</p>
+                        <div className={bubbleClasses} style={bubbleStyle}>
+                          <p className={textClasses}>{msg.text}</p>
                         </div>
-                        <span className="text-caption text-on-surface-variant">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity">
                           {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </span>
                       </div>
                     </div>
                   ) : (
-                    <div key={msg._id} className="flex gap-md max-w-[80%]">
-                      <div className="w-8 h-8 rounded-full bg-primary-container text-surface flex items-center justify-center font-bold text-sm shrink-0 mt-1">
+                    <div key={msg._id} className="flex gap-4 max-w-[80%] group">
+                      <div className="w-10 h-10 rounded-xl bg-surface-container border border-white/10 text-white flex items-center justify-center font-bold text-sm shrink-0 mt-1 shadow-inner">
                         {msg.sender?.name?.[0]?.toUpperCase() || '?'}
                       </div>
                       <div className="space-y-1">
-                        <div className="bg-surface-container-highest p-md text-on-surface shadow-md" style={{ borderRadius: '2px 12px 12px 12px' }}>
-                          <p className="text-body">{msg.text}</p>
+                        <div className={bubbleClasses} style={bubbleStyle}>
+                          <p className={textClasses}>{msg.text}</p>
                         </div>
-                        <span className="text-caption text-on-surface-variant ml-1">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant ml-1 opacity-0 group-hover:opacity-100 transition-opacity">
                           {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </span>
                       </div>
@@ -301,8 +339,25 @@ export function ChatInbox() {
             </div>
 
             {/* Input Area */}
-            <footer className="p-lg bg-surface-container-lowest/50 backdrop-blur-sm shrink-0">
-              <div className="flex items-end gap-md bg-surface-container-highest rounded-xl p-3 border border-outline-variant focus-within:border-tertiary focus-within:ring-1 focus-within:ring-tertiary/20 transition-all">
+            <footer className="p-6 glass-panel border-t border-white/10 shrink-0 relative !overflow-visible z-20">
+              {showEmojiPicker && (
+                <div className="absolute bottom-[90px] left-6 z-50 shadow-2xl">
+                  <EmojiPicker
+                    onEmojiClick={(emojiObject) => {
+                      setInput(prev => prev + emojiObject.emoji);
+                      textareaRef.current?.focus();
+                    }}
+                    theme="dark"
+                  />
+                </div>
+              )}
+              <div className="flex items-end gap-2 bg-surface-container/50 rounded-2xl p-2 pl-2 border border-white/10 focus-within:border-neon-cyan focus-within:shadow-glow-cyan transition-all">
+                <button
+                  onClick={() => setShowEmojiPicker(prev => !prev)}
+                  className="p-2 text-white/40 hover:text-neon-cyan transition-colors rounded-full hover:bg-white/5 self-end mb-1"
+                >
+                  <Smile size={24} />
+                </button>
                 <textarea
                   ref={textareaRef}
                   value={input}
@@ -317,17 +372,17 @@ export function ChatInbox() {
                     }, 1200);
                   }}
                   onKeyDown={handleKeyDown}
-                  className="flex-grow bg-transparent border-none focus:ring-0 text-body text-on-surface placeholder:text-outline resize-none py-2 max-h-32 custom-scrollbar outline-none"
+                  className="flex-grow bg-transparent border-none focus:ring-0 text-sm text-white placeholder:text-white/20 resize-none py-3 max-h-32 custom-scrollbar outline-none"
                   placeholder="Type your message here..."
                   rows={1}
                 />
                 <button
                   onClick={handleSend}
                   disabled={!isConnected}
-                  className="bg-secondary-container text-on-secondary-container px-6 py-2 rounded-lg font-body font-bold flex items-center gap-2 hover:brightness-110 active:scale-95 transition-all shrink-0 disabled:opacity-50"
+                  className="bg-gradient-to-r from-neon-purple to-neon-cyan text-white px-6 py-3 rounded-xl font-bold uppercase tracking-wider text-xs flex items-center gap-2 hover:opacity-90 active:scale-95 transition-all shrink-0 disabled:opacity-50 border border-white/10 shadow-[0_0_15px_rgba(188,19,254,0.3)] mb-1"
                 >
                   <span>Send</span>
-                  <span className="material-symbols-outlined text-[18px]">send</span>
+                  <Send size={16} />
                 </button>
               </div>
             </footer>

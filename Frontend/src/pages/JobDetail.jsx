@@ -10,6 +10,7 @@ import { jobService } from '../services/jobService';
 import { applicationService } from '../services/applicationService';
 import { candidateService } from '../services/candidateService';
 import { formatPostedAt } from '../utils/dateUtils';
+import { Building2, MapPin, Send, Bookmark, BookmarkCheck, FileText, Info, Loader2 } from 'lucide-react';
 
 const SAVED_JOBS_KEY = 'hirehub_saved_jobs';
 
@@ -100,8 +101,8 @@ export function JobDetail() {
     return (
       <>
         <DashboardHeader />
-        <div className="flex items-center justify-center py-3xl">
-          <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+        <div className="flex items-center justify-center py-32 w-full">
+          <Loader2 size={40} className="animate-spin text-neon-purple" />
         </div>
       </>
     );
@@ -111,8 +112,8 @@ export function JobDetail() {
     return (
       <>
         <DashboardHeader />
-        <div className="max-w-6xl mx-auto px-gutter py-xl w-full">
-          <div className="bg-error-container/20 border border-error/30 text-error rounded-xl p-xl text-center">
+        <div className="max-w-6xl mx-auto px-4 py-8 w-full">
+          <div className="bg-neon-pink/10 border border-neon-pink/30 text-neon-pink shadow-glow-pink rounded-xl p-6 text-center font-bold">
             {error || 'Job not found'}
           </div>
         </div>
@@ -123,29 +124,29 @@ export function JobDetail() {
   return (
     <>
       <DashboardHeader />
-      <div className="max-w-6xl mx-auto px-gutter py-xl w-full">
-        <div className="flex flex-col lg:flex-row gap-lg">
+      <div className="max-w-6xl mx-auto px-4 py-8 w-full">
+        <div className="flex flex-col lg:flex-row gap-6">
 
           {/* Main Job Detail Column */}
-          <div className="flex-1 space-y-lg">
+          <div className="flex-1 space-y-6">
 
             {/* Header Card */}
-            <div className="bg-surface-container rounded-xl p-xl border border-outline-variant relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 blur-3xl -mr-16 -mt-16"></div>
-              <div className="flex items-start justify-between">
-                <div className="flex gap-lg">
-                  <div className="w-16 h-16 bg-surface-container-high rounded-lg flex items-center justify-center p-sm shrink-0 shadow-xl shadow-black/20">
-                    <span className="material-symbols-outlined text-on-surface-variant text-[32px]">corporate_fare</span>
+            <div className="glass-panel rounded-2xl p-8 relative overflow-hidden group hover:border-neon-purple/50 transition-all">
+              <div className="absolute top-0 right-0 w-48 h-48 bg-neon-purple/20 blur-3xl rounded-full"></div>
+              <div className="flex items-start justify-between relative z-10">
+                <div className="flex flex-col md:flex-row gap-6">
+                  <div className="w-16 h-16 bg-surface-container rounded-xl flex items-center justify-center shrink-0 border border-white/10 shadow-inner">
+                    <Building2 size={32} className="text-neon-cyan" />
                   </div>
                   <div>
-                    <h1 className="font-h2 text-h2 text-on-surface flex items-center gap-sm">
+                    <h1 className="font-bold text-3xl text-white mb-2">
                       {job.title}
                     </h1>
-                    <p className="text-tertiary font-medium">{job.company}</p>
-                    <div className="flex flex-wrap gap-md mt-md">
-                      <div className="flex items-center gap-xs text-on-surface-variant">
-                        <span className="material-symbols-outlined text-[18px]">location_on</span>
-                        <span className="text-caption">{job.location}</span>
+                    <p className="text-neon-cyan font-bold mb-4">{job.company}</p>
+                    <div className="flex flex-wrap gap-3">
+                      <div className="flex items-center gap-1.5 bg-surface-container-high px-3 py-1.5 rounded-lg border border-white/5 text-xs text-on-surface-variant font-medium">
+                        <MapPin size={14} className="text-neon-orange" />
+                        {job.location}
                       </div>
                     </div>
                   </div>
@@ -154,11 +155,11 @@ export function JobDetail() {
             </div>
 
             {/* Tabs */}
-            <div className="border-b border-outline-variant flex gap-xl px-sm">
+            <div className="border-b border-white/10 flex gap-8 px-2 relative z-10">
               {['Overview', 'Company', 'Benefits', 'Reviews'].map(tab => (
                 <button
                   key={tab}
-                  className={`pb-md transition-all ${activeTab === tab ? 'border-b-2 border-tertiary text-tertiary font-bold' : 'text-on-surface-variant hover:text-on-surface'}`}
+                  className={`pb-3 text-sm font-bold transition-all ${activeTab === tab ? 'border-b-2 border-neon-purple text-neon-purple shadow-[0_4px_10px_rgba(110,92,255,0.5)]' : 'text-on-surface-variant hover:text-white'}`}
                   onClick={() => setActiveTab(tab)}
                 >
                   {tab}
@@ -167,14 +168,17 @@ export function JobDetail() {
             </div>
 
             {/* Job Description Content */}
-            <div className="space-y-xl text-on-surface-variant leading-relaxed">
+            <div className="space-y-8 text-on-surface-variant leading-relaxed text-sm relative z-10">
               {activeTab === 'Overview' ? (
-                <section>
-                  <h3 className="font-h3 text-h3 text-on-surface mb-md">About the role</h3>
-                  <p className="whitespace-pre-line">{job.description}</p>
+                <section className="glass-card p-6">
+                  <h3 className="font-bold text-white text-lg mb-4 flex items-center gap-2">
+                    <Info size={20} className="text-neon-purple" />
+                    About the role
+                  </h3>
+                  <p className="whitespace-pre-line text-white/80">{job.description}</p>
                 </section>
               ) : (
-                <section className="text-center py-xl text-on-surface-variant">
+                <section className="text-center py-12 text-on-surface-variant glass-card p-6">
                   No {activeTab.toLowerCase()} information available for this job yet.
                 </section>
               )}
@@ -183,44 +187,43 @@ export function JobDetail() {
 
           {/* Sticky Sidebar */}
           <aside className="w-full lg:w-[320px] shrink-0">
-            <div className="sticky top-24 space-y-lg">
-              <div className="bg-surface-container rounded-xl p-lg border border-outline-variant shadow-lg">
-                <h3 className="font-h3 text-h3 mb-md">Apply Now</h3>
-                <p className="text-caption text-on-surface-variant mb-lg">This position is currently open for applications.</p>
-                <div className="space-y-md">
+            <div className="sticky top-24 space-y-6">
+              <div className="glass-panel p-6 rounded-2xl relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-neon-cyan/10 blur-3xl rounded-full"></div>
+                <h3 className="font-bold text-white text-lg mb-2 relative z-10">Apply Now</h3>
+                <p className="text-xs text-on-surface-variant mb-6 relative z-10">This position is currently open for applications.</p>
+                <div className="space-y-4 relative z-10">
                   <button
                     onClick={() => setIsApplyModalOpen(true)}
-                    className="w-full bg-primary-container text-on-primary-container py-md rounded-lg font-bold hover:bg-primary transition-all flex items-center justify-center gap-sm shadow-lg shadow-primary-container/20"
+                    className="w-full bg-gradient-to-r from-neon-purple to-neon-pink text-white py-3 rounded-xl font-bold hover:opacity-90 transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(110,92,255,0.4)]"
                   >
                     Submit Application
-                    <span className="material-symbols-outlined text-[20px]">send</span>
+                    <Send size={18} />
                   </button>
                   <button
                     onClick={toggleSaved}
                     aria-pressed={isSaved}
-                    className={`w-full border py-md rounded-lg font-bold transition-all flex items-center justify-center gap-sm ${
+                    className={`w-full border py-3 rounded-xl font-bold transition-all flex items-center justify-center gap-2 ${
                       isSaved
-                        ? 'border-tertiary text-tertiary bg-tertiary/10 hover:bg-tertiary/20'
-                        : 'border-outline-variant hover:bg-surface-container-high'
+                        ? 'border-neon-mint text-neon-mint bg-neon-mint/10 shadow-glow-mint'
+                        : 'border-white/10 hover:bg-white/5 text-white'
                     }`}
                   >
-                    <span className="material-symbols-outlined text-[20px]">
-                      {isSaved ? 'bookmark_added' : 'bookmark'}
-                    </span>
+                    {isSaved ? <BookmarkCheck size={18} /> : <Bookmark size={18} />}
                     {isSaved ? 'Saved' : 'Save for Later'}
                   </button>
                 </div>
 
-                <hr className="my-lg border-outline-variant"/>
+                <hr className="my-6 border-white/10 relative z-10"/>
 
-                <div className="space-y-md">
-                  <div className="flex justify-between text-caption">
+                <div className="space-y-4 relative z-10">
+                  <div className="flex justify-between text-xs">
                     <span className="text-on-surface-variant">Posted:</span>
-                    <span className="text-on-surface font-medium">{formatPostedAt(job.createdAt)}</span>
+                    <span className="text-white font-bold">{formatPostedAt(job.createdAt)}</span>
                   </div>
-                  <div className="flex justify-between text-caption">
+                  <div className="flex justify-between text-xs">
                     <span className="text-on-surface-variant">Salary Range:</span>
-                    <span className="text-tertiary font-bold">
+                    <span className="text-neon-mint font-bold">
                       {job.salary ? `EGP ${job.salary.toLocaleString()}` : 'Not disclosed'}
                     </span>
                   </div>
@@ -236,46 +239,46 @@ export function JobDetail() {
         onClose={() => setIsApplyModalOpen(false)}
         title={`Apply for ${job.title}`}
       >
-        <form onSubmit={handleSubmit(handleApply)} className="space-y-lg">
-          <div className="space-y-sm">
-            <label className="block font-label-tag text-on-surface-variant uppercase">Your CV</label>
+        <form onSubmit={handleSubmit(handleApply)} className="space-y-6">
+          <div className="space-y-2">
+            <label className="block text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Your CV</label>
             {hasDefaultCv ? (
               <>
-                <div className="w-full bg-surface-container border border-outline-variant rounded-lg py-md px-md flex items-center gap-md">
-                  <div className="w-10 h-10 rounded flex items-center justify-center bg-red-900/20 shrink-0">
-                    <span className="material-symbols-outlined text-error">picture_as_pdf</span>
+                <div className="w-full bg-surface-container border border-white/10 rounded-xl py-3 px-4 flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-red-900/20 text-neon-pink shrink-0">
+                    <FileText size={20} />
                   </div>
-                  <p className="font-bold text-on-surface text-sm truncate flex-1">{resumeFileName}</p>
+                  <p className="font-bold text-white text-sm truncate flex-1">{resumeFileName}</p>
                 </div>
-                <p className="text-caption text-on-surface-variant mt-1">
+                <p className="text-xs text-on-surface-variant mt-2">
                   Your default resume will be submitted with this application.{' '}
-                  <Link to="/candidate/cv" className="underline hover:text-tertiary">Change it in your CV Manager</Link>.
+                  <Link to="/candidate/cv" className="underline hover:text-neon-cyan">Change it in your CV Manager</Link>.
                 </p>
               </>
             ) : (
-              <p className="text-caption text-error mt-1">
-                No default CV found! <Link to="/candidate/cv" className="underline hover:text-error/80">Upload one in your profile</Link> before applying.
+              <p className="text-xs text-neon-pink bg-neon-pink/10 border border-neon-pink/20 p-3 rounded-xl mt-2">
+                No default CV found! <Link to="/candidate/cv" className="underline font-bold">Upload one in your profile</Link> before applying.
               </p>
             )}
           </div>
-          <div className="space-y-sm">
-            <label className="block font-label-tag text-on-surface-variant uppercase">Cover Note (Optional)</label>
+          <div className="space-y-2">
+            <label className="block text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Cover Note (Optional)</label>
             <textarea
               {...register("coverNote")}
-              className="w-full bg-surface-container border border-outline-variant rounded-lg py-md px-md text-on-surface focus:ring-2 focus:ring-tertiary focus:outline-none resize-none"
+              className="w-full bg-surface-container border border-white/10 rounded-xl py-3 px-4 text-white focus:border-neon-purple focus:shadow-glow-purple focus:outline-none resize-none transition-all"
               placeholder="Explain why you're a great fit for this role..."
               rows="5"
             ></textarea>
           </div>
-          <div className="bg-surface-container-high/50 p-md rounded-lg flex items-start gap-md border border-outline-variant">
-            <span className="material-symbols-outlined text-tertiary">info</span>
-            <p className="text-caption text-on-surface-variant">Your profile and contact details will be shared with the employer's recruitment team automatically.</p>
+          <div className="bg-neon-cyan/10 p-4 rounded-xl flex items-start gap-3 border border-neon-cyan/20">
+            <Info size={16} className="text-neon-cyan shrink-0 mt-0.5" />
+            <p className="text-xs text-neon-cyan/90 leading-relaxed">Your profile and contact details will be shared with the employer's recruitment team automatically.</p>
           </div>
-          <div className="flex gap-md pt-md">
+          <div className="flex gap-4 pt-4">
             <Button
-              variant="outline"
+              variant="ghost"
               type="button"
-              className="flex-1"
+              className="flex-1 border border-white/10"
               onClick={() => setIsApplyModalOpen(false)}
             >
               Cancel
@@ -283,7 +286,7 @@ export function JobDetail() {
             <Button
               variant="primary"
               type="submit"
-              className="flex-1 shadow-lg shadow-primary-container/20"
+              className="flex-1 bg-gradient-to-r from-neon-purple to-neon-pink text-white border-none shadow-[0_0_15px_rgba(110,92,255,0.4)]"
               disabled={isSubmitting || !hasDefaultCv}
               title={!hasDefaultCv ? 'Upload a CV in your profile before applying' : undefined}
             >

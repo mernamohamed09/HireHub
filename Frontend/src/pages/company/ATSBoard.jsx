@@ -9,6 +9,11 @@ import { formatPostedAt } from '../../utils/dateUtils';
 import AssessmentStatusView from '../../components/Assessment/AssessmentStatusView';
 import { api } from '../../services/api';
 import { toast } from 'react-toastify';
+import { Button } from '../../components/ui/Button';
+import {
+  Sparkles, RefreshCw, FileText, MessageSquare, ChevronDown, ChevronUp,
+  Briefcase, CheckCircle, XCircle, AlertCircle, Eye, Loader2, Send
+} from 'lucide-react';
 
 const COLUMNS = [
   { key: 'pending', title: 'Pending' },
@@ -17,40 +22,38 @@ const COLUMNS = [
   { key: 'rejected', title: 'Rejected' },
 ];
 
-// Maps an application's aiAnalysis to a badge label/style, or null if there's
-// nothing to show yet (e.g. a legacy application with no aiAnalysis at all).
 const getMatchBadge = (aiAnalysis) => {
   if (!aiAnalysis) return null;
 
   if (aiAnalysis.status === 'pending' || aiAnalysis.status === 'processing') {
-    return { label: 'Analyzing…', className: 'bg-surface-container-highest text-on-surface-variant' };
+    return { label: 'Analyzing…', className: 'bg-surface-container-high border-white/10 text-on-surface-variant' };
   }
   if (aiAnalysis.status === 'failed') {
     const isUnreadable = /resume file (is missing|could not be read)|unreadable/i.test(aiAnalysis.lastError || '');
     return {
       label: isUnreadable ? 'Unreadable Resume' : 'AI Analysis Failed',
       title: aiAnalysis.lastError || 'The AI analysis could not be completed.',
-      className: 'bg-surface-container-highest text-on-surface-variant',
+      className: 'bg-neon-pink/10 border-neon-pink/20 text-neon-pink shadow-glow-pink',
     };
   }
 
   const score = aiAnalysis.matchScore ?? 0;
-  if (score >= 80) return { label: `${score}% Top Match`, className: 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' };
-  if (score >= 60) return { label: `${score}% Moderate Match`, className: 'bg-amber-500/20 text-amber-400' };
-  return { label: `${score}% Low Match`, className: 'bg-rose-500/20 text-rose-400' };
+  if (score >= 80) return { label: `${score}% Top Match`, className: 'bg-neon-mint/10 border-neon-mint/30 text-neon-mint shadow-glow-mint' };
+  if (score >= 60) return { label: `${score}% Moderate Match`, className: 'bg-neon-orange/10 border-neon-orange/30 text-neon-orange shadow-glow-orange' };
+  return { label: `${score}% Low Match`, className: 'bg-neon-pink/10 border-neon-pink/30 text-neon-pink shadow-glow-pink' };
 };
 
 const AiSkillTags = ({ skills }) => {
   if (!skills?.length) return null;
 
   return (
-    <div className="flex flex-wrap gap-xs mb-md">
+    <div className="flex flex-wrap gap-1.5 mb-4">
       {skills.slice(0, 4).map((skill) => (
         <span
           key={skill}
-          className="flex items-center gap-1 bg-tertiary-container/20 text-tertiary text-[10px] uppercase tracking-wider px-sm py-1 rounded-full font-label-tag border border-tertiary-container/30"
+          className="flex items-center gap-1 bg-neon-purple/10 text-neon-purple text-[10px] uppercase tracking-wider px-2 py-1 rounded-full border border-neon-purple/20 shadow-glow-purple"
         >
-          <span className="material-symbols-outlined text-[12px]">auto_awesome</span>
+          <Sparkles size={10} />
           {skill}
         </span>
       ))}
@@ -101,102 +104,111 @@ const CandidateCard = ({ candidate, availableAssessments, onStatusChange, onMess
   };
 
   return (
-  <div className="bg-surface-container border border-outline-variant rounded-xl p-md shadow-md hover:border-primary-container transition-all">
-    <div className="flex items-start justify-between gap-sm">
-      <p className="font-body text-body font-bold text-on-surface">{candidate.applicant?.name || 'Unknown'}</p>
+  <div className="glass-card p-5 hover:border-neon-purple/50 transition-all flex flex-col relative overflow-hidden group hover-lift">
+    {/* Decorative background glow based on score if top match */}
+    {candidate.aiAnalysis?.matchScore >= 80 && (
+      <div className="absolute top-0 right-0 w-24 h-24 bg-neon-mint/5 blur-2xl rounded-full"></div>
+    )}
+
+    <div className="flex items-start justify-between gap-2 mb-2 relative z-10">
+      <p className="font-bold text-white text-sm">{candidate.applicant?.name || 'Unknown'}</p>
       {matchBadge && (
         <span
           title={matchBadge.title}
-          className={`shrink-0 text-[10px] font-bold uppercase tracking-wider px-sm py-1 rounded-full ${matchBadge.className}`}
+          className={`shrink-0 text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${matchBadge.className}`}
         >
           {matchBadge.label}
         </span>
       )}
     </div>
-    <p className="font-caption text-caption text-on-surface-variant mb-md">
+    <p className="text-[10px] text-on-surface-variant mb-4 relative z-10">
       Applied {formatPostedAt(candidate.appliedAt || candidate.createdAt)}
     </p>
+
     <AiSkillTags skills={candidate.aiAnalysis?.matchedSkills} />
+
     {candidate.aiAnalysis?.missingRequiredSkills?.length > 0 && (
-      <p className="text-[10px] text-rose-400 mb-sm">
+      <p className="text-[10px] text-neon-pink mb-3 flex items-center gap-1 relative z-10">
+        <AlertCircle size={10} />
         Missing: {candidate.aiAnalysis.missingRequiredSkills.slice(0, 3).join(', ')}
       </p>
     )}
+
     {candidate.applicant?.skills?.length > 0 && (
-      <div className="flex flex-wrap gap-xs mb-md">
+      <div className="flex flex-wrap gap-1.5 mb-4 relative z-10">
         {candidate.applicant.skills.slice(0, 3).map(tag => (
-          <span key={tag} className="bg-surface-container-highest text-on-surface text-[10px] uppercase tracking-wider px-sm py-1 rounded-full font-label-tag">
+          <span key={tag} className="bg-surface-container text-white/70 border border-white/5 text-[9px] uppercase tracking-wider px-2 py-1 rounded-full">
             {tag}
           </span>
         ))}
       </div>
     )}
+
     <select
       value={candidate.status}
       onChange={(e) => onStatusChange(candidate._id, e.target.value)}
-      className="w-full py-xs border border-outline-variant rounded-lg font-caption text-caption bg-surface-container-low text-on-surface-variant px-sm outline-none"
+      className="w-full py-2 mb-4 border border-white/10 rounded-xl text-xs bg-surface-container-high text-white px-3 outline-none focus:border-neon-purple transition-colors relative z-10"
     >
       {COLUMNS.map(col => (
-        <option key={col.key} value={col.key} className="bg-surface text-on-surface font-bold">{col.title}</option>
+        <option key={col.key} value={col.key} className="bg-background text-white">{col.title}</option>
       ))}
     </select>
-    <div className="flex gap-sm mt-sm">
+
+    <div className="flex gap-2 relative z-10">
       {candidate.cvUrl ? (
         <button
           type="button"
           onClick={() => onViewCv(candidate._id)}
-          className="flex-1 py-xs bg-surface-container-highest text-on-surface rounded-lg font-caption text-caption font-bold hover:brightness-110 flex items-center justify-center gap-xs transition-all border border-outline-variant"
+          className="flex-1 py-1.5 bg-surface-container hover:bg-surface-container-high border border-white/10 text-white rounded-lg text-[10px] font-bold flex items-center justify-center gap-1 transition-all"
         >
-          <span className="material-symbols-outlined text-[16px]">description</span>
-          View CV
+          <FileText size={12} /> View CV
         </button>
       ) : (
         <button 
           disabled
           title="No CV attached"
-          className="flex-1 py-xs bg-surface-container-lowest text-on-surface-variant/50 rounded-lg font-caption text-caption font-bold flex items-center justify-center gap-xs border border-outline-variant/30 cursor-not-allowed"
+          className="flex-1 py-1.5 bg-surface-container-lowest text-on-surface-variant/50 rounded-lg text-[10px] font-bold flex items-center justify-center gap-1 border border-white/5 cursor-not-allowed"
         >
-          <span className="material-symbols-outlined text-[16px]">description</span>
-          No CV
+          <FileText size={12} /> No CV
         </button>
       )}
       <button 
         onClick={() => onMessageClick(candidate.applicant._id)}
-        className="flex-1 py-xs bg-primary-container text-on-primary-container rounded-lg font-caption text-caption font-bold hover:brightness-110 flex items-center justify-center gap-xs transition-all"
+        className="flex-1 py-1.5 bg-neon-purple/20 border border-neon-purple/30 text-neon-purple hover:bg-neon-purple hover:text-white rounded-lg text-[10px] font-bold flex items-center justify-center gap-1 transition-all"
       >
-        <span className="material-symbols-outlined text-[16px]">chat</span>
-        Message
+        <MessageSquare size={12} /> Message
       </button>
       <button
         type="button"
         title="Reanalyze with the latest ATS model"
-        aria-label="Reanalyze application"
         onClick={() => onReanalyze(candidate._id)}
-        className="w-9 py-xs bg-surface-container-highest text-tertiary rounded-lg hover:brightness-110 flex items-center justify-center border border-outline-variant"
+        className="w-8 py-1.5 bg-surface-container border border-white/10 text-neon-cyan hover:bg-neon-cyan/20 rounded-lg flex items-center justify-center transition-all"
       >
-        <span className="material-symbols-outlined text-[16px]">refresh</span>
+        <RefreshCw size={12} />
       </button>
     </div>
 
     {/* Assessments Section */}
-    <div className="mt-md border-t border-outline-variant pt-sm">
+    <div className="mt-4 border-t border-white/10 pt-3 relative z-10">
       <button 
         onClick={toggleAssessments}
-        className="w-full text-left text-sm font-medium text-blue-600 flex items-center justify-between"
+        className="w-full text-left text-xs font-bold text-neon-cyan hover:text-white transition-colors flex items-center justify-between"
       >
         <span>Assessments {showAssessments || invitations.length > 0 ? `(${invitations.length})` : ''}</span>
-        <span className="material-symbols-outlined text-[16px]">{showAssessments ? 'expand_less' : 'expand_more'}</span>
+        {showAssessments ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
       </button>
 
       {showAssessments && (
-        <div className="mt-sm space-y-3">
+        <div className="mt-3 space-y-3">
           {loadingInvites ? (
-            <p className="text-xs text-gray-500">Loading invitations...</p>
+            <div className="flex items-center gap-2 text-[10px] text-on-surface-variant">
+              <Loader2 size={10} className="animate-spin" /> Loading invitations...
+            </div>
           ) : (
             <>
               {invitations.map(inv => (
-                <div key={inv._id} className="border border-gray-200 rounded p-2">
-                  <p className="text-xs font-bold text-gray-700 mb-1">{inv.assessment?.title}</p>
+                <div key={inv._id} className="border border-white/10 bg-surface-container-high rounded-xl p-3 shadow-inner">
+                  <p className="text-[10px] font-bold text-white mb-2">{inv.assessment?.title}</p>
                   <AssessmentStatusView 
                     invitationId={inv._id} 
                     applicationId={candidate._id}
@@ -204,15 +216,15 @@ const CandidateCard = ({ candidate, availableAssessments, onStatusChange, onMess
                   />
                 </div>
               ))}
-              {invitations.length === 0 && <p className="text-xs text-gray-500">No assessments sent yet.</p>}
+              {invitations.length === 0 && <p className="text-[10px] text-on-surface-variant">No assessments sent yet.</p>}
               
-              <div className="flex gap-2 items-center mt-2">
+              <div className="flex gap-2 items-center mt-3">
                 <select 
-                  className="flex-1 text-xs p-1 border border-outline-variant rounded bg-surface-container-low text-on-surface-variant outline-none"
+                  className="flex-1 text-[10px] p-1.5 border border-white/10 rounded-lg bg-surface-container-high text-white outline-none focus:border-neon-mint"
                   value={invitingAssesmentId}
                   onChange={(e) => setInvitingAssesmentId(e.target.value)}
                 >
-                  <option value="">Select assessment to invite...</option>
+                  <option value="">Select assessment...</option>
                   {availableAssessments.filter(a => !invitations.some(inv => inv.assessment?._id === a._id)).map(a => (
                     <option key={a._id} value={a._id}>{a.title}</option>
                   ))}
@@ -220,9 +232,10 @@ const CandidateCard = ({ candidate, availableAssessments, onStatusChange, onMess
                 <button 
                   onClick={handleInvite}
                   disabled={!invitingAssesmentId || isInviting}
-                  className="bg-blue-600 text-white px-2 py-1 text-xs rounded disabled:opacity-50"
+                  className="bg-gradient-to-r from-neon-mint to-emerald-400 text-black px-3 py-1.5 text-[10px] font-bold rounded-lg disabled:opacity-50 hover:opacity-90 flex items-center gap-1"
                 >
-                  {isInviting ? 'Inviting...' : 'Invite'}
+                  {isInviting ? <Loader2 size={10} className="animate-spin" /> : <Send size={10} />}
+                  Invite
                 </button>
               </div>
             </>
@@ -235,16 +248,17 @@ const CandidateCard = ({ candidate, availableAssessments, onStatusChange, onMess
 };
 
 const KanbanColumn = ({ title, items, availableAssessments, onStatusChange, onMessageClick, onViewCv, onReanalyze }) => (
-  <section className="min-w-[280px] max-w-[320px] flex flex-col h-[calc(100vh-200px)]">
-    <div className="flex items-center justify-between mb-md px-xs">
-      <div className="flex items-center gap-sm">
-        <h2 className="font-body text-body font-bold text-on-surface">{title}</h2>
-        <span className="bg-surface-container-highest text-on-surface-variant text-[10px] px-sm py-0.5 rounded-full">
+  <section className="min-w-[280px] max-w-[320px] flex flex-col h-[calc(100vh-200px)] glass-panel bg-surface-container/20 overflow-hidden relative">
+    <div className="absolute top-0 right-0 w-32 h-32 bg-neon-purple/10 blur-[40px] pointer-events-none"></div>
+    <div className="flex items-center justify-between mb-4 p-4 border-b border-white/5 bg-surface-container-high/30">
+      <div className="flex items-center gap-2">
+        <h2 className="font-bold text-white uppercase tracking-wider text-xs">{title}</h2>
+        <span className="bg-white/10 text-white text-[10px] px-2 py-0.5 rounded-full font-bold">
           {items.length}
         </span>
       </div>
     </div>
-    <div className="flex-1 space-y-md overflow-y-auto custom-scrollbar pr-xs">
+    <div className="flex-1 space-y-4 overflow-y-auto custom-scrollbar p-4">
       {items.map(candidate => (
         <CandidateCard key={candidate._id} candidate={candidate} availableAssessments={availableAssessments} onStatusChange={onStatusChange} onMessageClick={onMessageClick} onViewCv={onViewCv} onReanalyze={onReanalyze} />
       ))}
@@ -283,10 +297,6 @@ export function ATSBoard() {
     fetchJobs();
   }, [user]);
 
-  // The sort mode is sent to the server so the ranking is authoritative (and
-  // stays correct once these lists paginate). Toggling sort does not refetch -
-  // the memo below re-orders what's already loaded - so switching stays instant
-  // and never resets scroll position.
   const fetchJobData = async () => {
     if (!selectedJobId) {
       setApplicants([]);
@@ -313,13 +323,9 @@ export function ATSBoard() {
 
   useEffect(() => {
     fetchJobData();
-    // sortMode is intentionally not a dependency: re-sorting is done client-side.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedJobId]);
 
-  // Real-time sync: update a candidate's badge/skills in place as soon as the
-  // backend finishes AI analysis, without refetching the whole board. Uses the
-  // shared authenticated socket connection.
   useEffect(() => {
     if (!socket) return;
 
@@ -348,8 +354,6 @@ export function ATSBoard() {
     return () => socket.off('application_ai_completed', onAiCompleted);
   }, [socket]);
 
-  // Sorting is derived client-side from the already-loaded applicants, so
-  // toggling it never refetches, flashes a loader, or resets scroll position.
   const sortedApplicants = useMemo(() => {
     if (sortMode !== 'ai_score') return applicants;
 
@@ -411,61 +415,64 @@ export function ATSBoard() {
   return (
     <div className="flex flex-col h-full overflow-hidden w-full relative">
       {/* Top Navigation / Header */}
-      <header className="bg-surface-container/50 backdrop-blur-md border-b border-outline-variant/30 h-16 flex items-center justify-between px-md w-full mb-lg rounded-xl z-40 relative">
-        <div className="flex items-center gap-md">
-          <span className="material-symbols-outlined text-tertiary">work_history</span>
+      <header className="glass-card-purple p-4 flex items-center justify-between w-full mb-6 z-40 relative">
+        <div className="flex items-center gap-4">
+          <div className="p-2 bg-neon-purple/10 rounded-xl border border-neon-purple/20">
+            <Briefcase size={20} className="text-neon-purple" />
+          </div>
           <select
             value={selectedJobId || ''}
             onChange={(e) => setSelectedJobId(e.target.value)}
-            className="font-h3 text-h3 text-on-surface bg-transparent outline-none"
+            className="text-lg font-bold text-white bg-transparent outline-none cursor-pointer hover:text-neon-purple transition-colors"
           >
-            {myJobs.length === 0 && <option value="" className="bg-surface text-on-surface">No jobs posted yet</option>}
+            {myJobs.length === 0 && <option value="" className="bg-background text-white">No jobs posted yet</option>}
             {myJobs.map(job => (
-              <option key={job._id} value={job._id} className="bg-surface text-on-surface">{job.title}</option>
+              <option key={job._id} value={job._id} className="bg-background text-white">{job.title}</option>
             ))}
           </select>
           {selectedJob && (
-            <span className="font-caption text-caption text-on-surface-variant bg-surface-container-highest px-xs rounded ml-sm">
+            <span className="text-xs text-neon-cyan bg-neon-cyan/10 border border-neon-cyan/20 px-2 py-1 rounded-full shadow-glow-cyan font-bold">
               {applicants.length} applicant{applicants.length !== 1 ? 's' : ''}
             </span>
           )}
         </div>
-        <div className="flex items-center gap-sm">
+        <div className="flex items-center gap-3">
           <button
             onClick={fetchJobData}
             title="Refresh Board"
-            className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-surface-container-highest text-tertiary transition-colors"
+            className="flex items-center justify-center w-10 h-10 rounded-xl bg-surface-container-high border border-white/5 hover:border-neon-cyan hover:text-neon-cyan text-on-surface-variant transition-all shadow-md"
           >
-            <span className="material-symbols-outlined text-[20px]">refresh</span>
+            <RefreshCw size={18} />
           </button>
           <select
             value={sortMode}
             onChange={(e) => setSortMode(e.target.value)}
-            className="font-caption text-caption text-on-surface-variant bg-surface-container-highest rounded-lg px-sm py-1 outline-none border border-outline-variant"
+            className="text-xs text-white font-bold bg-surface-container-high rounded-xl px-4 py-2 outline-none border border-white/5 focus:border-neon-purple transition-all"
           >
-            <option value="latest">Sort by: Latest Applied</option>
-            <option value="ai_score">Sort by: AI Match Score</option>
+            <option value="latest">Sort: Latest Applied</option>
+            <option value="ai_score">Sort: AI Match Score</option>
           </select>
         </div>
       </header>
 
       {error && (
-        <div className="bg-error-container/20 border border-error/30 text-error rounded-xl p-lg text-center mb-lg">
-          {error}
+        <div className="bg-neon-pink/10 border border-neon-pink/30 text-neon-pink shadow-glow-pink rounded-xl p-4 text-center mb-6 text-sm font-bold flex items-center justify-center gap-2">
+          <AlertCircle size={16} /> {error}
         </div>
       )}
 
       {isLoading ? (
-        <div className="flex items-center justify-center py-3xl">
-          <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+        <div className="flex items-center justify-center py-32">
+          <Loader2 size={40} className="animate-spin text-neon-purple" />
         </div>
       ) : myJobs.length === 0 ? (
-        <div className="bg-surface-container border border-outline-variant rounded-xl p-xl text-center text-on-surface-variant">
-          You haven't posted any jobs yet. Post a job from your Dashboard to start reviewing applicants.
+        <div className="glass-card p-10 text-center text-on-surface-variant flex flex-col items-center justify-center">
+          <Briefcase size={48} className="text-white/10 mb-4" />
+          <p>You haven't posted any jobs yet. Post a job from your Dashboard to start reviewing applicants.</p>
         </div>
       ) : (
         <div className="flex-1 overflow-x-auto custom-scrollbar relative mx-[-24px] lg:mx-[-32px] px-lg lg:px-xl pb-lg">
-          <div className="flex h-full gap-lg min-w-max relative z-10 pt-md">
+          <div className="flex h-full gap-6 min-w-max relative z-10 pt-4">
             {COLUMNS.map(col => (
               <KanbanColumn
                 key={col.key}

@@ -1,49 +1,53 @@
 import { Link } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
+import { Rocket, Bell } from 'lucide-react';
 
 export function ForCandidates() {
   return (
     <div className="w-full">
       <section className="relative hero-mesh py-24 px-gutter overflow-hidden min-h-[70vh] flex items-center">
-        <div className="max-w-container_max_width mx-auto flex flex-col md:flex-row items-center gap-xl relative z-10">
-          <div className="w-full md:w-1/2 space-y-lg">
-            <div className="inline-flex items-center gap-sm bg-tertiary/20 text-tertiary px-md py-xs rounded-full font-label-tag font-bold tracking-widest uppercase mb-sm border border-tertiary/20">
-              <span className="material-symbols-outlined text-[16px]">rocket_launch</span>
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-neon-purple/20 blur-[120px] rounded-full pointer-events-none -z-10 translate-x-1/3 -translate-y-1/3"></div>
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-neon-cyan/20 blur-[120px] rounded-full pointer-events-none -z-10 -translate-x-1/3 translate-y-1/3"></div>
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-12 relative z-10">
+          <div className="w-full md:w-1/2 space-y-8">
+            <div className="inline-flex items-center gap-2 bg-neon-purple/20 text-neon-purple px-4 py-2 rounded-full font-bold tracking-widest uppercase mb-4 border border-neon-purple/30 shadow-glow-purple">
+              <Rocket size={16} />
               Accelerate Your Career
             </div>
-            <h1 className="font-h1 text-h1-mobile md:text-h1 text-on-surface leading-tight">
-              Companies apply <br /><span className="text-tertiary">to you.</span>
+            <h1 className="font-bold text-5xl md:text-7xl text-white leading-tight">
+              Companies apply <br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-purple to-neon-cyan drop-shadow-[0_0_15px_rgba(188,19,254,0.5)]">to you.</span>
             </h1>
-            <p className="font-body text-lg text-on-surface-variant max-w-lg">
+            <p className="font-medium text-lg text-on-surface-variant max-w-lg leading-relaxed">
               Create your profile once and let our AI match you with companies that respect your skills and salary expectations. No more cover letters.
             </p>
-            <div className="flex flex-col sm:flex-row gap-md pt-md">
+            <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <Link to="/register">
-                <Button variant="primary" size="lg" className="w-full sm:w-auto bg-tertiary hover:bg-tertiary/90 text-on-tertiary shadow-lg shadow-tertiary/20">Create Free Profile</Button>
+                <button className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-neon-purple to-neon-cyan text-white font-bold rounded-xl uppercase tracking-wider hover:opacity-90 active:scale-[0.98] transition-all shadow-[0_0_20px_rgba(188,19,254,0.3)]">Create Free Profile</button>
               </Link>
               <Link to="/jobs">
-                <Button variant="outline" size="lg" className="w-full sm:w-auto">Browse Jobs First</Button>
+                <button className="w-full sm:w-auto px-8 py-4 bg-surface-container/50 text-white font-bold rounded-xl border border-white/10 uppercase tracking-wider hover:bg-white/5 hover:border-white/30 transition-all">Browse Jobs First</button>
               </Link>
             </div>
           </div>
           
           <div className="w-full md:w-1/2 flex justify-center">
-            <div className="bg-surface-container border border-outline-variant rounded-2xl p-lg shadow-2xl relative max-w-md w-full">
-              <div className="flex justify-between items-center mb-md border-b border-outline-variant pb-sm">
-                <h3 className="font-bold text-on-surface">Interview Requests</h3>
-                <span className="material-symbols-outlined text-tertiary">notifications_active</span>
+            <div className="glass-card rounded-2xl border border-white/10 p-8 shadow-2xl relative max-w-md w-full overflow-hidden group">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-neon-purple/20 blur-[40px] rounded-full pointer-events-none transition-all group-hover:bg-neon-purple/30"></div>
+              <div className="flex justify-between items-center mb-6 border-b border-white/10 pb-4 relative z-10">
+                <h3 className="font-bold text-lg text-white">Interview Requests</h3>
+                <Bell className="text-neon-cyan" size={20} />
               </div>
-              <div className="space-y-md">
-                <div className="p-md rounded-lg bg-surface-container-high border border-outline-variant relative overflow-hidden group hover:border-tertiary transition-colors cursor-pointer">
-                  <div className="absolute top-0 left-0 w-1 h-full bg-tertiary"></div>
-                  <div className="flex justify-between items-start mb-sm">
-                    <div className="font-bold text-on-surface">TechCorp Inc.</div>
-                    <span className="text-xs font-bold text-tertiary bg-tertiary/10 px-2 py-1 rounded">New</span>
+              <div className="space-y-4 relative z-10">
+                <div className="p-4 rounded-xl bg-surface-container/50 border border-white/5 relative overflow-hidden group-hover:border-neon-purple/50 transition-all cursor-pointer shadow-lg hover:bg-white/5">
+                  <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-neon-purple to-neon-cyan"></div>
+                  <div className="flex justify-between items-start mb-2">
+                    <div className="font-bold text-white group-hover:text-neon-cyan transition-colors">TechCorp Inc.</div>
+                    <span className="text-[10px] font-bold text-neon-purple bg-neon-purple/20 px-2.5 py-1 rounded-full uppercase tracking-wider shadow-glow-purple border border-neon-purple/30">New</span>
                   </div>
-                  <div className="text-sm text-on-surface-variant">Requested an interview for Frontend Lead</div>
-                  <div className="mt-md flex gap-sm">
-                    <button className="flex-1 bg-tertiary/20 text-tertiary py-1 rounded text-sm font-bold hover:bg-tertiary hover:text-on-tertiary transition-colors">Accept</button>
-                    <button className="flex-1 bg-surface-variant text-on-surface-variant py-1 rounded text-sm font-bold hover:bg-outline-variant transition-colors">Decline</button>
+                  <div className="text-xs text-on-surface-variant font-medium leading-relaxed">Requested an interview for Frontend Lead</div>
+                  <div className="mt-4 flex gap-3">
+                    <button className="flex-1 bg-neon-purple/20 text-neon-purple py-2 rounded-lg text-xs font-bold uppercase tracking-wider hover:bg-neon-purple hover:text-white transition-all shadow-glow-purple border border-neon-purple/30">Accept</button>
+                    <button className="flex-1 bg-surface-container text-on-surface-variant py-2 rounded-lg text-xs font-bold uppercase tracking-wider hover:text-white hover:bg-white/10 transition-all border border-white/10">Decline</button>
                   </div>
                 </div>
               </div>

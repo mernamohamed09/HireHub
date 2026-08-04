@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import { interviewService } from '../services/interviewService';
 import { jobService } from '../services/jobService';
 import { applicationService } from '../services/applicationService';
+import { ChevronLeft, ChevronRight, Edit, PlusCircle, Calendar, Clock, Video, Loader2 } from 'lucide-react';
 
 export function Scheduling() {
   const { user } = useSelector((state) => state.auth);
@@ -194,44 +195,46 @@ export function Scheduling() {
   const totalCompleted = interviews.filter(i => i.status === 'completed').length;
 
   return (
-    <div className="w-full">
+    <div className="w-full relative">
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-surface/95 backdrop-blur-md border-b border-outline-variant flex justify-between items-center h-16 px-md -mt-lg mx-[-24px] lg:mx-[-32px] w-[calc(100%+48px)] lg:w-[calc(100%+64px)] mb-xl">
-        <div className="flex items-center gap-xl">
-          <h2 className="font-h3 text-h3 font-bold text-on-surface">Interview Scheduling</h2>
+      <header className="glass-panel border-b border-white/10 sticky top-0 z-40 bg-background/80 backdrop-blur-xl flex justify-between items-center h-20 px-8 -mt-8 mx-[-24px] lg:mx-[-32px] w-[calc(100%+48px)] lg:w-[calc(100%+64px)] mb-8">
+        <div className="absolute top-0 right-10 w-48 h-48 bg-neon-purple/10 blur-[100px] rounded-full"></div>
+        <div className="flex items-center gap-6 relative z-10">
+          <h2 className="font-bold text-3xl text-white">Interview Scheduling</h2>
         </div>
       </header>
 
-      <div className="grid grid-cols-12 gap-gutter max-w-container_max_width w-full">
+      <div className="grid grid-cols-12 gap-8 max-w-7xl mx-auto w-full relative z-10">
         {/* Left Column: Calendar */}
-        <div className="col-span-12 lg:col-span-8 space-y-gutter">
-          <section className="bg-surface-container-low rounded-xl border border-outline-variant p-lg shadow-md hover:shadow-xl transition-shadow">
-            <div className="flex justify-between items-center mb-lg">
-              <div className="flex items-center gap-md">
-                <h3 className="font-h2 text-h2 text-on-surface">{monthNames[month]} {year}</h3>
-                <div className="flex gap-xs">
-                  <button onClick={prevMonth} className="p-1 hover:bg-surface-container-high rounded-md transition-colors">
-                    <span className="material-symbols-outlined">chevron_left</span>
+        <div className="col-span-12 lg:col-span-8 space-y-8">
+          <section className="glass-card rounded-2xl border border-white/10 p-8 shadow-lg relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-neon-purple to-neon-cyan"></div>
+            <div className="flex justify-between items-center mb-8">
+              <div className="flex items-center gap-4">
+                <h3 className="font-bold text-2xl text-white">{monthNames[month]} {year}</h3>
+                <div className="flex gap-2">
+                  <button onClick={prevMonth} className="p-2 hover:bg-white/10 rounded-xl transition-colors border border-white/5 hover:border-white/20">
+                    <ChevronLeft className="text-white w-5 h-5" />
                   </button>
-                  <button onClick={nextMonth} className="p-1 hover:bg-surface-container-high rounded-md transition-colors">
-                    <span className="material-symbols-outlined">chevron_right</span>
+                  <button onClick={nextMonth} className="p-2 hover:bg-white/10 rounded-xl transition-colors border border-white/5 hover:border-white/20">
+                    <ChevronRight className="text-white w-5 h-5" />
                   </button>
                 </div>
               </div>
-              <div className="flex gap-md text-caption">
-                <div className="flex items-center gap-xs">
-                  <span className="w-3 h-3 rounded-full bg-tertiary inline-block"></span>
+              <div className="flex gap-4 text-xs font-bold uppercase tracking-wider">
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-neon-purple shadow-glow-purple inline-block"></span>
                   <span className="text-on-surface-variant">Scheduled</span>
                 </div>
               </div>
             </div>
 
-            <div className="grid grid-cols-7 gap-px bg-outline-variant border border-outline-variant rounded-lg overflow-hidden">
+            <div className="grid grid-cols-7 gap-[1px] bg-white/10 border border-white/10 rounded-xl overflow-hidden shadow-inner">
               {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(d => (
-                <div key={d} className="bg-surface-container-high py-2 text-center font-label-tag text-label-tag text-on-surface-variant uppercase">{d}</div>
+                <div key={d} className="bg-surface-container/80 py-3 text-center text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">{d}</div>
               ))}
               {Array.from({ length: startOffset }).map((_, i) => (
-                <div key={`empty-${i}`} className="bg-surface/50 h-20 sm:h-28 p-2" />
+                <div key={`empty-${i}`} className="bg-surface-container/30 h-24 sm:h-32 p-2 backdrop-blur-sm" />
               ))}
               {Array.from({ length: daysInMonth }, (_, i) => i + 1).map(day => {
                 const dayInterviews = getInterviewsForDay(day);
@@ -241,13 +244,13 @@ export function Scheduling() {
                   <div
                     key={day}
                     onClick={() => setSelectedDay(day)}
-                    className={`bg-surface h-20 sm:h-28 p-2 transition-colors hover:bg-surface-container-highest cursor-pointer relative ${isSelected ? 'ring-2 ring-inset ring-tertiary' : ''}`}
+                    className={`bg-surface-container/50 h-24 sm:h-32 p-2 transition-all hover:bg-white/5 cursor-pointer relative ${isSelected ? 'ring-2 ring-inset ring-neon-purple bg-neon-purple/5' : ''}`}
                   >
-                    <span className={`font-bold text-caption inline-flex items-center justify-center ${isToday ? 'bg-primary text-on-primary w-6 h-6 rounded-full' : 'text-on-surface'}`}>
+                    <span className={`font-bold text-xs inline-flex items-center justify-center ${isToday ? 'bg-gradient-to-br from-neon-purple to-neon-cyan text-white w-7 h-7 rounded-full shadow-[0_0_10px_rgba(0,255,255,0.5)]' : 'text-on-surface-variant'}`}>
                       {day}
                     </span>
                     {dayInterviews.length > 0 && (
-                      <div className="mt-1 p-1 bg-primary-container/40 border-l-2 border-primary text-[10px] text-primary truncate rounded-r-sm hidden sm:block">
+                      <div className="mt-2 p-1.5 bg-neon-cyan/20 border-l-2 border-neon-cyan text-[10px] font-bold text-neon-cyan truncate rounded-r-md hidden sm:block shadow-glow-cyan">
                         {dayInterviews.length} Interview{dayInterviews.length > 1 ? 's' : ''}
                       </div>
                     )}
@@ -259,117 +262,118 @@ export function Scheduling() {
 
           {/* Add Interview Form (Only for Company / Recruiters) */}
           {(user?.role === 'company' || user?.role === 'admin') && (
-            <section className="bg-surface-container rounded-xl border border-outline-variant p-lg shadow-md hover:shadow-xl transition-shadow">
-              <div className="flex items-center justify-between gap-sm mb-md">
-                <div className="flex items-center gap-sm">
-                  <span className="material-symbols-outlined text-tertiary">{editingId ? 'edit_calendar' : 'add_circle'}</span>
-                  <h3 className="font-h3 text-h3 text-on-surface">{editingId ? 'Reschedule Interview' : 'Schedule an Interview'}</h3>
+            <section className="glass-card rounded-2xl border border-white/10 p-8 shadow-lg relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-neon-cyan/5 blur-[50px] rounded-full pointer-events-none"></div>
+              <div className="flex items-center justify-between gap-4 mb-8">
+                <div className="flex items-center gap-4">
+                  {editingId ? <Edit className="text-neon-cyan w-6 h-6" /> : <PlusCircle className="text-neon-purple w-6 h-6" />}
+                  <h3 className="font-bold text-2xl text-white">{editingId ? 'Reschedule Interview' : 'Schedule an Interview'}</h3>
                 </div>
                 {editingId && (
-                  <button type="button" onClick={resetForm} className="text-caption text-on-surface-variant hover:text-on-surface underline">
+                  <button type="button" onClick={resetForm} className="text-xs font-bold uppercase tracking-wider text-on-surface-variant hover:text-neon-pink transition-colors">
                     Cancel edit
                   </button>
                 )}
               </div>
-              <form className="space-y-md" onSubmit={handleSubmit}>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-md">
+              <form className="space-y-6 relative z-10" onSubmit={handleSubmit}>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-caption text-on-surface-variant mb-1">Select Job</label>
+                    <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Select Job</label>
                     <select
                       value={selectedJobId}
                       onChange={(e) => setSelectedJobId(e.target.value)}
                       disabled={!!editingId}
-                      className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-md py-2 focus:border-tertiary focus:ring-1 focus:ring-tertiary outline-none transition-all text-on-surface disabled:opacity-60"
+                      className="w-full bg-surface-container/50 border border-white/10 rounded-xl px-4 py-3 focus:border-neon-purple focus:ring-1 focus:ring-neon-purple outline-none transition-all text-white disabled:opacity-50"
                       required
                     >
                       {myJobs.map(job => (
-                        <option key={job._id} value={job._id}>{job.title}</option>
+                        <option key={job._id} value={job._id} className="bg-background">{job.title}</option>
                       ))}
-                      {myJobs.length === 0 && <option value="">No jobs posted yet</option>}
+                      {myJobs.length === 0 && <option value="" className="bg-background">No jobs posted yet</option>}
                     </select>
                   </div>
                   <div>
-                    <label className="block text-caption text-on-surface-variant mb-1">Select Candidate</label>
+                    <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Select Candidate</label>
                     <select
                       value={form.candidateId}
                       onChange={(e) => setForm({ ...form, candidateId: e.target.value })}
                       disabled={!!editingId}
-                      className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-md py-2 focus:border-tertiary focus:ring-1 focus:ring-tertiary outline-none transition-all text-on-surface disabled:opacity-60"
+                      className="w-full bg-surface-container/50 border border-white/10 rounded-xl px-4 py-3 focus:border-neon-purple focus:ring-1 focus:ring-neon-purple outline-none transition-all text-white disabled:opacity-50"
                       required
                     >
                       {applicants.map(app => (
-                        <option key={app._id} value={app.applicant?._id}>{app.applicant?.name}</option>
+                        <option key={app._id} value={app.applicant?._id} className="bg-background">{app.applicant?.name}</option>
                       ))}
-                      {applicants.length === 0 && <option value="">No applicants for selected job</option>}
+                      {applicants.length === 0 && <option value="" className="bg-background">No applicants for selected job</option>}
                     </select>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-md">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div>
-                    <label className="block text-caption text-on-surface-variant mb-1">Date</label>
+                    <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Date</label>
                     <input 
                       type="date"
                       value={form.date} 
                       onChange={(e) => setForm({ ...form, date: e.target.value })}
-                      className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-md py-2 focus:border-tertiary focus:ring-1 focus:ring-tertiary outline-none transition-all text-on-surface"
+                      className="w-full bg-surface-container/50 border border-white/10 rounded-xl px-4 py-3 focus:border-neon-purple focus:ring-1 focus:ring-neon-purple outline-none transition-all text-white"
                       required
                     />
                   </div>
                   <div>
-                    <label className="block text-caption text-on-surface-variant mb-1">Start Time</label>
+                    <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Start Time</label>
                     <input 
                       type="time" 
                       value={form.startTime} 
                       onChange={(e) => setForm({ ...form, startTime: e.target.value })}
-                      className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-md py-2 focus:border-tertiary focus:ring-1 focus:ring-tertiary outline-none transition-all text-on-surface"
+                      className="w-full bg-surface-container/50 border border-white/10 rounded-xl px-4 py-3 focus:border-neon-purple focus:ring-1 focus:ring-neon-purple outline-none transition-all text-white"
                       required
                     />
                   </div>
                   <div>
-                    <label className="block text-caption text-on-surface-variant mb-1">End Time</label>
+                    <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">End Time</label>
                     <input 
                       type="time" 
                       value={form.endTime} 
                       onChange={(e) => setForm({ ...form, endTime: e.target.value })}
-                      className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-md py-2 focus:border-tertiary focus:ring-1 focus:ring-tertiary outline-none transition-all text-on-surface"
+                      className="w-full bg-surface-container/50 border border-white/10 rounded-xl px-4 py-3 focus:border-neon-purple focus:ring-1 focus:ring-neon-purple outline-none transition-all text-white"
                       required
                     />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-md">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-caption text-on-surface-variant mb-1">Interview Type</label>
+                    <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Interview Type</label>
                     <select 
                       value={form.type} 
                       onChange={(e) => setForm({ ...form, type: e.target.value })}
-                      className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-md py-2 focus:border-tertiary focus:ring-1 focus:ring-tertiary outline-none transition-all text-on-surface"
+                      className="w-full bg-surface-container/50 border border-white/10 rounded-xl px-4 py-3 focus:border-neon-purple focus:ring-1 focus:ring-neon-purple outline-none transition-all text-white"
                     >
-                      <option value="video">Video Call</option>
-                      <option value="phone">Phone Call</option>
-                      <option value="in-person">In-Person</option>
+                      <option value="video" className="bg-background">Video Call</option>
+                      <option value="phone" className="bg-background">Phone Call</option>
+                      <option value="in-person" className="bg-background">In-Person</option>
                     </select>
                   </div>
                   <div>
-                    <label className="block text-caption text-on-surface-variant mb-1">Meeting Link (e.g., Google Meet)</label>
+                    <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Meeting Link (e.g., Google Meet)</label>
                     <input 
                       type="url" 
                       value={form.meetingLink} 
                       onChange={(e) => setForm({ ...form, meetingLink: e.target.value })}
                       placeholder="https://meet.google.com/..."
-                      className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-md py-2 focus:border-tertiary focus:ring-1 focus:ring-tertiary outline-none transition-all text-on-surface"
+                      className="w-full bg-surface-container/50 border border-white/10 rounded-xl px-4 py-3 focus:border-neon-purple focus:ring-1 focus:ring-neon-purple outline-none transition-all text-white placeholder-white/30"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-caption text-on-surface-variant mb-1">Additional Notes</label>
+                  <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Additional Notes</label>
                   <textarea 
                     value={form.notes} 
                     onChange={(e) => setForm({ ...form, notes: e.target.value })}
-                    rows={2}
-                    className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-md py-2 focus:border-tertiary focus:ring-1 focus:ring-tertiary outline-none transition-all text-on-surface"
+                    rows={3}
+                    className="w-full bg-surface-container/50 border border-white/10 rounded-xl px-4 py-3 focus:border-neon-purple focus:ring-1 focus:ring-neon-purple outline-none transition-all text-white resize-none"
                     placeholder="Enter details for the candidate..."
                   />
                 </div>
@@ -377,7 +381,7 @@ export function Scheduling() {
                 <button
                   type="submit"
                   disabled={isSubmitting || (!editingId && applicants.length === 0)}
-                  className="w-full bg-tertiary text-on-tertiary py-3 rounded-lg font-bold hover:brightness-110 active:scale-95 transition-all disabled:opacity-50"
+                  className="w-full bg-gradient-to-r from-neon-purple to-neon-cyan text-white py-4 rounded-xl font-bold text-sm uppercase tracking-wider hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-50 shadow-[0_0_20px_rgba(188,19,254,0.3)] border-none"
                 >
                   {isSubmitting ? 'Saving...' : editingId ? 'Save Changes' : 'Schedule Interview'}
                 </button>
@@ -387,59 +391,60 @@ export function Scheduling() {
         </div>
 
         {/* Right Column */}
-        <div className="col-span-12 lg:col-span-4 space-y-gutter">
+        <div className="col-span-12 lg:col-span-4 space-y-8">
           {/* Upcoming Interviews */}
-          <section className="bg-surface-container-low rounded-xl border border-outline-variant p-lg shadow-md hover:scale-[1.01] transition-transform duration-200">
-            <h3 className="font-h3 text-h3 text-on-surface mb-lg">Upcoming Interviews</h3>
+          <section className="glass-card rounded-2xl border border-white/10 p-6 shadow-lg relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-neon-cyan/10 blur-[50px] rounded-full pointer-events-none"></div>
+            <h3 className="font-bold text-xl text-white mb-6 relative z-10">Upcoming Interviews</h3>
             {isLoading ? (
-              <div className="flex items-center justify-center py-lg">
-                <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+              <div className="flex items-center justify-center py-12">
+                <Loader2 size={32} className="animate-spin text-neon-purple" />
               </div>
             ) : upcomingInterviews.length === 0 ? (
-              <p className="text-on-surface-variant text-body">No upcoming interviews.</p>
+              <p className="text-on-surface-variant text-sm font-medium">No upcoming interviews.</p>
             ) : (
-              <div className="space-y-md">
+              <div className="space-y-4 relative z-10">
                 {upcomingInterviews.map(interview => {
                   const interviewDate = new Date(interview.date);
                   const isToday = interviewDate.toDateString() === new Date().toDateString();
                   const otherPerson = user?.role === 'company' ? interview.candidate : interview.interviewer;
                   return (
-                    <div key={interview._id} className="p-md bg-surface-container-high rounded-lg border border-outline-variant relative overflow-hidden group">
-                      <div className="absolute top-0 left-0 w-1 h-full bg-primary"></div>
-                      <div className="flex justify-between items-start mb-sm">
-                        <div className="flex gap-md">
-                          <div className="w-12 h-12 rounded-lg border border-outline-variant bg-primary-container text-surface flex items-center justify-center font-bold text-lg shrink-0">
+                    <div key={interview._id} className="p-4 bg-surface-container/50 rounded-xl border border-white/5 hover:border-neon-cyan/50 hover:bg-white/5 transition-all group relative overflow-hidden">
+                      <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-neon-purple to-neon-cyan group-hover:shadow-[0_0_10px_rgba(0,255,255,0.8)] transition-all"></div>
+                      <div className="flex justify-between items-start mb-4">
+                        <div className="flex gap-4">
+                          <div className="w-12 h-12 rounded-xl border border-white/10 bg-surface-container text-white flex items-center justify-center font-bold text-lg shrink-0 shadow-inner group-hover:border-neon-cyan/30 transition-colors">
                             {otherPerson?.name?.[0]?.toUpperCase() || '?'}
                           </div>
                           <div>
-                            <h4 className="font-bold text-body text-on-surface">{otherPerson?.name || 'Unknown'}</h4>
-                            <p className="text-caption text-on-surface-variant">{interview.job?.title || 'Interview'}</p>
+                            <h4 className="font-bold text-sm text-white group-hover:text-neon-cyan transition-colors">{otherPerson?.name || 'Unknown'}</h4>
+                            <p className="text-xs text-on-surface-variant mt-1">{interview.job?.title || 'Interview'}</p>
                           </div>
                         </div>
-                        {isToday && <span className="bg-primary-container/20 text-primary text-[10px] px-2 py-0.5 rounded-full font-bold uppercase whitespace-nowrap">Today</span>}
+                        {isToday && <span className="bg-neon-mint/20 text-neon-mint text-[10px] px-2.5 py-1 rounded-full font-bold uppercase tracking-wider border border-neon-mint/30 shadow-glow-mint whitespace-nowrap">Today</span>}
                       </div>
-                      <div className="flex items-center gap-md text-caption text-on-surface-variant mb-md">
-                        <div className="flex items-center gap-xs">
-                          <span className="material-symbols-outlined text-sm">calendar_month</span>
-                          {interviewDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                      <div className="flex items-center gap-4 text-xs font-medium text-on-surface-variant mb-4 bg-background/50 p-2.5 rounded-lg border border-white/5">
+                        <div className="flex items-center gap-2">
+                          <Calendar size={14} className="text-neon-purple" />
+                          {interviewDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                         </div>
-                        <div className="flex items-center gap-xs">
-                          <span className="material-symbols-outlined text-sm">schedule</span>
+                        <div className="flex items-center gap-2">
+                          <Clock size={14} className="text-neon-cyan" />
                           {interview.startTime} - {interview.endTime}
                         </div>
                       </div>
                       {interview.meetingLink && (
                         <a href={interview.meetingLink} target="_blank" rel="noopener noreferrer"
-                          className="w-full bg-primary-container text-white py-2 rounded-md text-caption font-bold hover:bg-primary-container/80 transition-colors flex items-center justify-center gap-sm">
-                          <span className="material-symbols-outlined text-sm">video_call</span>
+                          className="w-full bg-neon-cyan/10 border border-neon-cyan/30 text-neon-cyan py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider hover:bg-neon-cyan hover:text-background hover:shadow-glow-cyan transition-all flex items-center justify-center gap-2 mb-3">
+                          <Video size={16} />
                           Join Meeting
                         </a>
                       )}
-                      <div className="flex gap-md mt-sm">
+                      <div className="flex gap-4 mt-2">
                         {(user?.role === 'company' || user?.role === 'admin') && (
-                          <button onClick={() => startEdit(interview)} className="flex-1 text-tertiary text-caption font-medium hover:underline">Reschedule</button>
+                          <button onClick={() => startEdit(interview)} className="flex-1 text-neon-purple text-xs font-bold uppercase tracking-wider hover:text-white transition-colors text-left">Reschedule</button>
                         )}
-                        <button onClick={() => handleCancel(interview._id)} className="flex-1 text-error text-caption font-medium hover:underline">Cancel</button>
+                        <button onClick={() => handleCancel(interview._id)} className="flex-1 text-neon-pink text-xs font-bold uppercase tracking-wider hover:text-white transition-colors text-right">Cancel</button>
                       </div>
                     </div>
                   );
@@ -449,14 +454,16 @@ export function Scheduling() {
           </section>
 
           {/* Stats */}
-          <div className="grid grid-cols-2 gap-md">
-            <div className="p-md bg-surface-container-low border border-outline-variant rounded-xl hover:border-tertiary transition-colors">
-              <p className="text-[10px] text-on-surface-variant uppercase font-bold mb-1">Scheduled</p>
-              <p className="font-h2 text-h2 text-tertiary">{totalScheduled}</p>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="p-6 glass-card rounded-2xl border border-white/10 hover:border-neon-purple/50 transition-all hover:bg-white/5 relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-neon-purple/10 blur-[30px] rounded-full pointer-events-none group-hover:bg-neon-purple/20 transition-all"></div>
+              <p className="text-[10px] text-on-surface-variant uppercase font-bold tracking-wider mb-2 relative z-10">Scheduled</p>
+              <p className="font-bold text-4xl text-neon-purple relative z-10 drop-shadow-[0_0_8px_rgba(188,19,254,0.5)]">{totalScheduled}</p>
             </div>
-            <div className="p-md bg-surface-container-low border border-outline-variant rounded-xl hover:border-primary transition-colors">
-              <p className="text-[10px] text-on-surface-variant uppercase font-bold mb-1">Completed</p>
-              <p className="font-h2 text-h2 text-primary">{totalCompleted}</p>
+            <div className="p-6 glass-card rounded-2xl border border-white/10 hover:border-neon-cyan/50 transition-all hover:bg-white/5 relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-neon-cyan/10 blur-[30px] rounded-full pointer-events-none group-hover:bg-neon-cyan/20 transition-all"></div>
+              <p className="text-[10px] text-on-surface-variant uppercase font-bold tracking-wider mb-2 relative z-10">Completed</p>
+              <p className="font-bold text-4xl text-neon-cyan relative z-10 drop-shadow-[0_0_8px_rgba(0,255,255,0.5)]">{totalCompleted}</p>
             </div>
           </div>
         </div>

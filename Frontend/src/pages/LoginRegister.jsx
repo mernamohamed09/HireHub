@@ -5,6 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { toast } from 'react-toastify';
 import { login, register as registerUser } from '../store/slices/authSlice';
+import { Orbit, User, Briefcase, BadgeCheck, Mail, Lock, Key, Loader2, Rocket } from 'lucide-react';
 
 export function LoginRegister() {
   const location = useLocation();
@@ -56,81 +57,86 @@ export function LoginRegister() {
       toast.error('An unexpected error occurred');
     }
   };
-
   return (
     <main className="flex min-h-screen w-full flex-col md:flex-row bg-background">
       {/* Left Section: Brand & Atmosphere */}
-      <section className="relative w-full md:w-1/2 mesh-gradient flex flex-col justify-between p-lg md:p-xl overflow-hidden">
-        <div className="absolute inset-0 decorative-pattern opacity-30 pointer-events-none"></div>
+      <section className="relative w-full md:w-1/2 flex flex-col justify-between p-8 md:p-12 overflow-hidden border-r border-white/10">
+        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-background via-surface-container to-background z-0"></div>
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-neon-purple/20 blur-[120px] rounded-full pointer-events-none z-0 translate-x-1/3 -translate-y-1/3"></div>
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-neon-cyan/20 blur-[120px] rounded-full pointer-events-none z-0 -translate-x-1/3 translate-y-1/3"></div>
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 pointer-events-none z-0 mix-blend-overlay"></div>
+        
         <div className="relative z-10">
-          <Link to="/" className="flex items-center gap-sm">
-            <div className="w-10 h-10 bg-tertiary rounded-lg flex items-center justify-center shadow-lg shadow-tertiary/20">
-              <span className="material-symbols-outlined text-on-tertiary font-bold">hub</span>
+          <Link to="/" className="flex items-center gap-3">
+            <div className="w-12 h-12 bg-gradient-to-br from-neon-purple to-neon-cyan rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(188,19,254,0.4)]">
+              <Orbit className="text-white w-7 h-7" />
             </div>
-            <span className="font-h3 text-h3 text-on-surface tracking-tight">HireHub</span>
+            <span className="font-bold text-3xl text-white tracking-tight">HireHub</span>
           </Link>
         </div>
         
-        <div className="relative z-10 mt-xl md:mt-0">
-          <h1 className="font-h1 text-h1 text-white max-w-md mb-md leading-tight">
-            Your career bridge to the future.
+        <div className="relative z-10 mt-12 md:mt-0">
+          <h1 className="font-bold text-5xl text-white max-w-md mb-6 leading-tight">
+            Your career bridge to the <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan to-neon-purple">future.</span>
           </h1>
-          <p className="text-on-surface-variant text-body max-w-sm">
+          <p className="text-on-surface-variant text-lg max-w-sm leading-relaxed">
             Join thousands of professionals and top-tier companies finding their perfect match through our AI-driven recruitment ecosystem.
           </p>
           
-          <div className="mt-xl hidden md:block">
-            <div className="glass-panel p-md rounded-xl flex items-center gap-md border-primary/20 max-w-xs transition-transform hover:scale-105 duration-300">
-              <div className="flex -space-x-2">
-                <div className="w-8 h-8 rounded-full border-2 border-surface-container bg-surface-variant overflow-hidden"></div>
-                <div className="w-8 h-8 rounded-full border-2 border-surface-container bg-surface-variant overflow-hidden"></div>
-                <div className="w-8 h-8 rounded-full border-2 border-surface-container bg-surface-variant overflow-hidden"></div>
+          <div className="mt-12 hidden md:block">
+            <div className="glass-panel p-4 rounded-2xl flex items-center gap-4 border-neon-cyan/20 max-w-xs transition-transform hover:scale-105 duration-300 shadow-glow-cyan bg-neon-cyan/5">
+              <div className="flex -space-x-3">
+                <div className="w-10 h-10 rounded-full border-2 border-background bg-surface-container overflow-hidden"></div>
+                <div className="w-10 h-10 rounded-full border-2 border-background bg-surface-container overflow-hidden"></div>
+                <div className="w-10 h-10 rounded-full border-2 border-background bg-neon-purple flex items-center justify-center text-[10px] font-bold text-white shadow-glow-purple">+500</div>
               </div>
-              <span className="text-caption font-label-tag text-tertiary uppercase tracking-widest">+500 Jobs today</span>
+              <span className="text-xs font-bold text-neon-cyan uppercase tracking-widest">Jobs today</span>
             </div>
           </div>
         </div>
         
-        <div className="relative z-10 pt-xl">
-          <p className="text-caption text-on-surface-variant italic opacity-60">
+        <div className="relative z-10 pt-12">
+          <p className="text-sm font-medium text-on-surface-variant italic opacity-80">
             "The fastest way to build a high-performing team."
           </p>
         </div>
       </section>
 
       {/* Right Section: Form */}
-      <section className="w-full md:w-1/2 bg-on-background dark:bg-surface flex items-center justify-center p-gutter relative">
-        <div className="w-full max-w-md">
-          <div className="bg-surface-container-low p-xl rounded-xl border border-outline-variant/30 shadow-2xl relative z-10">
+      <section className="w-full md:w-1/2 bg-background flex items-center justify-center p-6 relative overflow-hidden">
+        <div className="w-full max-w-md relative z-10">
+          <div className="glass-card p-10 rounded-3xl border border-white/10 shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-neon-pink/10 blur-[40px] rounded-full pointer-events-none"></div>
+            
             {/* Tabs */}
-            <div className="flex gap-lg mb-xl border-b border-outline-variant/20">
+            <div className="flex gap-8 mb-10 border-b border-white/10">
               <Link 
                 to="/login"
-                className={`pb-sm text-body font-bold transition-all relative ${isLogin ? 'text-tertiary border-b-2 border-tertiary' : 'text-on-surface-variant hover:text-primary'}`}
+                className={`pb-3 text-sm font-bold uppercase tracking-wider transition-all relative ${isLogin ? 'text-neon-cyan border-b-2 border-neon-cyan drop-shadow-[0_0_8px_rgba(0,255,255,0.8)]' : 'text-on-surface-variant hover:text-white'}`}
               >
                 Login
               </Link>
               <Link 
                 to="/register"
-                className={`pb-sm text-body font-bold transition-all relative ${!isLogin ? 'text-tertiary border-b-2 border-tertiary' : 'text-on-surface-variant hover:text-primary'}`}
+                className={`pb-3 text-sm font-bold uppercase tracking-wider transition-all relative ${!isLogin ? 'text-neon-purple border-b-2 border-neon-purple drop-shadow-[0_0_8px_rgba(188,19,254,0.8)]' : 'text-on-surface-variant hover:text-white'}`}
               >
                 Register
               </Link>
             </div>
 
-            <div className="mb-xl">
-              <h2 className="font-h2 text-h2 text-on-surface">
+            <div className="mb-8">
+              <h2 className="font-bold text-3xl text-white">
                 {isLogin ? 'Welcome back' : 'Create an account'}
               </h2>
-              <p className="text-on-surface-variant text-body mt-xs">
+              <p className="text-on-surface-variant text-sm mt-2 font-medium">
                 {isLogin ? 'Enter your details to access your account.' : 'Get started with your professional journey.'}
               </p>
             </div>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-md">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               
               {!isLogin && (
-                <div className="grid grid-cols-2 gap-sm mb-lg">
+                <div className="grid grid-cols-2 gap-4 mb-8">
                   <label className="cursor-pointer group">
                     <input 
                       {...register('role', { required: true })} 
@@ -139,9 +145,9 @@ export function LoginRegister() {
                       className="sr-only peer" 
                       defaultChecked
                     />
-                    <div className="p-md rounded-lg border border-outline-variant bg-surface-container-high peer-checked:border-tertiary peer-checked:bg-tertiary-container/10 transition-all text-center">
-                      <span className="material-symbols-outlined block mb-xs text-on-surface-variant peer-checked:text-tertiary">person</span>
-                      <span className="text-label-tag text-on-surface uppercase">Candidate</span>
+                    <div className="p-4 rounded-xl border border-white/10 bg-surface-container/50 peer-checked:border-neon-cyan peer-checked:bg-neon-cyan/10 peer-checked:shadow-glow-cyan transition-all text-center group-hover:border-white/30">
+                      <User className="mx-auto mb-2 text-on-surface-variant peer-checked:text-neon-cyan transition-colors" size={24} />
+                      <span className="text-[10px] font-bold text-white uppercase tracking-wider peer-checked:text-neon-cyan transition-colors">Candidate</span>
                     </div>
                   </label>
                   <label className="cursor-pointer group">
@@ -151,84 +157,84 @@ export function LoginRegister() {
                       value="company" 
                       className="sr-only peer" 
                     />
-                    <div className="p-md rounded-lg border border-outline-variant bg-surface-container-high peer-checked:border-tertiary peer-checked:bg-tertiary-container/10 transition-all text-center">
-                      <span className="material-symbols-outlined block mb-xs text-on-surface-variant peer-checked:text-tertiary">business</span>
-                      <span className="text-label-tag text-on-surface uppercase">Company</span>
+                    <div className="p-4 rounded-xl border border-white/10 bg-surface-container/50 peer-checked:border-neon-purple peer-checked:bg-neon-purple/10 peer-checked:shadow-glow-purple transition-all text-center group-hover:border-white/30">
+                      <Briefcase className="mx-auto mb-2 text-on-surface-variant peer-checked:text-neon-purple transition-colors" size={24} />
+                      <span className="text-[10px] font-bold text-white uppercase tracking-wider peer-checked:text-neon-purple transition-colors">Company</span>
                     </div>
                   </label>
                 </div>
               )}
 
               {!isLogin && (
-                <div className="space-y-sm">
-                  <label className="block text-caption text-on-surface-variant font-medium">Name</label>
-                  <div className="relative">
-                    <span className="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-outline text-[20px]">badge</span>
+                <div className="space-y-2">
+                  <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-wider">Name</label>
+                  <div className="relative group">
+                    <BadgeCheck className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 group-focus-within:text-neon-cyan transition-colors" size={20} />
                     <input 
                       {...register('name')}
-                      className={`w-full bg-surface-container border ${errors.name ? 'border-error focus:border-error' : 'border-outline-variant focus:border-tertiary'} rounded-lg pl-[44px] pr-md py-sm text-on-surface focus:ring-1 focus:ring-tertiary outline-none transition-all`} 
+                      className={`w-full bg-surface-container/50 border ${errors.name ? 'border-neon-pink focus:border-neon-pink focus:ring-neon-pink' : 'border-white/10 focus:border-neon-cyan focus:ring-neon-cyan'} rounded-xl pl-12 pr-4 py-3 text-white focus:ring-1 outline-none transition-all placeholder-white/20`} 
                       placeholder="Enter your name" 
                       type="text" 
                     />
                   </div>
-                  {errors.name && <p className="text-error text-caption mt-1">{errors.name.message}</p>}
+                  {errors.name && <p className="text-neon-pink text-[10px] font-bold uppercase tracking-wider mt-1">{errors.name.message}</p>}
                 </div>
               )}
 
-              <div className="space-y-sm">
-                <label className="block text-caption text-on-surface-variant font-medium">Email Address</label>
-                <div className="relative">
-                  <span className="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-outline text-[20px]">mail</span>
+              <div className="space-y-2">
+                <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-wider">Email Address</label>
+                <div className="relative group">
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 group-focus-within:text-neon-cyan transition-colors" size={20} />
                   <input 
                     {...register('email')}
-                    className={`w-full bg-surface-container border ${errors.email ? 'border-error focus:border-error' : 'border-outline-variant focus:border-tertiary'} rounded-lg pl-[44px] pr-md py-sm text-on-surface focus:ring-1 focus:ring-tertiary outline-none transition-all`} 
+                    className={`w-full bg-surface-container/50 border ${errors.email ? 'border-neon-pink focus:border-neon-pink focus:ring-neon-pink' : 'border-white/10 focus:border-neon-cyan focus:ring-neon-cyan'} rounded-xl pl-12 pr-4 py-3 text-white focus:ring-1 outline-none transition-all placeholder-white/20`} 
                     placeholder="email@example.com" 
                     type="email" 
                   />
                 </div>
-                {errors.email && <p className="text-error text-caption mt-1">{errors.email.message}</p>}
+                {errors.email && <p className="text-neon-pink text-[10px] font-bold uppercase tracking-wider mt-1">{errors.email.message}</p>}
               </div>
 
-              <div className={`grid gap-md ${!isLogin ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1'}`}>
-                <div className="space-y-sm">
-                  <label className="block text-caption text-on-surface-variant font-medium">Password</label>
-                  <div className="relative">
-                    <span className="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-outline text-[20px]">lock</span>
+              <div className={`grid gap-6 ${!isLogin ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1'}`}>
+                <div className="space-y-2">
+                  <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-wider">Password</label>
+                  <div className="relative group">
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 group-focus-within:text-neon-purple transition-colors" size={20} />
                     <input 
                       {...register('password')}
-                      className={`w-full bg-surface-container border ${errors.password ? 'border-error focus:border-error' : 'border-outline-variant focus:border-tertiary'} rounded-lg pl-[44px] pr-md py-sm text-on-surface focus:ring-1 focus:ring-tertiary outline-none transition-all`} 
+                      className={`w-full bg-surface-container/50 border ${errors.password ? 'border-neon-pink focus:border-neon-pink focus:ring-neon-pink' : 'border-white/10 focus:border-neon-purple focus:ring-neon-purple'} rounded-xl pl-12 pr-4 py-3 text-white focus:ring-1 outline-none transition-all placeholder-white/20`} 
                       placeholder="••••••••" 
                       type="password" 
                     />
                   </div>
-                  {errors.password && <p className="text-error text-caption mt-1">{errors.password.message}</p>}
+                  {errors.password && <p className="text-neon-pink text-[10px] font-bold uppercase tracking-wider mt-1">{errors.password.message}</p>}
                 </div>
 
                 {!isLogin && (
-                  <div className="space-y-sm">
-                    <label className="block text-caption text-on-surface-variant font-medium">Confirm</label>
-                    <div className="relative">
-                      <span className="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-outline text-[20px]">key</span>
+                  <div className="space-y-2">
+                    <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-wider">Confirm</label>
+                    <div className="relative group">
+                      <Key className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 group-focus-within:text-neon-purple transition-colors" size={20} />
                       <input 
                         {...register('confirmPassword')}
-                        className={`w-full bg-surface-container border ${errors.confirmPassword ? 'border-error focus:border-error' : 'border-outline-variant focus:border-tertiary'} rounded-lg pl-[44px] pr-md py-sm text-on-surface focus:ring-1 focus:ring-tertiary outline-none transition-all`} 
+                        className={`w-full bg-surface-container/50 border ${errors.confirmPassword ? 'border-neon-pink focus:border-neon-pink focus:ring-neon-pink' : 'border-white/10 focus:border-neon-purple focus:ring-neon-purple'} rounded-xl pl-12 pr-4 py-3 text-white focus:ring-1 outline-none transition-all placeholder-white/20`} 
                         placeholder="••••••••" 
                         type="password" 
                       />
                     </div>
-                    {errors.confirmPassword && <p className="text-error text-caption mt-1">{errors.confirmPassword.message}</p>}
+                    {errors.confirmPassword && <p className="text-neon-pink text-[10px] font-bold uppercase tracking-wider mt-1">{errors.confirmPassword.message}</p>}
                   </div>
                 )}
               </div>
 
               <button 
-                className={`w-full bg-secondary-container hover:bg-secondary-container/80 text-on-secondary-container font-bold py-md rounded-lg mt-lg transition-transform ${isLoading ? 'opacity-70 cursor-not-allowed' : 'active:scale-[0.98]'} shadow-lg shadow-secondary-container/20`} 
+                className={`w-full bg-gradient-to-r ${isLogin ? 'from-neon-cyan to-neon-purple shadow-[0_0_20px_rgba(0,255,255,0.3)]' : 'from-neon-purple to-neon-cyan shadow-[0_0_20px_rgba(188,19,254,0.3)]'} text-white font-bold py-4 rounded-xl mt-8 uppercase tracking-widest text-xs border-none hover:opacity-90 transition-all ${isLoading ? 'opacity-70 cursor-not-allowed' : 'active:scale-[0.98]'}`} 
                 type="submit"
                 disabled={isLoading}
               >
                 {isLoading ? (
-                  <div className="flex items-center justify-center gap-sm">
-                    <span className="material-symbols-outlined animate-spin text-[20px]">progress_activity</span>
+                  <div className="flex items-center justify-center gap-2">
+                    <Loader2 className="animate-spin" size={20} />
                     <span>Processing...</span>
                   </div>
                 ) : (
@@ -236,14 +242,14 @@ export function LoginRegister() {
                 )}
               </button>
 
-              <div className="relative flex items-center py-md">
-                <div className="flex-grow border-t border-outline-variant/30"></div>
-                <span className="flex-shrink mx-md text-caption text-outline uppercase tracking-widest">or continue with</span>
-                <div className="flex-grow border-t border-outline-variant/30"></div>
+              <div className="relative flex items-center py-6">
+                <div className="flex-grow border-t border-white/10"></div>
+                <span className="flex-shrink mx-4 text-[10px] font-bold text-white/40 uppercase tracking-widest">or continue with</span>
+                <div className="flex-grow border-t border-white/10"></div>
               </div>
 
               <button 
-                className="w-full flex items-center justify-center gap-sm bg-white text-surface p-md rounded-lg font-medium hover:bg-white/90 transition-colors" 
+                className="w-full flex items-center justify-center gap-3 bg-white/5 border border-white/10 text-white p-4 rounded-xl font-bold hover:bg-white/10 transition-all" 
                 type="button"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -256,14 +262,14 @@ export function LoginRegister() {
               </button>
             </form>
 
-            <p className="mt-xl text-center text-caption text-on-surface-variant">
-              By continuing, you agree to our <Link className="text-tertiary underline hover:text-tertiary-fixed transition-colors" to="/terms">Terms of Service</Link> and <Link className="text-tertiary underline hover:text-tertiary-fixed transition-colors" to="/privacy">Privacy Policy</Link>.
+            <p className="mt-8 text-center text-[10px] font-bold text-on-surface-variant uppercase tracking-wider leading-relaxed">
+              By continuing, you agree to our <Link className="text-neon-cyan hover:text-white transition-colors underline" to="/terms">Terms of Service</Link> and <Link className="text-neon-cyan hover:text-white transition-colors underline" to="/privacy">Privacy Policy</Link>.
             </p>
           </div>
         </div>
 
-        <div className="absolute bottom-md right-md opacity-10 pointer-events-none select-none">
-          <span className="material-symbols-outlined text-[120px] text-primary">rocket_launch</span>
+        <div className="absolute bottom-8 right-8 opacity-10 pointer-events-none select-none">
+          <Rocket className="text-white w-32 h-32" />
         </div>
       </section>
     </main>
