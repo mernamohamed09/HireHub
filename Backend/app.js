@@ -1,5 +1,5 @@
-require ("dotenv").config();
-const express = require ("express");
+require("dotenv").config();
+const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const fs = require('fs');
@@ -21,7 +21,8 @@ const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
 // to cross-origin while keeping the rest of helmet's headers.
 app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
 app.use(express.json());
-app.use(cors({ origin: FRONTEND_URL, credentials: true }));
+// app.use(cors({ origin: FRONTEND_URL, credentials: true }));
+app.use(cors());
 app.use('/uploads/avatars', express.static(path.join(__dirname, 'uploads', 'avatars')));
 
 // Throttle credential endpoints against brute force / enumeration. Disabled
@@ -47,19 +48,20 @@ app.get('/api/health', (req, res) => {
 });
 
 async function dbconnection() {
-  
-try {
-  await mongoose.connect(process.env.DB_URL)
-  console.log("DB Connected");
-  return true;
-} catch (error) {
-  console.log(error);
-  return false;
-}
+
+    try {
+        await mongoose.connect(process.env.DB_URL)
+        console.log("DB Connected");
+        return true;
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
 
 }
 const authRoutes = require("./Routes/authRoute");
 const userRoutes = require("./Routes/userRoute");
+const adminRoutes = require("./Routes/adminRoute");
 const candidateRoute = require("./Routes/candidateRoute");
 const companyRoute = require("./Routes/companyRoute");
 const jobRoutes = require("./Routes/jobRoute");
@@ -72,8 +74,9 @@ app.use("/api/register", authLimiter);
 app.use("/api/login", authLimiter);
 app.use("/api", authRoutes);
 app.use("/api/users", userRoutes);
+app.use('/api/admin', adminRoutes);
 app.use('/api/candidates', candidateRoute);
-app.use('/api/companies',companyRoute);
+app.use('/api/companies', companyRoute);
 app.use('/api/jobs', jobRoutes);
 app.use('/api/applications', applicationRoutes);
 app.use('/api/notifications', notificationRoutes);

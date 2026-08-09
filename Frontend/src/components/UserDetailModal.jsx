@@ -63,6 +63,12 @@ export function UserDetailModal({ userId, onClose }) {
               <dd className="col-span-2 text-on-surface">{detail.phone || 'Not set'}</dd>
               <dt className="text-on-surface-variant">Location</dt>
               <dd className="col-span-2 text-on-surface">{detail.location || 'Not set'}</dd>
+              <dt className="text-on-surface-variant">Status</dt>
+              <dd className="col-span-2 text-on-surface font-semibold">
+                <span className={`px-sm py-xs rounded-full font-label-tag text-[10px] uppercase ${detail.isActive !== false ? 'bg-emerald-500/20 text-emerald-400' : 'bg-error-container/40 text-error'}`}>
+                  {detail.isActive !== false ? 'Active' : 'Suspended'}
+                </span>
+              </dd>
               <dt className="text-on-surface-variant">Joined</dt>
               <dd className="col-span-2 text-on-surface">{detail.createdAt ? new Date(detail.createdAt).toLocaleDateString() : '-'}</dd>
             </dl>

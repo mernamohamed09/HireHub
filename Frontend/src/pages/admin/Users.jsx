@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { DashboardHeader } from '../../components/layout/DashboardHeader';
-import { Button } from '../../components/ui/Button';
 import { UserDetailModal } from '../../components/UserDetailModal';
-import { userService } from '../../services/userService';
+import { adminService } from '../../services/adminService';
 import { RefreshCw, Loader2, UserSearch, Trash2 } from 'lucide-react';
 
 export function Users() {
   const [candidates, setCandidates] = useState([]);
+  const [search, setSearch] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [reloadKey, setReloadKey] = useState(0);
@@ -17,113 +17,351 @@ export function Users() {
       try {
         setIsLoading(true);
         setError(null);
-        const data = await userService.getAllUsers();
-        setCandidates((data.users || []).filter(u => u.role === 'candidate'));
-      } catch {
-        setError('Failed to load candidates.');
+
+        const params = { role: 'candidate' };
+
+        if (search.trim()) {
+          params.search = search.trim();
+        }
+
+        const data = await adminService.getAllUsers(params);
+
+        setCandidates(data.users || []);
+      } catch (err) {
+        setError(
+          err?.response?.data?.msg || 'Failed to load candidates.'
+        );
       } finally {
         setIsLoading(false);
       }
     };
 
-    loadCandidates();
-  }, [reloadKey]);
+    const timer = setTimeout(loadCandidates, 300);
+
+    return () => clearTimeout(timer);
+  }, [search, reloadKey]);
 
   const handleDelete = async (id) => {
+    if (
+      !window.confirm(
+        'Are you sure you want to delete this candidate?'
+      )
+    ) {
+      return;
+    }
+
     try {
-      await userService.deleteUser(id);
-      setCandidates(prev => prev.filter(c => c._id !== id));
-    } catch {
-      setError('Failed to delete candidate.');
+      await adminService.deleteUser(id);
+
+      setCandidates((prev) =>
+        prev.filter((candidate) => candidate._id !== id)
+      );
+    } catch (err) {
+      setError(
+        err?.response?.data?.msg ||
+          'Failed to delete candidate.'
+      );
+    }
+  };
+
+  const handleToggleStatus = async (id, currentIsActive) => {
+    try {
+      const nextIsActive = currentIsActive === false;
+
+      await adminService.updateUserStatus(id, nextIsActive);
+
+      setCandidates((prev) =>
+        prev.map((candidate) =>
+          candidate._id === id
+            ? {
+                ...candidate,
+                isActive: nextIsActive,
+              }
+            : candidate
+        )
+      );
+    } catch (err) {
+      setError(
+        err?.response?.data?.msg ||
+          'Failed to update candidate status.'
+      );
     }
   };
 
   return (
     <>
       <DashboardHeader />
+
       <div className="w-full px-4 md:px-8 max-w-6xl mx-auto space-y-8 py-8 relative">
-        <div className="absolute top-0 left-0 w-[400px] h-[400px] bg-neon-purple/5 blur-[120px] rounded-full pointer-events-none -z-10 -translate-x-1/3 -translate-y-1/3"></div>
-        
-        <div className="flex justify-between items-end">
+
+        {/* Background decoration */}
+        <div className="absolute top-0 left-0 w-[400px] h-[400px] bg-neon-purple/5 blur-[120px] rounded-full pointer-events-none -z-10 -translate-x-1/3 -translate-y-1/3" />
+
+        {/* Header */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+
           <div>
-            <h1 className="font-bold text-3xl md:text-4xl text-white">Manage Candidates</h1>
-            <p className="text-on-surface-variant mt-2 font-medium">View and manage all registered candidates in the system.</p>
+            <h1 className="font-bold text-3xl md:text-4xl text-white">
+              Manage Candidates
+            </h1>
+
+            <p className="text-on-surface-variant mt-2 font-medium">
+              View and manage all registered candidates in the system.
+            </p>
           </div>
-          <button 
-            onClick={() => setReloadKey(k => k + 1)}
-            className="hidden md:flex items-center gap-2 bg-surface-container/50 border border-white/10 text-white px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-white/5 transition-all shadow-lg active:scale-95 group"
-          >
-            <RefreshCw size={14} className="group-hover:rotate-180 transition-transform duration-500" />
-            Refresh
-          </button>
+
+          {/* Search + Refresh */}
+          <div className="flex items-center gap-3 w-full md:w-auto">
+
+            <div className="flex items-center bg-surface-container rounded-lg px-4 py-2 border border-outline-variant/50 flex-1 md:flex-none">
+
+              <span className="material-symbols-outlined text-on-surface-variant text-[20px] mr-2">
+                search
+              </span>
+
+              <input
+                className="bg-transparent border-none focus:ring-0 text-body text-on-surface placeholder-on-surface-variant w-full md:w-48 outline-none"
+                placeholder="Search candidate..."
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+
+            </div>
+
+            <button
+              onClick={() => setReloadKey((key) => key + 1)}
+              className="hidden md:flex items-center gap-2 bg-surface-container/50 border border-white/10 text-white px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-white/5 transition-all shadow-lg active:scale-95 group"
+            >
+              <RefreshCw
+                size={14}
+                className="group-hover:rotate-180 transition-transform duration-500"
+              />
+
+              Refresh
+            </button>
+
+          </div>
         </div>
 
+        {/* Error */}
         {error && (
           <div className="bg-neon-pink/10 border border-neon-pink/30 text-neon-pink rounded-xl p-4 text-center text-sm font-bold shadow-glow-pink">
             {error}
           </div>
         )}
 
+        {/* Loading */}
         {isLoading ? (
           <div className="flex items-center justify-center py-20">
-            <Loader2 className="animate-spin text-neon-purple" size={32} />
+            <Loader2
+              className="animate-spin text-neon-purple"
+              size={32}
+            />
           </div>
         ) : candidates.length === 0 ? (
+
+          /* Empty state */
           <div className="glass-card rounded-3xl border border-white/5 p-12 flex flex-col items-center justify-center text-center min-h-[400px] shadow-2xl">
+
             <div className="w-20 h-20 bg-surface-container/50 rounded-2xl border border-white/10 flex items-center justify-center mb-6 shadow-inner">
-              <UserSearch className="text-white/20" size={40} />
+
+              <UserSearch
+                className="text-white/20"
+                size={40}
+              />
+
             </div>
-            <h3 className="font-bold text-2xl text-white mb-2">No Candidates Yet</h3>
+
+            <h3 className="font-bold text-2xl text-white mb-2">
+              No Candidates Yet
+            </h3>
+
             <p className="text-on-surface-variant font-medium max-w-md mx-auto">
-              Registered candidates will appear here once they create accounts.
+              No registered candidates match your search filter.
             </p>
+
           </div>
+
         ) : (
+
+          /* Candidates table */
           <div className="glass-card rounded-3xl border border-white/5 overflow-hidden shadow-2xl">
+
             <div className="overflow-x-auto custom-scrollbar">
-              <table className="w-full text-left min-w-[600px]">
+
+              <table className="w-full text-left min-w-[700px]">
+
                 <thead className="bg-surface-container/50 border-b border-white/10">
+
                   <tr>
-                    <th className="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Name</th>
-                    <th className="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Email</th>
-                    <th className="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Location</th>
-                    <th className="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest text-right">Actions</th>
+
+                    <th className="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">
+                      Name
+                    </th>
+
+                    <th className="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">
+                      Email
+                    </th>
+
+                    <th className="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">
+                      Location
+                    </th>
+
+                    <th className="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">
+                      Status
+                    </th>
+
+                    <th className="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest text-right">
+                      Actions
+                    </th>
+
                   </tr>
+
                 </thead>
+
                 <tbody className="divide-y divide-white/5">
-                  {candidates.map(c => (
-                    <tr key={c._id} className="hover:bg-white/5 transition-colors group">
+
+                  {candidates.map((candidate) => (
+
+                    <tr
+                      key={candidate._id}
+                      className="hover:bg-white/5 transition-colors group"
+                    >
+
+                      {/* Name */}
                       <td className="px-6 py-4">
-                        <button className="flex items-center gap-4" onClick={() => setSelectedUserId(c._id)}>
-                          <div className="w-10 h-10 rounded-xl bg-neon-purple/20 text-neon-purple border border-neon-purple/30 flex items-center justify-center font-bold text-sm shadow-glow-purple group-hover:scale-110 transition-transform">
-                            {c.name?.[0]?.toUpperCase() || '?'}
-                          </div>
-                          <span className="font-bold text-white group-hover:text-neon-purple transition-colors">{c.name}</span>
-                        </button>
-                      </td>
-                      <td className="px-6 py-4 text-sm text-on-surface-variant font-medium">{c.email}</td>
-                      <td className="px-6 py-4 text-sm text-on-surface-variant font-medium">{c.location || '-'}</td>
-                      <td className="px-6 py-4 text-right">
+
                         <button
-                          onClick={() => handleDelete(c._id)}
-                          className="w-8 h-8 rounded-lg bg-surface-container border border-white/10 flex items-center justify-center text-on-surface-variant hover:text-neon-pink hover:border-neon-pink/30 hover:bg-neon-pink/10 hover:shadow-glow-pink transition-all ml-auto"
-                          title="Delete candidate"
+                          className="flex items-center gap-4 text-left"
+                          onClick={() =>
+                            setSelectedUserId(candidate._id)
+                          }
                         >
-                          <Trash2 size={14} />
+
+                          <div className="w-10 h-10 rounded-xl bg-neon-purple/20 text-neon-purple border border-neon-purple/30 flex items-center justify-center font-bold text-sm shadow-glow-purple group-hover:scale-110 transition-transform">
+                            {candidate.name?.[0]?.toUpperCase() || '?'}
+                          </div>
+
+                          <span className="font-bold text-white group-hover:text-neon-purple transition-colors">
+                            {candidate.name}
+                          </span>
+
                         </button>
+
                       </td>
+
+                      {/* Email */}
+                      <td className="px-6 py-4 text-sm text-on-surface-variant font-medium">
+                        {candidate.email}
+                      </td>
+
+                      {/* Location */}
+                      <td className="px-6 py-4 text-sm text-on-surface-variant font-medium">
+                        {candidate.location || '-'}
+                      </td>
+
+                      {/* Status */}
+                      <td className="px-6 py-4">
+
+                        <span
+                          className={`px-3 py-1.5 rounded-full text-[10px] uppercase flex items-center gap-2 w-max font-bold ${
+                            candidate.isActive !== false
+                              ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                              : 'bg-error-container/40 text-error border border-error/40'
+                          }`}
+                        >
+
+                          <span
+                            className={`w-1.5 h-1.5 rounded-full ${
+                              candidate.isActive !== false
+                                ? 'bg-emerald-400'
+                                : 'bg-error'
+                            }`}
+                          />
+
+                          {candidate.isActive !== false
+                            ? 'Active'
+                            : 'Suspended'}
+
+                        </span>
+
+                      </td>
+
+                      {/* Actions */}
+                      <td className="px-6 py-4 text-right">
+
+                        <div className="flex items-center justify-end gap-2">
+
+                          {/* Suspend / Activate */}
+                          <button
+                            onClick={() =>
+                              handleToggleStatus(
+                                candidate._id,
+                                candidate.isActive
+                              )
+                            }
+                            className={`p-2 rounded-lg transition-all ${
+                              candidate.isActive !== false
+                                ? 'text-on-surface-variant hover:text-warning hover:bg-warning/10'
+                                : 'text-emerald-400 hover:bg-emerald-500/10'
+                            }`}
+                            title={
+                              candidate.isActive !== false
+                                ? 'Suspend candidate'
+                                : 'Activate candidate'
+                            }
+                          >
+
+                            <span className="material-symbols-outlined">
+                              {candidate.isActive !== false
+                                ? 'block'
+                                : 'check_circle'}
+                            </span>
+
+                          </button>
+
+                          {/* Delete */}
+                          <button
+                            onClick={() =>
+                              handleDelete(candidate._id)
+                            }
+                            className="w-8 h-8 rounded-lg bg-surface-container border border-white/10 flex items-center justify-center text-on-surface-variant hover:text-neon-pink hover:border-neon-pink/30 hover:bg-neon-pink/10 hover:shadow-glow-pink transition-all"
+                            title="Delete candidate"
+                          >
+
+                            <Trash2 size={14} />
+
+                          </button>
+
+                        </div>
+
+                      </td>
+
                     </tr>
+
                   ))}
+
                 </tbody>
+
               </table>
+
             </div>
+
           </div>
+
         )}
+
       </div>
 
+      {/* User details modal */}
       {selectedUserId && (
-        <UserDetailModal userId={selectedUserId} onClose={() => setSelectedUserId(null)} />
+        <UserDetailModal
+          userId={selectedUserId}
+          onClose={() => setSelectedUserId(null)}
+        />
       )}
+
     </>
   );
 }

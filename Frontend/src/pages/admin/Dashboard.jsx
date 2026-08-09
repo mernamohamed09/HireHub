@@ -1,7 +1,7 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '../../components/ui/Button';
 import { UserDetailModal } from '../../components/UserDetailModal';
-import { userService } from '../../services/userService';
+import { adminService } from '../../services/adminService';
 import { jobService } from '../../services/jobService';
 import { RefreshCw, Loader2, Users, Building2, UserCircle2, Briefcase, Search, Trash2 } from 'lucide-react';
 
@@ -9,21 +9,29 @@ export function Dashboard() {
   const [users, setUsers] = useState([]);
   const [jobCount, setJobCount] = useState(0);
   const [search, setSearch] = useState('');
+  const [roleFilter, setRoleFilter] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [reloadKey, setReloadKey] = useState(0);
   const [selectedUserId, setSelectedUserId] = useState(null);
+  const [stats, setStats] = useState(null);
 
   useEffect(() => {
     const loadData = async () => {
       try {
         setIsLoading(true);
         setError(null);
-        const [usersRes, jobsRes] = await Promise.allSettled([
-          userService.getAllUsers(),
+        const params = {};
+        if (search.trim()) params.search = search.trim();
+        if (roleFilter) params.role = roleFilter;
+
+        const [usersRes, statsRes, jobsRes] = await Promise.allSettled([
+          adminService.getAllUsers(params),
+          adminService.getStats(),
           jobService.getAllJobs(),
         ]);
         if (usersRes.status === 'fulfilled') setUsers(usersRes.value.users || []);
+        if (statsRes.status === 'fulfilled') setStats(statsRes.value.stats);
         if (jobsRes.status === 'fulfilled') setJobCount((jobsRes.value.jobs || []).length);
       } catch {
         setError('Failed to load admin data.');
@@ -32,34 +40,33 @@ export function Dashboard() {
       }
     };
 
-    loadData();
-  }, [reloadKey]);
+    const timer = setTimeout(loadData, 300);
+    return () => clearTimeout(timer);
+  }, [search, roleFilter, reloadKey]);
 
   const handleDelete = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this user?')) return;
     try {
-      await userService.deleteUser(id);
+      await adminService.deleteUser(id);
       setUsers(prev => prev.filter(u => u._id !== id));
-    } catch {
-      setError('Failed to delete user.');
+    } catch (err) {
+      setError(err?.response?.data?.msg || 'Failed to delete user.');
     }
   };
 
-  const candidateCount = users.filter(u => u.role === 'candidate').length;
-  const companyCount = users.filter(u => u.role === 'company').length;
+  const handleToggleStatus = async (id, currentIsActive) => {
+    try {
+      const nextIsActive = currentIsActive === false ? true : false;
+      await adminService.updateUserStatus(id, nextIsActive);
+      setUsers(prev => prev.map(u => u._id === id ? { ...u, isActive: nextIsActive } : u));
+    } catch (err) {
+      setError(err?.response?.data?.msg || 'Failed to update user status.');
+    }
+  };
 
-  const filteredUsers = useMemo(() => {
-    const q = search.trim().toLowerCase();
-    if (!q) return users;
-    return users.filter(u => u.name?.toLowerCase().includes(q) || u.email?.toLowerCase().includes(q));
-  }, [users, search]);
-
-  if (isLoading) {
-    return (
-      <div className="w-full flex items-center justify-center py-20">
-        <Loader2 className="animate-spin text-neon-cyan" size={32} />
-      </div>
-    );
-  }
+  const candidateCount = stats?.totalCandidates ?? users.filter(u => u.role === 'candidate').length;
+  const companyCount = stats?.totalCompanies ?? users.filter(u => u.role === 'company').length;
+  const totalUserCount = stats?.totalUsers ?? users.length;
 
   return (
     <div className="w-full relative">
@@ -87,12 +94,11 @@ export function Dashboard() {
       )}
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div className="glass-card p-6 rounded-2xl border border-white/5 hover:border-white/20 transition-all flex flex-col gap-2 group shadow-lg overflow-hidden relative">
-          <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-          <div className="w-10 h-10 rounded-xl bg-surface-container border border-white/10 flex items-center justify-center mb-2 shadow-inner group-hover:scale-110 transition-transform relative z-10"><Users className="text-white/40" size={20} /></div>
-          <span className="text-white/40 text-[10px] font-bold uppercase tracking-widest relative z-10">Total Users</span>
-          <span className="font-bold text-3xl text-white relative z-10">{users.length}</span>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-md mb-xl">
+        <div className="glass-panel p-lg rounded-xl flex flex-col gap-xs group hover:border-tertiary transition-colors">
+          <span className="material-symbols-outlined text-tertiary">group</span>
+          <span className="text-on-surface-variant font-label-tag text-label-tag uppercase">Total Users</span>
+          <span className="font-h2 text-h2 text-on-surface">{totalUserCount}</span>
         </div>
         <div className="glass-card p-6 rounded-2xl border border-white/5 hover:border-neon-cyan/30 transition-all flex flex-col gap-2 group shadow-lg overflow-hidden relative">
           <div className="absolute inset-0 bg-gradient-to-br from-neon-cyan/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -115,81 +121,108 @@ export function Dashboard() {
       </div>
 
       {/* Users Table */}
-      <section className="glass-card rounded-3xl border border-white/5 overflow-hidden mb-8 shadow-2xl transition-all duration-300">
-        <div className="p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-white/10 bg-surface-container/30">
-          <h3 className="font-bold text-xl text-white">All Users</h3>
-          <div className="flex items-center bg-surface-container/50 rounded-xl px-4 py-2 border border-white/10 flex-1 md:flex-none focus-within:border-neon-cyan focus-within:shadow-glow-cyan transition-all">
-            <Search className="text-white/40 mr-3" size={16} />
-            <input
-              className="bg-transparent border-none focus:ring-0 text-sm text-white placeholder-white/20 w-full md:w-64 outline-none"
-              placeholder="Search users..."
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
+      <section className="glass-panel rounded-xl overflow-hidden mb-xl">
+        <div className="p-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-md border-b border-outline-variant/30">
+          <h3 className="font-h3 text-h3 text-on-surface">All Users</h3>
+          <div className="flex flex-wrap items-center gap-md w-full md:w-auto">
+            {/* Role Filter */}
+            <select
+              className="bg-surface-container border border-outline-variant/50 text-on-surface text-body rounded-lg px-md py-xs outline-none"
+              value={roleFilter}
+              onChange={(e) => setRoleFilter(e.target.value)}
+            >
+              <option value="">All Roles</option>
+              <option value="candidate">Candidates</option>
+              <option value="company">Companies</option>
+              <option value="admin">Admins</option>
+            </select>
+
+            {/* Search Input */}
+            <div className="flex items-center bg-surface-container rounded-lg px-md py-xs border border-outline-variant/50 flex-1 md:flex-none">
+              <span className="material-symbols-outlined text-on-surface-variant text-[20px] mr-sm">search</span>
+              <input
+                className="bg-transparent border-none focus:ring-0 text-body text-on-surface placeholder-on-surface-variant w-full md:w-48 outline-none"
+                placeholder="Search by name or email..."
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
           </div>
         </div>
 
-        <div className="overflow-x-auto custom-scrollbar">
-          <table className="w-full text-left min-w-[600px]">
-            <thead className="bg-surface-container/50 border-b border-white/10">
-              <tr>
-                <th className="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">User</th>
-                <th className="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Email</th>
-                <th className="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Role</th>
-                <th className="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-white/5">
-              {filteredUsers.map(user => (
-                <tr key={user._id} className="hover:bg-white/5 transition-colors group">
-                  <td className="px-6 py-4">
-                    <button className="flex items-center gap-4" onClick={() => setSelectedUserId(user._id)}>
-                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-sm shadow-inner group-hover:scale-110 transition-transform ${
-                        user.role === 'candidate' ? 'bg-neon-purple/20 text-neon-purple border border-neon-purple/30 shadow-glow-purple' :
-                        user.role === 'company' ? 'bg-neon-cyan/20 text-neon-cyan border border-neon-cyan/30 shadow-glow-cyan' :
-                        'bg-neon-pink/20 text-neon-pink border border-neon-pink/30 shadow-glow-pink'
-                      }`}>
-                        {user.name?.[0]?.toUpperCase() || '?'}
-                      </div>
-                      <span className={`font-bold transition-colors ${
-                        user.role === 'candidate' ? 'text-white group-hover:text-neon-purple' :
-                        user.role === 'company' ? 'text-white group-hover:text-neon-cyan' :
-                        'text-white group-hover:text-neon-pink'
-                      }`}>{user.name}</span>
-                    </button>
-                  </td>
-                  <td className="px-6 py-4 text-sm text-on-surface-variant font-medium">{user.email}</td>
-                  <td className="px-6 py-4">
-                    <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border ${
-                      user.role === 'candidate' ? 'bg-neon-purple/10 text-neon-purple border-neon-purple/30 shadow-glow-purple' :
-                      user.role === 'company' ? 'bg-neon-cyan/10 text-neon-cyan border-neon-cyan/30 shadow-glow-cyan' :
-                      'bg-neon-pink/10 text-neon-pink border-neon-pink/30 shadow-glow-pink'
-                    }`}>
-                      {user.role}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-right">
-                    <button
-                      onClick={() => handleDelete(user._id)}
-                      className="w-8 h-8 rounded-lg bg-surface-container border border-white/10 flex items-center justify-center text-on-surface-variant hover:text-neon-pink hover:border-neon-pink/30 hover:bg-neon-pink/10 hover:shadow-glow-pink transition-all ml-auto"
-                      title="Delete user"
-                    >
-                      <Trash2 size={14} />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-              {filteredUsers.length === 0 && (
+        <div className="overflow-x-auto">
+          {isLoading ? (
+            <div className="flex items-center justify-center py-3xl">
+              <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          ) : (
+            <table className="w-full text-left">
+              <thead className="bg-surface-container-high/50 text-on-surface-variant font-label-tag text-label-tag uppercase">
                 <tr>
-                  <td colSpan={4} className="px-6 py-12 text-center text-on-surface-variant font-medium bg-surface-container/30">No users found.</td>
+                  <th className="px-lg py-md">User</th>
+                  <th className="px-lg py-md">Email</th>
+                  <th className="px-lg py-md">Role</th>
+                  <th className="px-lg py-md">Status</th>
+                  <th className="px-lg py-md text-right">Actions</th>
                 </tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-outline-variant/30">
+                {users.map(user => (
+                  <tr key={user._id} className="hover:bg-surface-container-highest transition-colors group">
+                    <td className="px-lg py-md">
+                      <button className="flex items-center gap-md text-left" onClick={() => setSelectedUserId(user._id)}>
+                        <div className="w-8 h-8 rounded-full bg-primary-container text-surface flex items-center justify-center font-bold text-sm shrink-0">
+                          {user.name?.[0]?.toUpperCase() || '?'}
+                        </div>
+                        <span className="font-body text-body font-bold text-on-surface whitespace-nowrap hover:underline">{user.name}</span>
+                      </button>
+                    </td>
+                    <td className="px-lg py-md font-body text-body text-on-surface-variant whitespace-nowrap">{user.email}</td>
+                    <td className="px-lg py-md">
+                      <span className={`px-sm py-xs rounded-full font-label-tag text-[10px] uppercase ${user.role === 'candidate' ? 'bg-tertiary-container/30 text-tertiary' : user.role === 'company' ? 'bg-primary-container/30 text-primary' : 'bg-secondary-container/30 text-secondary'}`}>
+                        {user.role}
+                      </span>
+                    </td>
+                    <td className="px-lg py-md">
+                      <span className={`px-sm py-xs rounded-full font-label-tag text-[10px] uppercase flex items-center gap-1 w-max ${user.isActive !== false ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-error-container/40 text-error border border-error/40'}`}>
+                        <span className={`w-1.5 h-1.5 rounded-full ${user.isActive !== false ? 'bg-emerald-400' : 'bg-error'}`}></span>
+                        {user.isActive !== false ? 'Active' : 'Suspended'}
+                      </span>
+                    </td>
+                    <td className="px-lg py-md text-right">
+                      <div className="flex items-center justify-end gap-sm">
+                        <button
+                          onClick={() => handleToggleStatus(user._id, user.isActive)}
+                          className={`p-1 rounded-lg transition-all ${user.isActive !== false ? 'text-on-surface-variant hover:text-warning hover:bg-warning/10' : 'text-emerald-400 hover:bg-emerald-500/10'}`}
+                          title={user.isActive !== false ? 'Suspend user' : 'Activate user'}
+                        >
+                          <span className="material-symbols-outlined">
+                            {user.isActive !== false ? 'block' : 'check_circle'}
+                          </span>
+                        </button>
+                        <button
+                          onClick={() => handleDelete(user._id)}
+                          className="p-1 text-on-surface-variant hover:text-error hover:bg-error/10 rounded-lg transition-all"
+                          title="Delete user"
+                        >
+                          <span className="material-symbols-outlined">delete</span>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+                {users.length === 0 && (
+                  <tr>
+                    <td colSpan={5} className="px-lg py-lg text-center text-on-surface-variant">No users found matching your query.</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          )}
         </div>
-        <div className="p-6 bg-surface-container/30 flex justify-between items-center border-t border-white/10">
-          <span className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Showing {filteredUsers.length} of {users.length} users</span>
+        <div className="p-lg bg-surface-container-low flex justify-between items-center text-on-surface-variant font-caption text-caption border-t border-outline-variant/30">
+          <span>Showing {users.length} users</span>
         </div>
       </section>
 
