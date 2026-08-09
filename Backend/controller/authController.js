@@ -95,6 +95,10 @@ const login = async (req, res) => {
             return res.status(401).json({ msg: "Invalid email or password" });
         }
 
+        if (user.isActive === false) {
+            return res.status(403).json({ msg: "Your account has been suspended. Please contact admin." });
+        }
+
         const token = generateToken(user);
 
         // تجهيز كائن مستخدم نظيف وبدون كلمة المرور لإرجاعه للفرونت إند
@@ -105,7 +109,8 @@ const login = async (req, res) => {
             role: user.role,
             phone: user.phone,
             location: user.location,
-            profileImage: user.profileImage
+            profileImage: user.profileImage,
+            isActive: user.isActive
         };
 
         res.status(200).json({

@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
@@ -12,7 +13,20 @@ export function LoginRegister() {
   const isLogin = location.pathname === '/login';
   
   const dispatch = useDispatch();
-  const { isLoading } = useSelector((state) => state.auth);
+  const { isLoading, isAuthenticated, user } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      const role = user.role?.toLowerCase();
+      if (role === 'candidate') {
+        navigate('/candidate/dashboard', { replace: true });
+      } else if (role === 'company') {
+        navigate('/company/dashboard', { replace: true });
+      } else {
+        navigate('/admin/dashboard', { replace: true });
+      }
+    }
+  }, [isAuthenticated, user, navigate]);
 
   const schema = yup.object().shape({
     email: yup.string().email('Invalid email address').required('Email is required'),

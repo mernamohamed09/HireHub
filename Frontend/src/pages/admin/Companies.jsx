@@ -2,10 +2,11 @@ import { useState, useEffect } from 'react';
 import { DashboardHeader } from '../../components/layout/DashboardHeader';
 import { Button } from '../../components/ui/Button';
 import { UserDetailModal } from '../../components/UserDetailModal';
-import { userService } from '../../services/userService';
+import { adminService } from '../../services/adminService';
 
 export function Companies() {
   const [companies, setCompanies] = useState([]);
+  const [search, setSearch] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [reloadKey, setReloadKey] = useState(0);
@@ -16,8 +17,10 @@ export function Companies() {
       try {
         setIsLoading(true);
         setError(null);
-        const data = await userService.getAllUsers();
-        setCompanies((data.users || []).filter(u => u.role === 'company'));
+        const params = { role: 'company' };
+        if (search.trim()) params.search = search.trim();
+        const data = await adminService.getAllUsers(params);
+        setCompanies(data.users || []);
       } catch {
         setError('Failed to load companies.');
       } finally {
@@ -25,15 +28,27 @@ export function Companies() {
       }
     };
 
-    loadCompanies();
-  }, [reloadKey]);
+    const timer = setTimeout(loadCompanies, 300);
+    return () => clearTimeout(timer);
+  }, [search, reloadKey]);
 
   const handleDelete = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this company?')) return;
     try {
-      await userService.deleteUser(id);
+      await adminService.deleteUser(id);
       setCompanies(prev => prev.filter(c => c._id !== id));
-    } catch {
-      setError('Failed to delete company.');
+    } catch (err) {
+      setError(err?.response?.data?.msg || 'Failed to delete company.');
+    }
+  };
+
+  const handleToggleStatus = async (id, currentIsActive) => {
+    try {
+      const nextIsActive = currentIsActive === false ? true : false;
+      await adminService.updateUserStatus(id, nextIsActive);
+      setCompanies(prev => prev.map(c => c._id === id ? { ...c, isActive: nextIsActive } : c));
+    } catch (err) {
+      setError(err?.response?.data?.msg || 'Failed to update company status.');
     }
   };
 
@@ -41,12 +56,24 @@ export function Companies() {
     <>
       <DashboardHeader />
       <div className="w-full px-md md:px-lg max-w-6xl mx-auto space-y-lg py-xl">
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-md">
           <div>
             <h1 className="font-h2 text-h2 text-on-surface">Manage Companies</h1>
             <p className="text-on-surface-variant mt-sm">View and manage all registered companies in the system.</p>
           </div>
-          <Button variant="outline" className="hidden md:flex" onClick={() => setReloadKey(k => k + 1)}>Refresh</Button>
+          <div className="flex items-center gap-md w-full md:w-auto">
+            <div className="flex items-center bg-surface-container rounded-lg px-md py-xs border border-outline-variant/50 flex-1 md:flex-none">
+              <span className="material-symbols-outlined text-on-surface-variant text-[20px] mr-sm">search</span>
+              <input
+                className="bg-transparent border-none focus:ring-0 text-body text-on-surface placeholder-on-surface-variant w-full md:w-48 outline-none"
+                placeholder="Search company..."
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+            <Button variant="outline" className="hidden md:flex" onClick={() => setReloadKey(k => k + 1)}>Refresh</Button>
+          </div>
         </div>
 
         {error && (
@@ -62,9 +89,9 @@ export function Companies() {
         ) : companies.length === 0 ? (
           <div className="bg-surface-container rounded-xl border border-outline-variant p-xl flex flex-col items-center justify-center text-center min-h-[400px]">
             <span className="material-symbols-outlined text-[64px] text-outline mb-md">domain</span>
-            <h3 className="font-h3 text-h3 text-on-surface mb-sm">No Companies Yet</h3>
+            <h3 className="font-h3 text-h3 text-on-surface mb-sm">No Companies Found</h3>
             <p className="text-on-surface-variant max-w-md mx-auto">
-              Registered companies will appear here once they create accounts.
+              No registered companies match your search filter.
             </p>
           </div>
         ) : (
@@ -75,6 +102,7 @@ export function Companies() {
                   <th className="px-lg py-md">Name</th>
                   <th className="px-lg py-md">Email</th>
                   <th className="px-lg py-md">Location</th>
+                  <th className="px-lg py-md">Status</th>
                   <th className="px-lg py-md text-right">Actions</th>
                 </tr>
               </thead>
@@ -82,8 +110,8 @@ export function Companies() {
                 {companies.map(c => (
                   <tr key={c._id} className="hover:bg-surface-container-highest transition-colors">
                     <td className="px-lg py-md">
-                      <button className="flex items-center gap-md" onClick={() => setSelectedUserId(c._id)}>
-                        <div className="w-8 h-8 rounded-full bg-primary-container text-primary flex items-center justify-center font-bold text-sm">
+                      <button className="flex items-center gap-md text-left" onClick={() => setSelectedUserId(c._id)}>
+                        <div className="w-8 h-8 rounded-full bg-primary-container text-primary flex items-center justify-center font-bold text-sm shrink-0">
                           {c.name?.[0]?.toUpperCase() || '?'}
                         </div>
                         <span className="font-body font-bold text-on-surface hover:underline">{c.name}</span>
@@ -91,14 +119,31 @@ export function Companies() {
                     </td>
                     <td className="px-lg py-md text-on-surface-variant">{c.email}</td>
                     <td className="px-lg py-md text-on-surface-variant">{c.location || '-'}</td>
+                    <td className="px-lg py-md">
+                      <span className={`px-sm py-xs rounded-full font-label-tag text-[10px] uppercase flex items-center gap-1 w-max ${c.isActive !== false ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-error-container/40 text-error border border-error/40'}`}>
+                        <span className={`w-1.5 h-1.5 rounded-full ${c.isActive !== false ? 'bg-emerald-400' : 'bg-error'}`}></span>
+                        {c.isActive !== false ? 'Active' : 'Suspended'}
+                      </span>
+                    </td>
                     <td className="px-lg py-md text-right">
-                      <button
-                        onClick={() => handleDelete(c._id)}
-                        className="text-on-surface-variant hover:text-error transition-all"
-                        title="Delete company"
-                      >
-                        <span className="material-symbols-outlined">delete</span>
-                      </button>
+                      <div className="flex items-center justify-end gap-sm">
+                        <button
+                          onClick={() => handleToggleStatus(c._id, c.isActive)}
+                          className={`p-1 rounded-lg transition-all ${c.isActive !== false ? 'text-on-surface-variant hover:text-warning hover:bg-warning/10' : 'text-emerald-400 hover:bg-emerald-500/10'}`}
+                          title={c.isActive !== false ? 'Suspend company' : 'Activate company'}
+                        >
+                          <span className="material-symbols-outlined">
+                            {c.isActive !== false ? 'block' : 'check_circle'}
+                          </span>
+                        </button>
+                        <button
+                          onClick={() => handleDelete(c._id)}
+                          className="p-1 text-on-surface-variant hover:text-error hover:bg-error/10 rounded-lg transition-all"
+                          title="Delete company"
+                        >
+                          <span className="material-symbols-outlined">delete</span>
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}

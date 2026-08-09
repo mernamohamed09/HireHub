@@ -50,8 +50,13 @@ export function Navbar() {
         <div className="flex items-center gap-md">
           {isAuthenticated && user ? (
             <>
-              <Link to={dashboardPath} className="font-body text-body text-on-surface-variant hover:text-primary transition-colors">
-                {user.name}
+              <Link to={dashboardPath} className="font-body text-body text-on-surface-variant hover:text-primary transition-colors flex items-center gap-1.5 font-medium">
+                <span className="material-symbols-outlined text-[20px]">
+                  {user.role === 'admin' ? 'admin_panel_settings' : 'account_circle'}
+                </span>
+                <span>
+                  {user.role === 'admin' ? 'Admin Portal' : user.name}
+                </span>
               </Link>
               <Button variant="outline" onClick={handleLogout}>Logout</Button>
             </>
