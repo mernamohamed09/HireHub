@@ -31,10 +31,6 @@ export function DashboardHeader({ title = 'HireHub', user }) {
         </div>
 
         <div className="flex items-center gap-4 z-10">
-          <button className="hidden lg:flex items-center gap-2 bg-gradient-to-r from-neon-purple/20 to-neon-pink/20 border border-neon-pink/30 text-neon-pink px-3 py-1.5 rounded-full text-xs font-bold shadow-glow-pink hover:scale-105 transition-transform">
-            <Sparkles size={14} />
-            AI Assistant
-          </button>
 
           <button
             onClick={() => navigate('/notifications')}

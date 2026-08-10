@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Button } from '../../components/ui/Button';
+import { DashboardHeader } from '../../components/layout/DashboardHeader';
 import { UserDetailModal } from '../../components/UserDetailModal';
 import { adminService } from '../../services/adminService';
 import { jobService } from '../../services/jobService';
-import { RefreshCw, Loader2, Users, Building2, UserCircle2, Briefcase, Search, Trash2 } from 'lucide-react';
+import { RefreshCw, Loader2, Users, Building2, UserCircle2, Briefcase, Search, Trash2, Ban, CheckCircle } from 'lucide-react';
 
 export function Dashboard() {
   const [users, setUsers] = useState([]);
@@ -69,23 +70,25 @@ export function Dashboard() {
   const totalUserCount = stats?.totalUsers ?? users.length;
 
   return (
-    <div className="w-full relative">
-      <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-neon-cyan/5 blur-[120px] rounded-full pointer-events-none -z-10 translate-x-1/3 -translate-y-1/3"></div>
-      
-      {/* Floating Glassmorphic Header */}
-      <header className="sticky top-0 z-40 mb-8 flex justify-between items-center glass-panel backdrop-blur-xl py-4 px-6 lg:px-8 border-b border-white/10 -mt-6 mx-[-24px] lg:mx-[-32px] w-[calc(100%+48px)] lg:w-[calc(100%+64px)] shadow-lg">
-        <div>
-          <h2 className="font-bold text-2xl text-white">Admin Overview</h2>
-          <p className="text-on-surface-variant text-xs font-bold uppercase tracking-widest mt-1">Real-time system users and jobs.</p>
+    <>
+      <DashboardHeader />
+      <div className="w-full px-4 md:px-8 max-w-6xl mx-auto space-y-8 py-8 relative">
+        <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-neon-cyan/5 blur-[120px] rounded-full pointer-events-none -z-10 translate-x-1/3 -translate-y-1/3"></div>
+        
+        {/* Header */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-8">
+          <div>
+            <h1 className="font-bold text-3xl md:text-4xl text-white">Admin Overview</h1>
+            <p className="text-on-surface-variant mt-2 font-medium">Real-time system users and jobs.</p>
+          </div>
+          <button 
+            onClick={() => setReloadKey(k => k + 1)}
+            className="hidden md:flex items-center gap-2 bg-surface-container/50 border border-white/10 text-white px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-white/5 transition-all shadow-lg active:scale-95 group"
+          >
+            <RefreshCw size={14} className="group-hover:rotate-180 transition-transform duration-500" />
+            Refresh
+          </button>
         </div>
-        <button 
-          onClick={() => setReloadKey(k => k + 1)}
-          className="flex items-center gap-2 bg-neon-cyan/20 border border-neon-cyan/30 text-neon-cyan px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-neon-cyan/30 transition-all shadow-glow-cyan active:scale-95 group"
-        >
-          <RefreshCw size={14} className="group-hover:rotate-180 transition-transform duration-500" />
-          Refresh
-        </button>
-      </header>
 
       {error && (
         <div className="bg-neon-pink/10 border border-neon-pink/30 text-neon-pink rounded-xl p-4 text-center mb-8 text-sm font-bold shadow-glow-pink">
@@ -94,11 +97,12 @@ export function Dashboard() {
       )}
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-md mb-xl">
-        <div className="glass-panel p-lg rounded-xl flex flex-col gap-xs group hover:border-tertiary transition-colors">
-          <span className="material-symbols-outlined text-tertiary">group</span>
-          <span className="text-on-surface-variant font-label-tag text-label-tag uppercase">Total Users</span>
-          <span className="font-h2 text-h2 text-on-surface">{totalUserCount}</span>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className="glass-card p-6 rounded-2xl border border-white/5 hover:border-white/30 transition-all flex flex-col gap-2 group shadow-lg overflow-hidden relative">
+          <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div className="w-10 h-10 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center mb-2 shadow-lg group-hover:scale-110 transition-transform relative z-10"><Users className="text-white" size={20} /></div>
+          <span className="text-white text-[10px] font-bold uppercase tracking-widest relative z-10">Total Users</span>
+          <span className="font-bold text-3xl text-white relative z-10">{totalUserCount}</span>
         </div>
         <div className="glass-card p-6 rounded-2xl border border-white/5 hover:border-neon-cyan/30 transition-all flex flex-col gap-2 group shadow-lg overflow-hidden relative">
           <div className="absolute inset-0 bg-gradient-to-br from-neon-cyan/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -121,27 +125,27 @@ export function Dashboard() {
       </div>
 
       {/* Users Table */}
-      <section className="glass-panel rounded-xl overflow-hidden mb-xl">
-        <div className="p-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-md border-b border-outline-variant/30">
-          <h3 className="font-h3 text-h3 text-on-surface">All Users</h3>
-          <div className="flex flex-wrap items-center gap-md w-full md:w-auto">
+      <div className="glass-card rounded-3xl border border-white/5 overflow-hidden shadow-2xl mb-8">
+        <div className="p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-white/10 bg-surface-container/30">
+          <h3 className="font-bold text-xl text-white">All Users</h3>
+          <div className="flex flex-wrap items-center gap-4 w-full md:w-auto">
             {/* Role Filter */}
             <select
-              className="bg-surface-container border border-outline-variant/50 text-on-surface text-body rounded-lg px-md py-xs outline-none"
+              className="bg-white/5 border border-white/10 text-white rounded-lg px-4 py-2 outline-none backdrop-blur-md focus:border-neon-cyan focus:shadow-glow-cyan transition-all text-sm font-medium"
               value={roleFilter}
               onChange={(e) => setRoleFilter(e.target.value)}
             >
-              <option value="">All Roles</option>
-              <option value="candidate">Candidates</option>
-              <option value="company">Companies</option>
-              <option value="admin">Admins</option>
+              <option value="" className="bg-background">All Roles</option>
+              <option value="candidate" className="bg-background">Candidates</option>
+              <option value="company" className="bg-background">Companies</option>
+              <option value="admin" className="bg-background">Admins</option>
             </select>
 
             {/* Search Input */}
-            <div className="flex items-center bg-surface-container rounded-lg px-md py-xs border border-outline-variant/50 flex-1 md:flex-none">
-              <span className="material-symbols-outlined text-on-surface-variant text-[20px] mr-sm">search</span>
+            <div className="flex items-center bg-white/5 rounded-lg px-4 py-2 border border-white/10 flex-1 md:flex-none backdrop-blur-md focus-within:border-neon-cyan focus-within:shadow-glow-cyan transition-all">
+              <Search className="text-white/40 mr-2" size={16} />
               <input
-                className="bg-transparent border-none focus:ring-0 text-body text-on-surface placeholder-on-surface-variant w-full md:w-48 outline-none"
+                className="bg-transparent border-none focus:ring-0 text-sm text-white placeholder-white/40 w-full md:w-48 outline-none"
                 placeholder="Search by name or email..."
                 type="text"
                 value={search}
@@ -151,84 +155,94 @@ export function Dashboard() {
           </div>
         </div>
 
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto custom-scrollbar">
           {isLoading ? (
-            <div className="flex items-center justify-center py-3xl">
-              <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+            <div className="flex items-center justify-center py-20">
+              <Loader2 className="animate-spin text-neon-purple" size={32} />
+            </div>
+          ) : users.length === 0 ? (
+            <div className="p-12 flex flex-col items-center justify-center text-center min-h-[300px]">
+              <div className="w-16 h-16 bg-surface-container/50 rounded-2xl border border-white/10 flex items-center justify-center mb-4 shadow-inner">
+                <Search className="text-white/20" size={32} />
+              </div>
+              <h3 className="font-bold text-xl text-white mb-2">No Users Found</h3>
+              <p className="text-on-surface-variant font-medium text-sm">Try adjusting your filters or search query.</p>
             </div>
           ) : (
-            <table className="w-full text-left">
-              <thead className="bg-surface-container-high/50 text-on-surface-variant font-label-tag text-label-tag uppercase">
+            <table className="w-full text-left min-w-[700px]">
+              <thead className="bg-surface-container/50 border-b border-white/10">
                 <tr>
-                  <th className="px-lg py-md">User</th>
-                  <th className="px-lg py-md">Email</th>
-                  <th className="px-lg py-md">Role</th>
-                  <th className="px-lg py-md">Status</th>
-                  <th className="px-lg py-md text-right">Actions</th>
+                  <th className="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">User</th>
+                  <th className="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Email</th>
+                  <th className="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Role</th>
+                  <th className="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Status</th>
+                  <th className="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-outline-variant/30">
+              <tbody className="divide-y divide-white/5">
                 {users.map(user => (
-                  <tr key={user._id} className="hover:bg-surface-container-highest transition-colors group">
-                    <td className="px-lg py-md">
-                      <button className="flex items-center gap-md text-left" onClick={() => setSelectedUserId(user._id)}>
-                        <div className="w-8 h-8 rounded-full bg-primary-container text-surface flex items-center justify-center font-bold text-sm shrink-0">
+                  <tr key={user._id} className="hover:bg-white/5 transition-colors group">
+                    <td className="px-6 py-4">
+                      <button className="flex items-center gap-4 text-left" onClick={() => setSelectedUserId(user._id)}>
+                        <div className="w-10 h-10 rounded-xl bg-neon-purple/20 text-neon-purple border border-neon-purple/30 flex items-center justify-center font-bold text-sm shadow-glow-purple group-hover:scale-110 transition-transform">
                           {user.name?.[0]?.toUpperCase() || '?'}
                         </div>
-                        <span className="font-body text-body font-bold text-on-surface whitespace-nowrap hover:underline">{user.name}</span>
+                        <span className="font-bold text-white group-hover:text-neon-purple transition-colors">{user.name}</span>
                       </button>
                     </td>
-                    <td className="px-lg py-md font-body text-body text-on-surface-variant whitespace-nowrap">{user.email}</td>
-                    <td className="px-lg py-md">
-                      <span className={`px-sm py-xs rounded-full font-label-tag text-[10px] uppercase ${user.role === 'candidate' ? 'bg-tertiary-container/30 text-tertiary' : user.role === 'company' ? 'bg-primary-container/30 text-primary' : 'bg-secondary-container/30 text-secondary'}`}>
+                    <td className="px-6 py-4 text-sm text-on-surface-variant font-medium">{user.email}</td>
+                    <td className="px-6 py-4">
+                      <span className={`px-3 py-1.5 rounded-full text-[10px] uppercase font-bold border ${
+                        user.role === 'candidate' ? 'bg-neon-purple/10 text-neon-purple border-neon-purple/30' : 
+                        user.role === 'company' ? 'bg-neon-cyan/10 text-neon-cyan border-neon-cyan/30' : 
+                        'bg-white/10 text-white border-white/20'
+                      }`}>
                         {user.role}
                       </span>
                     </td>
-                    <td className="px-lg py-md">
-                      <span className={`px-sm py-xs rounded-full font-label-tag text-[10px] uppercase flex items-center gap-1 w-max ${user.isActive !== false ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-error-container/40 text-error border border-error/40'}`}>
+                    <td className="px-6 py-4">
+                      <span className={`px-3 py-1.5 rounded-full text-[10px] uppercase flex items-center gap-2 w-max font-bold ${
+                        user.isActive !== false ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-error-container/40 text-error border border-error/40'
+                      }`}>
                         <span className={`w-1.5 h-1.5 rounded-full ${user.isActive !== false ? 'bg-emerald-400' : 'bg-error'}`}></span>
                         {user.isActive !== false ? 'Active' : 'Suspended'}
                       </span>
                     </td>
-                    <td className="px-lg py-md text-right">
-                      <div className="flex items-center justify-end gap-sm">
+                    <td className="px-6 py-4 text-right">
+                      <div className="flex items-center justify-end gap-2">
                         <button
                           onClick={() => handleToggleStatus(user._id, user.isActive)}
-                          className={`p-1 rounded-lg transition-all ${user.isActive !== false ? 'text-on-surface-variant hover:text-warning hover:bg-warning/10' : 'text-emerald-400 hover:bg-emerald-500/10'}`}
+                          className={`p-2 rounded-lg transition-all ${user.isActive !== false ? 'text-on-surface-variant hover:text-warning hover:bg-warning/10' : 'text-emerald-400 hover:bg-emerald-500/10'}`}
                           title={user.isActive !== false ? 'Suspend user' : 'Activate user'}
                         >
-                          <span className="material-symbols-outlined">
-                            {user.isActive !== false ? 'block' : 'check_circle'}
-                          </span>
+                          {user.isActive !== false ? <Ban size={18} /> : <CheckCircle size={18} />}
                         </button>
                         <button
                           onClick={() => handleDelete(user._id)}
-                          className="p-1 text-on-surface-variant hover:text-error hover:bg-error/10 rounded-lg transition-all"
+                          className="w-8 h-8 rounded-lg bg-surface-container border border-white/10 flex items-center justify-center text-on-surface-variant hover:text-neon-pink hover:border-neon-pink/30 hover:bg-neon-pink/10 hover:shadow-glow-pink transition-all"
                           title="Delete user"
                         >
-                          <span className="material-symbols-outlined">delete</span>
+                          <Trash2 size={14} />
                         </button>
                       </div>
                     </td>
                   </tr>
                 ))}
-                {users.length === 0 && (
-                  <tr>
-                    <td colSpan={5} className="px-lg py-lg text-center text-on-surface-variant">No users found matching your query.</td>
-                  </tr>
-                )}
               </tbody>
             </table>
           )}
         </div>
-        <div className="p-lg bg-surface-container-low flex justify-between items-center text-on-surface-variant font-caption text-caption border-t border-outline-variant/30">
-          <span>Showing {users.length} users</span>
-        </div>
-      </section>
+        {!isLoading && users.length > 0 && (
+          <div className="p-4 bg-surface-container/30 flex justify-between items-center text-on-surface-variant text-xs font-bold uppercase tracking-widest border-t border-white/10">
+            <span>Showing {users.length} users</span>
+          </div>
+        )}
+      </div>
 
       {selectedUserId && (
         <UserDetailModal userId={selectedUserId} onClose={() => setSelectedUserId(null)} />
       )}
-    </div>
+      </div>
+    </>
   );
 }
