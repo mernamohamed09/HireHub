@@ -102,7 +102,7 @@ const ApplicationResults = () => {
                 {result.status === 'completed' && (
                   <div className="text-right relative z-10 bg-surface-container p-4 rounded-2xl border border-white/10 shadow-inner">
                     <p className="text-[10px] text-on-surface-variant uppercase font-bold tracking-wider mb-1">Final Score</p>
-                    <p className={`text-4xl font-bold leading-none ${result.passed ? 'text-neon-mint drop-shadow-[0_0_8px_rgba(85,245,198,0.5)]' : 'text-neon-pink drop-shadow-[0_0_8px_rgba(255,42,109,0.5)]'}`}>
+                    <p className={`text-4xl font-bold leading-none ${result.passed ? 'text-neon-mint drop-shadow-[0_0_8px_rgba(45,212,191,0.5)]' : 'text-neon-pink drop-shadow-[0_0_8px_rgba(244,114,182,0.5)]'}`}>
                       {result.score}%
                     </p>
                   </div>

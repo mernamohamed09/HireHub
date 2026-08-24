@@ -133,7 +133,7 @@ export function Dashboard() {
                     
                     <div className="relative z-10 mt-12 mb-4">
                       <p className="text-7xl md:text-8xl font-bold text-white mb-6 tracking-tight drop-shadow-md">{totalApplicants}</p>
-                      <div className="inline-flex items-center gap-2 bg-neon-purple/10 border border-neon-purple/40 px-4 py-2 rounded-full text-neon-purple text-sm font-bold shadow-[0_0_15px_rgba(110,92,255,0.2)]">
+                      <div className="inline-flex items-center gap-2 bg-neon-purple/10 border border-neon-purple/40 px-4 py-2 rounded-full text-neon-purple text-sm font-bold shadow-[0_0_15px_rgba(99,102,241,0.2)]">
                         <TrendingUp size={16} /> +12% this week
                       </div>
                     </div>
@@ -143,13 +143,13 @@ export function Dashboard() {
                   <div className="absolute bottom-0 left-0 w-full h-32 overflow-hidden rounded-b-[24px] pointer-events-none">
                     <svg viewBox="0 0 200 80" preserveAspectRatio="none" className="w-full h-full opacity-80 group-hover:opacity-100 transition-opacity">
                       <path d="M0,80 L0,40 C30,50 60,10 100,25 C140,40 170,10 200,20 L200,80 Z" fill="url(#purpleAreaGlow)" />
-                      <path d="M0,40 C30,50 60,10 100,25 C140,40 170,10 200,20" fill="none" stroke="#6E5CFF" strokeWidth="2.5" className="drop-shadow-[0_0_8px_rgba(110,92,255,0.8)]" />
+                      <path d="M0,40 C30,50 60,10 100,25 C140,40 170,10 200,20" fill="none" stroke="#6366F1" strokeWidth="2.5" className="drop-shadow-[0_0_8px_rgba(99,102,241,0.8)]" />
                       {/* Glowing dot at the end of the trend line */}
-                      <circle cx="200" cy="20" r="4" fill="#fff" className="drop-shadow-[0_0_8px_rgba(255,255,255,1)]" stroke="#6E5CFF" strokeWidth="2" />
+                      <circle cx="200" cy="20" r="4" fill="#fff" className="drop-shadow-[0_0_8px_rgba(255,255,255,1)]" stroke="#6366F1" strokeWidth="2" />
                       <defs>
                         <linearGradient id="purpleAreaGlow" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="0%" stopColor="#6E5CFF" stopOpacity="0.4" />
-                          <stop offset="100%" stopColor="#6E5CFF" stopOpacity="0" />
+                          <stop offset="0%" stopColor="#6366F1" stopOpacity="0.4" />
+                          <stop offset="100%" stopColor="#6366F1" stopOpacity="0" />
                         </linearGradient>
                       </defs>
                     </svg>
@@ -175,7 +175,7 @@ export function Dashboard() {
                   <div className="relative w-20 h-20 flex items-center justify-center">
                     <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
                       <circle cx="50" cy="50" r="40" className="stroke-white/10" strokeWidth="8" fill="none" />
-                      <circle cx="50" cy="50" r="40" className="stroke-neon-cyan drop-shadow-[0_0_10px_rgba(0,229,255,0.8)]" strokeWidth="8" fill="none" strokeDasharray="251.2" strokeDashoffset={251.2 - (251.2 * (Math.min(myJobs.length, 10) / 10))} strokeLinecap="round" />
+                      <circle cx="50" cy="50" r="40" className="stroke-neon-cyan drop-shadow-[0_0_10px_rgba(34,211,238,0.8)]" strokeWidth="8" fill="none" strokeDasharray="251.2" strokeDashoffset={251.2 - (251.2 * (Math.min(myJobs.length, 10) / 10))} strokeLinecap="round" />
                     </svg>
                     <span className="absolute text-white font-bold text-lg">{myJobs.length}/10</span>
                   </div>

@@ -113,9 +113,9 @@ export function Sidebar({ links = [], user }) {
               }}
             >
               {isActive && (
-                <div className="absolute -left-4 top-1/2 -translate-y-1/2 w-5 h-10 border-r-[3px] border-neon-mint rounded-r-[100%] shadow-[4px_0_12px_rgba(85,245,198,0.5)] bg-gradient-to-r from-transparent to-neon-mint/10"></div>
+                <div className="absolute -left-4 top-1/2 -translate-y-1/2 w-5 h-10 border-r-[3px] border-neon-mint rounded-r-[100%] shadow-[4px_0_12px_rgba(45,212,191,0.5)] bg-gradient-to-r from-transparent to-neon-mint/10"></div>
               )}
-              <Icon size={isCollapsed ? 22 : 20} className={cn("transition-transform relative z-10", isActive ? "scale-110 text-neon-mint drop-shadow-[0_0_8px_rgba(85,245,198,0.8)]" : "group-hover:scale-110")} />
+              <Icon size={isCollapsed ? 22 : 20} className={cn("transition-transform relative z-10", isActive ? "scale-110 text-neon-mint drop-shadow-[0_0_8px_rgba(45,212,191,0.8)]" : "group-hover:scale-110")} />
               
               {!isCollapsed && (
                 <span className="font-medium text-[13px] whitespace-nowrap">{link.label || link.name}</span>

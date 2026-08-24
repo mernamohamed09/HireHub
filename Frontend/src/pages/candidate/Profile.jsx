@@ -252,7 +252,7 @@ export function Profile() {
             </div>
           </div>
         </div>
-        <Button variant="primary" className="flex items-center gap-2 transition-all shadow-[0_0_15px_rgba(110,92,255,0.4)] bg-gradient-to-r from-neon-purple to-neon-pink border-none relative z-10 text-white" onClick={startEditing}>
+        <Button variant="primary" className="flex items-center gap-2 transition-all shadow-[0_0_15px_rgba(99,102,241,0.4)] bg-gradient-to-r from-neon-purple to-neon-pink border-none relative z-10 text-white" onClick={startEditing}>
           <Edit2 size={16} />
           Edit Profile
         </Button>

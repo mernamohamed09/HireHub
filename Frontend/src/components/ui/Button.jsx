@@ -9,12 +9,12 @@ export const Button = React.forwardRef(({
   ...props 
 }, ref) => {
   const variants = {
-    primary: 'bg-gradient-to-r from-neon-purple to-neon-pink text-white shadow-glow-purple hover:shadow-[0_0_40px_rgba(110,92,255,0.6)] hover:-translate-y-1 hover:brightness-110',
-    cyan: 'bg-gradient-to-r from-neon-purple to-neon-cyan text-white shadow-glow-cyan hover:shadow-[0_0_40px_rgba(0,229,255,0.6)] hover:-translate-y-1 hover:brightness-110',
-    mint: 'bg-gradient-to-r from-neon-mint to-neon-cyan text-[#002018] shadow-glow-mint hover:shadow-[0_0_40px_rgba(85,245,198,0.6)] hover:-translate-y-1 hover:brightness-110',
+    primary: 'bg-gradient-to-r from-neon-purple to-neon-pink text-white shadow-glow-purple hover:shadow-[0_0_30px_rgba(99,102,241,0.4)] hover:-translate-y-1 hover:brightness-110',
+    cyan: 'bg-gradient-to-r from-neon-purple to-neon-cyan text-white shadow-glow-cyan hover:shadow-[0_0_30px_rgba(34,211,238,0.4)] hover:-translate-y-1 hover:brightness-110',
+    mint: 'bg-gradient-to-r from-neon-mint to-neon-cyan text-[#042F2E] shadow-glow-mint hover:shadow-[0_0_30px_rgba(45,212,191,0.4)] hover:-translate-y-1 hover:brightness-110',
     outline: 'border border-outline text-on-surface hover:bg-surface-container-high hover:border-neon-purple/50 hover:shadow-glow-purple',
     ghost: 'text-on-surface-variant hover:text-white hover:bg-white/10',
-    danger: 'bg-gradient-to-r from-neon-red to-neon-pink text-white shadow-glow-pink hover:shadow-[0_0_40px_rgba(255,90,122,0.6)] hover:-translate-y-1',
+    danger: 'bg-gradient-to-r from-neon-red to-neon-pink text-white shadow-glow-pink hover:shadow-[0_0_30px_rgba(248,113,113,0.4)] hover:-translate-y-1',
   };
 
   const sizes = {

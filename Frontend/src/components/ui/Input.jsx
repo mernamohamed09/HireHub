@@ -21,8 +21,8 @@ export const Input = React.forwardRef(({
         id={inputId}
         ref={ref}
         className={cn(
-          'w-full bg-surface-container-high/60 border border-white/[0.08] rounded-xl px-4 py-2.5 text-white placeholder:text-on-surface-variant/50 focus:outline-none focus:border-neon-purple/50 focus:shadow-[0_0_15px_rgba(110,92,255,0.15)] transition-all duration-200',
-          error && 'border-neon-red/50 focus:border-neon-red/50 focus:shadow-[0_0_15px_rgba(255,90,122,0.15)]',
+          'w-full bg-surface-container-high/60 border border-white/[0.08] rounded-xl px-4 py-2.5 text-white placeholder:text-on-surface-variant/50 focus:outline-none focus:border-neon-purple/50 focus:shadow-[0_0_15px_rgba(99,102,241,0.15)] transition-all duration-200',
+          error && 'border-neon-red/50 focus:border-neon-red/50 focus:shadow-[0_0_15px_rgba(248,113,113,0.15)]',
           className
         )}
         {...props}
