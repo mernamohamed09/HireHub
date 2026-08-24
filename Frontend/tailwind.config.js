@@ -11,79 +11,79 @@ export default {
   theme: {
     extend: {
       colors: {
-        /* ── Core Cyberpunk Palette ─────────────────────── */
-        "background":               "#03050A",
-        "surface":                  "#0F1629",
-        "surface-dim":              "#03050A",
-        "surface-bright":           "#1A2034",
-        "surface-container-lowest": "#050814",
-        "surface-container-low":    "#080D1F",
-        "surface-container":        "#0C1222",
-        "surface-container-high":   "#111A2E",
-        "surface-container-highest":"#1A2642",
-        "surface-variant":          "#17223B",
-        "surface-tint":             "#6E5CFF",
+        /* ── Midnight Horizon Core Palette ─────────────── */
+        "background":               "#0A0F1A",
+        "surface":                  "#111827",
+        "surface-dim":              "#0A0F1A",
+        "surface-bright":           "#1E293B",
+        "surface-container-lowest": "#070B14",
+        "surface-container-low":    "#0D1321",
+        "surface-container":        "#111827",
+        "surface-container-high":   "#1E293B",
+        "surface-container-highest":"#334155",
+        "surface-variant":          "#1E293B",
+        "surface-tint":             "#6366F1",
 
         /* ── On-Surface (Text) ──────────────────────────── */
-        "on-surface":               "#FFFFFF",
-        "on-surface-variant":       "#9FA8C5",
+        "on-surface":               "#F1F5F9",
+        "on-surface-variant":       "#94A3B8",
         "on-background":            "#E2E8F0",
 
-        /* ── Primary (Purple) ───────────────────────────── */
-        "primary":                  "#6E5CFF",
-        "primary-container":        "rgba(110, 92, 255, 0.15)",
+        /* ── Primary (Indigo) ───────────────────────────── */
+        "primary":                  "#6366F1",
+        "primary-container":        "rgba(99, 102, 241, 0.15)",
         "on-primary":               "#FFFFFF",
-        "on-primary-container":     "#A594FF",
-        "on-primary-fixed":         "#1B0A5C",
-        "on-primary-fixed-variant": "#3D2A9E",
-        "primary-fixed":            "#D6CFFF",
-        "primary-fixed-dim":        "#A594FF",
-        "inverse-primary":          "#4A3CC0",
+        "on-primary-container":     "#A5B4FC",
+        "on-primary-fixed":         "#312E81",
+        "on-primary-fixed-variant": "#4338CA",
+        "primary-fixed":            "#C7D2FE",
+        "primary-fixed-dim":        "#A5B4FC",
+        "inverse-primary":          "#4338CA",
 
-        /* ── Secondary (Mint) ───────────────────────────── */
-        "secondary":                "#55F5C6",
-        "secondary-container":      "rgba(85, 245, 198, 0.12)",
-        "on-secondary":             "#003D2E",
-        "on-secondary-container":   "#55F5C6",
-        "secondary-fixed":          "#B3FFEA",
-        "secondary-fixed-dim":      "#55F5C6",
-        "on-secondary-fixed":       "#002018",
-        "on-secondary-fixed-variant":"#005540",
+        /* ── Secondary (Teal) ──────────────────────────── */
+        "secondary":                "#14B8A6",
+        "secondary-container":      "rgba(20, 184, 166, 0.12)",
+        "on-secondary":             "#042F2E",
+        "on-secondary-container":   "#2DD4BF",
+        "secondary-fixed":          "#99F6E4",
+        "secondary-fixed-dim":      "#2DD4BF",
+        "on-secondary-fixed":       "#042F2E",
+        "on-secondary-fixed-variant":"#0F766E",
 
         /* ── Tertiary (Cyan) ────────────────────────────── */
-        "tertiary":                 "#00E5FF",
-        "tertiary-container":       "rgba(0, 229, 255, 0.12)",
-        "on-tertiary":              "#003640",
-        "on-tertiary-container":    "#00E5FF",
-        "tertiary-fixed":           "#B3F5FF",
-        "tertiary-fixed-dim":       "#4CD6FB",
-        "on-tertiary-fixed":        "#001F27",
-        "on-tertiary-fixed-variant":"#004E5F",
+        "tertiary":                 "#22D3EE",
+        "tertiary-container":       "rgba(34, 211, 238, 0.12)",
+        "on-tertiary":              "#083344",
+        "on-tertiary-container":    "#22D3EE",
+        "tertiary-fixed":           "#A5F3FC",
+        "tertiary-fixed-dim":       "#67E8F9",
+        "on-tertiary-fixed":        "#083344",
+        "on-tertiary-fixed-variant":"#0E7490",
 
-        /* ── Error / Danger (Red-Pink) ──────────────────── */
-        "error":                    "#FF5A7A",
-        "error-container":          "rgba(255, 90, 122, 0.15)",
+        /* ── Error / Danger ─────────────────────────────── */
+        "error":                    "#F87171",
+        "error-container":          "rgba(248, 113, 113, 0.15)",
         "on-error":                 "#FFFFFF",
-        "on-error-container":       "#FF8FA5",
+        "on-error-container":       "#FCA5A5",
 
         /* ── Outline / Borders ──────────────────────────── */
-        "outline":                  "rgba(255, 255, 255, 0.12)",
+        "outline":                  "rgba(255, 255, 255, 0.10)",
         "outline-variant":          "rgba(255, 255, 255, 0.06)",
 
         /* ── Inverse ────────────────────────────────────── */
         "inverse-surface":          "#E2E8F0",
-        "inverse-on-surface":       "#1A2034",
+        "inverse-on-surface":       "#1E293B",
 
-        /* ── Custom Neon Accents ────────────────────────── */
-        "neon-purple":              "#6E5CFF",
-        "neon-mint":                "#55F5C6",
-        "neon-cyan":                "#00E5FF",
-        "neon-pink":                "#FF6B95",
-        "neon-orange":              "#FDBA4D",
-        "neon-red":                 "#FF5A7A",
+        /* ── Accent Colors ─────────────────────────────── */
+        "neon-purple":              "#818CF8",
+        "neon-mint":                "#2DD4BF",
+        "neon-cyan":                "#22D3EE",
+        "neon-pink":                "#F472B6",
+        "neon-orange":              "#F59E0B",
+        "neon-red":                 "#F87171",
 
         /* ── Card Surface ───────────────────────────────── */
-        "card":                     "#1A2034",
+        "card":                     "#1E293B",
       },
       borderRadius: {
         "DEFAULT": "0.5rem",
@@ -127,14 +127,14 @@ export default {
         "caption":  ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
       },
       boxShadow: {
-        "glow-purple": "0 0 30px rgba(110, 92, 255, 0.4), 0 0 100px rgba(110, 92, 255, 0.15)",
-        "glow-mint":   "0 0 30px rgba(85, 245, 198, 0.4), 0 0 100px rgba(85, 245, 198, 0.15)",
-        "glow-cyan":   "0 0 30px rgba(0, 229, 255, 0.4), 0 0 100px rgba(0, 229, 255, 0.15)",
-        "glow-pink":   "0 0 30px rgba(255, 107, 149, 0.4), 0 0 100px rgba(255, 107, 149, 0.15)",
-        "glow-orange": "0 0 30px rgba(253, 186, 77, 0.4), 0 0 100px rgba(253, 186, 77, 0.15)",
-        "glow-card":   "0 0 60px rgba(84, 175, 255, 0.1)",
-        "inner-glow":  "inset 0 1px 0 0 rgba(255,255,255,0.15)",
-        "card":        "0 20px 50px rgba(0, 0, 0, 0.6)",
+        "glow-purple": "0 0 20px rgba(99, 102, 241, 0.3), 0 0 60px rgba(99, 102, 241, 0.1)",
+        "glow-mint":   "0 0 20px rgba(45, 212, 191, 0.3), 0 0 60px rgba(45, 212, 191, 0.1)",
+        "glow-cyan":   "0 0 20px rgba(34, 211, 238, 0.3), 0 0 60px rgba(34, 211, 238, 0.1)",
+        "glow-pink":   "0 0 20px rgba(244, 114, 182, 0.3), 0 0 60px rgba(244, 114, 182, 0.1)",
+        "glow-orange": "0 0 20px rgba(245, 158, 11, 0.3), 0 0 60px rgba(245, 158, 11, 0.1)",
+        "glow-card":   "0 4px 40px rgba(0, 0, 0, 0.4)",
+        "inner-glow":  "inset 0 1px 0 0 rgba(255,255,255,0.1)",
+        "card":        "0 10px 40px rgba(0, 0, 0, 0.5)",
       },
       animation: {
         'slide-up': 'slide-up 0.5s ease-out forwards',
