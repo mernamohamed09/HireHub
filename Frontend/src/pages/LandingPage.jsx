@@ -1,255 +1,349 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Button } from '../components/ui/Button';
-import { Rocket, BrainCircuit, MessageSquare, KanbanSquare, Network, Sparkles, Binary, Building2, UserCircle2 } from 'lucide-react';
+import { Rocket, BrainCircuit, MessageSquare, KanbanSquare, Network, Sparkles, Binary, Building2, UserCircle2, CheckCircle2 } from 'lucide-react';
+
+/* 
+  🎨 THEME: "Executive Glass & Emerald" 
+  A highly professional, trustworthy, yet modern and creative design tailored for high-end recruitment.
+  Uses deep slates, professional blues, and growth-oriented emerald greens with clean glassmorphism.
+*/
+
+const styleSheet = `
+  @keyframes subtle-float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+  }
+  @keyframes pulse-slow {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.05); }
+  }
+  
+  .bg-executive {
+    background-color: #0B111A; /* Deep slate blue/black */
+    background-image: 
+      radial-gradient(circle at 15% 50%, rgba(13, 148, 136, 0.08), transparent 25%),
+      radial-gradient(circle at 85% 30%, rgba(37, 99, 235, 0.08), transparent 25%);
+  }
+
+  .glass-card-pro {
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.2);
+    border-radius: 24px;
+    transition: all 0.4s ease;
+  }
+  .glass-card-pro:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 20px 40px -4px rgba(0, 0, 0, 0.4);
+    transform: translateY(-4px);
+  }
+
+  .btn-pro-primary {
+    background: linear-gradient(135deg, #0d9488 0%, #10b981 100%);
+    color: white;
+    box-shadow: 0 4px 14px 0 rgba(16, 185, 129, 0.39);
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: all 0.3s ease;
+  }
+  .btn-pro-primary:hover {
+    background: linear-gradient(135deg, #0f766e 0%, #059669 100%);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.23);
+    transform: translateY(-1px);
+  }
+
+  .btn-pro-outline {
+    background: rgba(255, 255, 255, 0.03);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+  }
+  .btn-pro-outline:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .text-gradient-pro {
+    background: linear-gradient(to right, #ffffff, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .text-gradient-emerald {
+    background: linear-gradient(to right, #2dd4bf, #34d399);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+`;
 
 export function LandingPage() {
   const [activeTab, setActiveTab] = useState('candidate');
 
   return (
-    <div className="w-full bg-background min-h-screen">
-      {/* Hero Section */}
-      <section className="relative hero-mesh py-32 px-gutter overflow-hidden min-h-screen flex items-center border-b border-white/10">
-        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-neon-purple/20 blur-[150px] rounded-full pointer-events-none -z-10 translate-x-1/3 -translate-y-1/3"></div>
-        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-neon-cyan/20 blur-[150px] rounded-full pointer-events-none -z-10 -translate-x-1/3 translate-y-1/3"></div>
-        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 pointer-events-none -z-10 mix-blend-overlay"></div>
-        
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-16 relative z-10 w-full">
-          <div className="w-full md:w-1/2 space-y-8">
-            <div className="inline-flex items-center gap-2 bg-neon-cyan/10 text-neon-cyan px-4 py-2 rounded-full font-bold tracking-widest uppercase mb-4 border border-neon-cyan/30 shadow-glow-cyan backdrop-blur-md">
-              <Network size={16} />
-              The Future of Recruitment
+    <div className="w-full min-h-screen relative overflow-hidden bg-executive text-slate-200">
+      <style>{styleSheet}</style>
+
+      {/* ── Ambient Background Glows ───────────────────────────── */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <div className="absolute top-[-10%] left-[-10%] w-[40vw] h-[40vw] rounded-full bg-teal-600 opacity-20 filter blur-[100px] animate-[pulse-slow_8s_infinite]" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] rounded-full bg-blue-600 opacity-10 filter blur-[120px] animate-[pulse-slow_12s_infinite]" />
+        <div className="absolute top-[40%] left-[50%] w-[30vw] h-[30vw] rounded-full bg-emerald-600 opacity-10 filter blur-[90px]" />
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/noise-pattern-with-subtle-cross-lines.png')] opacity-[0.02]" />
+      </div>
+
+      {/* ── Hero Section ───────────────────────────────────────── */}
+      <section className="relative pt-40 pb-32 px-gutter min-h-screen flex items-center z-10 border-b border-white/5">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-16 w-full">
+          <div className="w-full md:w-1/2 space-y-8 relative z-20">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full font-semibold tracking-wide text-xs bg-white/5 border border-white/10 text-emerald-400 backdrop-blur-md">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              Enterprise-Grade Talent Platform
             </div>
-            <h1 className="font-bold text-6xl md:text-8xl text-white leading-tight">
-              Find Your Next <br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan to-neon-purple drop-shadow-[0_0_20px_rgba(0,255,255,0.5)]">Opportunity</span>
+            
+            <h1 className="font-bold text-6xl md:text-7xl leading-[1.1] tracking-tight text-white">
+              Hire the top 1% <br />
+              <span className="text-gradient-emerald font-extrabold">faster & smarter.</span>
             </h1>
-            <p className="font-medium text-lg text-on-surface-variant max-w-lg leading-relaxed">
-              Connect with top tech companies. From disruptive startups to global enterprises, your professional breakthrough starts here.
+            
+            <p className="text-lg max-w-lg leading-relaxed text-slate-400 font-medium">
+              A sophisticated recruitment ecosystem designed for modern teams. Streamline your hiring pipeline with AI-driven insights and elegant workflows.
             </p>
+            
             <div className="flex flex-col sm:flex-row gap-4 pt-6">
-              <Link to="/jobs">
-                <button className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-neon-cyan to-neon-purple text-white font-bold rounded-xl uppercase tracking-wider hover:opacity-90 active:scale-[0.98] transition-all shadow-[0_0_20px_rgba(0,255,255,0.4)] flex items-center justify-center gap-2">
-                  <Sparkles size={18} /> Find Jobs
-                </button>
-              </Link>
               <Link to="/company/post-job">
-                <button className="w-full sm:w-auto px-8 py-4 bg-surface-container/50 text-white font-bold rounded-xl border border-white/10 uppercase tracking-wider hover:bg-white/5 hover:border-white/30 transition-all backdrop-blur-sm flex items-center justify-center gap-2">
-                  <Building2 size={18} /> Post a Job
+                <button className="w-full sm:w-auto px-8 py-4 rounded-xl font-bold tracking-wide text-sm btn-pro-primary flex items-center justify-center gap-2">
+                  <Building2 size={18} /> Post a Position
+                </button>
+              </Link>
+              <Link to="/jobs">
+                <button className="w-full sm:w-auto px-8 py-4 rounded-xl font-bold tracking-wide text-sm btn-pro-outline flex items-center justify-center gap-2">
+                  <Sparkles size={18} /> Explore Opportunities
                 </button>
               </Link>
             </div>
+            
+            <div className="pt-8 flex items-center gap-6 border-t border-white/5">
+              <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Trusted by top tech companies</span>
+            </div>
           </div>
-          
-          <div className="w-full md:w-1/2 relative h-[500px]">
-            {/* Glassmorphism Mockups */}
-            <div className="absolute top-10 right-0 w-72 glass-card rounded-2xl p-6 transform rotate-6 z-30 shadow-2xl border border-white/10 backdrop-blur-xl group hover:rotate-0 transition-transform duration-500">
-              <div className="absolute inset-0 bg-gradient-to-br from-neon-purple/10 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-              <div className="flex items-center gap-4 mb-6 relative z-10">
-                <div className="w-12 h-12 rounded-xl bg-neon-purple/20 flex items-center justify-center border border-neon-purple/30 shadow-glow-purple">
-                  <Rocket className="text-neon-purple" size={24} />
+
+          {/* Right side: Mockup / Hero Visual */}
+          <div className="w-full md:w-1/2 relative h-[500px] flex items-center justify-center z-10">
+            {/* Main Mockup Card */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] max-w-[600px] glass-card-pro p-1 border border-white/10 rounded-3xl overflow-hidden shadow-2xl" style={{ animation: 'subtle-float 8s ease-in-out infinite' }}>
+              
+              {/* Mockup Header */}
+              <div className="bg-[#111827]/80 backdrop-blur-md p-4 border-b border-white/5 flex items-center justify-between">
+                <div className="flex gap-2">
+                  <div className="w-3 h-3 rounded-full bg-slate-600" />
+                  <div className="w-3 h-3 rounded-full bg-slate-600" />
+                  <div className="w-3 h-3 rounded-full bg-slate-600" />
                 </div>
-                <div>
-                  <div className="font-bold text-lg text-white group-hover:text-neon-purple transition-colors">Senior Frontend</div>
-                  <div className="text-xs text-on-surface-variant font-medium">Tech Hub</div>
-                </div>
+                <div className="text-xs font-semibold text-slate-400">Senior React Engineer • Pipeline</div>
+                <div className="w-8" />
               </div>
-              <div className="space-y-3 relative z-10">
-                <div className="h-2 w-full bg-white/10 rounded-full overflow-hidden">
-                  <div className="h-full bg-neon-purple w-full"></div>
+              
+              {/* Mockup Body */}
+              <div className="bg-[#0F172A]/90 p-6 space-y-4">
+                <div className="flex justify-between items-center mb-6">
+                  <h3 className="text-white font-bold text-lg">Candidates (24)</h3>
+                  <div className="px-3 py-1 rounded-md bg-emerald-500/10 text-emerald-400 text-xs font-bold border border-emerald-500/20">Active</div>
                 </div>
-                <div className="h-2 w-3/4 bg-white/10 rounded-full overflow-hidden">
-                  <div className="h-full bg-neon-cyan w-full"></div>
+                
+                {/* Candidate Row 1 */}
+                <div className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30 text-emerald-400">
+                      JS
+                    </div>
+                    <div>
+                      <div className="text-sm font-bold text-white">Jonathan Smith</div>
+                      <div className="text-xs text-slate-400">Ex-Google • 8 YOE</div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-1 text-xs text-emerald-400 font-bold bg-emerald-400/10 px-2 py-1 rounded">
+                      <CheckCircle2 size={12} /> 98% Match
+                    </div>
+                    <div className="text-xs font-semibold text-slate-300 bg-white/5 px-3 py-1.5 rounded-md border border-white/10">Technical Interview</div>
+                  </div>
                 </div>
-                <div className="flex justify-between mt-8 items-end">
-                  <span className="bg-neon-pink/20 border border-neon-pink/30 text-neon-pink px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-glow-pink animate-pulse">URGENT</span>
-                  <span className="text-neon-cyan font-bold text-lg drop-shadow-[0_0_5px_rgba(0,255,255,0.5)]">$3k - $5k</span>
+                
+                {/* Candidate Row 2 */}
+                <div className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/5">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center border border-blue-500/30 text-blue-400">
+                      AM
+                    </div>
+                    <div>
+                      <div className="text-sm font-bold text-white">Alice Monroe</div>
+                      <div className="text-xs text-slate-400">Frontend Lead • 6 YOE</div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-1 text-xs text-emerald-400 font-bold bg-emerald-400/10 px-2 py-1 rounded">
+                      <CheckCircle2 size={12} /> 92% Match
+                    </div>
+                    <div className="text-xs font-semibold text-slate-300 bg-white/5 px-3 py-1.5 rounded-md border border-white/10">Initial Screening</div>
+                  </div>
                 </div>
               </div>
             </div>
             
-            <div className="absolute bottom-10 left-0 w-80 glass-card rounded-2xl p-6 transform -rotate-3 z-20 shadow-2xl border border-white/10 backdrop-blur-xl group hover:rotate-0 transition-transform duration-500 delay-100">
-              <div className="absolute inset-0 bg-gradient-to-tr from-neon-cyan/10 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-              <div className="font-bold text-white mb-4 flex justify-between items-center relative z-10">
-                <span>Application Status</span>
-                <Binary className="text-neon-cyan opacity-50" size={16} />
-              </div>
-              <div className="space-y-6 relative z-10">
-                <div className="flex items-center justify-between bg-surface-container/50 p-3 rounded-xl border border-white/5">
-                  <span className="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Interview Scheduled</span>
-                  <span className="w-3 h-3 rounded-full bg-neon-cyan shadow-glow-cyan animate-pulse"></span>
-                </div>
-                <div className="flex gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-neon-cyan/20 border border-neon-cyan/30 flex items-center justify-center shadow-glow-cyan"><UserCircle2 className="text-neon-cyan" size={20} /></div>
-                  <div className="w-10 h-10 rounded-xl bg-neon-purple/20 border border-neon-purple/30 flex items-center justify-center"><Building2 className="text-neon-purple" size={20} /></div>
-                  <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center"><MessageSquare className="text-white/40" size={20} /></div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-neon-cyan/20 rounded-full blur-[80px] -z-10 animate-pulse"></div>
           </div>
         </div>
       </section>
 
-      {/* Stats Bar */}
-      <section className="glass-panel border-y border-white/10 py-16 px-gutter relative z-20">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
-          <div className="text-center group">
-            <div className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan to-neon-mint drop-shadow-[0_0_10px_rgba(0,255,255,0.4)] group-hover:scale-110 transition-transform">10,000+</div>
-            <div className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mt-4">Jobs Posted</div>
-          </div>
-          <div className="text-center border-y md:border-y-0 md:border-x border-white/10 py-12 md:py-0 group">
-            <div className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-neon-purple to-neon-pink drop-shadow-[0_0_10px_rgba(188,19,254,0.4)] group-hover:scale-110 transition-transform">2,500+</div>
-            <div className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mt-4">Verified Companies</div>
-          </div>
-          <div className="text-center group">
-            <div className="text-5xl font-bold text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.4)] group-hover:scale-110 transition-transform">95%</div>
-            <div className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mt-4">Placement Rate</div>
-          </div>
+      {/* ── Stats Bar ──────────────────────────────────────────── */}
+      <div className="border-y border-white/5 bg-[#0f172a]/50 backdrop-blur-xl relative z-20 flex justify-center py-8">
+        <div className="max-w-5xl w-full flex flex-wrap justify-between gap-8 px-gutter">
+          <StatBox value="98%" label="Placement Success" />
+          <StatBox value="-45%" label="Time to Hire" />
+          <StatBox value="50k+" label="Elite Candidates" />
+          <StatBox value="1k+" label="Partner Companies" />
         </div>
-      </section>
+      </div>
 
-      {/* Features */}
-      <section className="py-32 px-gutter relative overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-neon-purple/5 blur-[120px] rounded-full pointer-events-none z-0"></div>
-        <div className="max-w-7xl mx-auto relative z-10">
+      <section className="py-32 px-gutter relative z-10 bg-executive">
+        <div className="max-w-7xl mx-auto">
           <div className="text-center mb-20">
-            <h2 className="font-bold text-4xl md:text-5xl text-white">Engineered for Efficiency</h2>
-            <p className="text-on-surface-variant mt-4 text-lg max-w-2xl mx-auto font-medium">Streamlined professional recruitment for the modern era.</p>
+            <h2 className="font-bold text-4xl md:text-5xl text-white mb-6">Engineered for <span className="text-emerald-400">Precision</span></h2>
+            <p className="text-lg max-w-2xl mx-auto text-slate-400 font-medium">
+              We provide the tools necessary to filter noise and identify true potential. Manage your entire recruitment lifecycle from a single, elegant platform.
+            </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="glass-card rounded-3xl p-10 border border-white/5 hover:border-neon-cyan/50 transition-all duration-300 group hover:-translate-y-2 shadow-2xl relative overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-b from-neon-cyan/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-              <div className="w-16 h-16 rounded-2xl bg-neon-cyan/20 flex items-center justify-center mb-8 border border-neon-cyan/30 shadow-glow-cyan relative z-10">
-                <BrainCircuit className="text-neon-cyan" size={32} />
-              </div>
-              <h3 className="font-bold text-2xl text-white mb-4 relative z-10">Smart Matching</h3>
-              <p className="font-medium text-on-surface-variant leading-relaxed relative z-10">AI-driven algorithms that analyze skills beyond keywords to find your perfect cultural and technical fit.</p>
-            </div>
-            
-            <div className="glass-card rounded-3xl p-10 border border-white/5 hover:border-neon-purple/50 transition-all duration-300 group hover:-translate-y-2 shadow-2xl relative overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-b from-neon-purple/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-              <div className="w-16 h-16 rounded-2xl bg-neon-purple/20 flex items-center justify-center mb-8 border border-neon-purple/30 shadow-glow-purple relative z-10">
-                <MessageSquare className="text-neon-purple" size={32} />
-              </div>
-              <h3 className="font-bold text-2xl text-white mb-4 relative z-10">Real-time Chat</h3>
-              <p className="font-medium text-on-surface-variant leading-relaxed relative z-10">Instant communication between HR leads and candidates. Schedule interviews and ask questions without leaving the hub.</p>
-            </div>
-            
-            <div className="glass-card rounded-3xl p-10 border border-white/5 hover:border-neon-pink/50 transition-all duration-300 group hover:-translate-y-2 shadow-2xl relative overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-b from-neon-pink/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-              <div className="w-16 h-16 rounded-2xl bg-neon-pink/20 flex items-center justify-center mb-8 border border-neon-pink/30 shadow-glow-pink relative z-10">
-                <KanbanSquare className="text-neon-pink" size={32} />
-              </div>
-              <h3 className="font-bold text-2xl text-white mb-4 relative z-10">ATS Pipeline</h3>
-              <p className="font-medium text-on-surface-variant leading-relaxed relative z-10">Manage applicants through a visual drag-and-drop kanban board. Custom stages tailored to your hiring process.</p>
-            </div>
+            <FeatureCard
+              icon={<BrainCircuit className="text-emerald-400" size={32} />}
+              title="Semantic AI Matching"
+              description="Move beyond keyword searching. Our AI analyzes candidate context, career trajectory, and soft skills to surface perfect fits."
+            />
+            <FeatureCard
+              icon={<KanbanSquare className="text-blue-400" size={32} />}
+              title="Pipeline Automation"
+              description="Customizable ATS boards that automatically trigger emails, assessments, and status updates as candidates move."
+            />
+            <FeatureCard
+              icon={<MessageSquare className="text-teal-400" size={32} />}
+              title="Integrated Communications"
+              description="Schedule interviews, conduct video calls, and collaborate with your hiring team without leaving the hub."
+            />
           </div>
         </div>
       </section>
 
-      {/* How It Works */}
-      <section className="py-32 bg-surface-container/30 border-y border-white/5 px-gutter relative overflow-hidden">
-        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-neon-cyan/5 blur-[120px] rounded-full pointer-events-none z-0"></div>
-        <div className="max-w-4xl mx-auto relative z-10">
+      {/* ── How It Works ───────────────────────────────────────── */}
+      <section className="py-32 px-gutter relative z-10 bg-[#0F172A]/30 border-y border-white/5">
+        <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="font-bold text-4xl md:text-5xl text-white">How It Works</h2>
+            <h2 className="font-bold text-4xl md:text-5xl text-white">How HireHub Works</h2>
           </div>
+          
           <div className="flex justify-center mb-16">
-            <div className="inline-flex glass-panel p-2 rounded-full border border-white/10 shadow-lg">
+            <div className="inline-flex p-1.5 rounded-xl bg-white/5 border border-white/10 backdrop-blur-md">
               <button 
-                className={`px-8 py-3 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${activeTab === 'candidate' ? 'bg-gradient-to-r from-neon-cyan to-neon-purple text-white shadow-glow-cyan' : 'text-on-surface-variant hover:text-white'}`}
+                className={`px-8 py-2.5 rounded-lg text-sm font-bold transition-all ${activeTab === 'company' ? 'bg-white/10 text-white shadow-sm border border-white/10' : 'text-slate-400 hover:text-slate-200'}`}
+                onClick={() => setActiveTab('company')}
+              >
+                For Employers
+              </button>
+              <button 
+                className={`px-8 py-2.5 rounded-lg text-sm font-bold transition-all ${activeTab === 'candidate' ? 'bg-white/10 text-white shadow-sm border border-white/10' : 'text-slate-400 hover:text-slate-200'}`}
                 onClick={() => setActiveTab('candidate')}
               >
                 For Candidates
               </button>
-              <button 
-                className={`px-8 py-3 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${activeTab === 'company' ? 'bg-gradient-to-r from-neon-purple to-neon-cyan text-white shadow-glow-purple' : 'text-on-surface-variant hover:text-white'}`}
-                onClick={() => setActiveTab('company')}
-              >
-                For Companies
-              </button>
             </div>
           </div>
           
-          {activeTab === 'candidate' && (
-            <div className="space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
-              <div className="glass-card p-8 rounded-3xl border border-white/5 flex gap-8 items-start hover:border-neon-cyan/30 transition-colors group shadow-lg relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-neon-cyan/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <div className="w-14 h-14 rounded-2xl bg-neon-cyan/10 border-2 border-neon-cyan/30 flex items-center justify-center shrink-0 text-neon-cyan font-bold text-xl shadow-glow-cyan relative z-10 group-hover:scale-110 transition-transform">1</div>
-                <div className="relative z-10">
-                  <h4 className="font-bold text-2xl text-white mb-2">Create your AI profile</h4>
-                  <p className="text-on-surface-variant font-medium leading-relaxed">Upload your CV and our system will automatically parse your experience into a digital footprint.</p>
-                </div>
-              </div>
-              <div className="glass-card p-8 rounded-3xl border border-white/5 flex gap-8 items-start hover:border-neon-purple/30 transition-colors group shadow-lg relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-neon-purple/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <div className="w-14 h-14 rounded-2xl bg-neon-purple/10 border-2 border-neon-purple/30 flex items-center justify-center shrink-0 text-neon-purple font-bold text-xl shadow-glow-purple relative z-10 group-hover:scale-110 transition-transform">2</div>
-                <div className="relative z-10">
-                  <h4 className="font-bold text-2xl text-white mb-2">Receive Tailored Matches</h4>
-                  <p className="text-on-surface-variant font-medium leading-relaxed">Instead of searching, get notified of jobs that actually match your specific tech stack and location preferences.</p>
-                </div>
-              </div>
-              <div className="glass-card p-8 rounded-3xl border border-white/5 flex gap-8 items-start hover:border-neon-pink/30 transition-colors group shadow-lg relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-neon-pink/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <div className="w-14 h-14 rounded-2xl bg-neon-pink/10 border-2 border-neon-pink/30 flex items-center justify-center shrink-0 text-neon-pink font-bold text-xl shadow-glow-pink relative z-10 group-hover:scale-110 transition-transform">3</div>
-                <div className="relative z-10">
-                  <h4 className="font-bold text-2xl text-white mb-2">One-click Interviewing</h4>
-                  <p className="text-on-surface-variant font-medium leading-relaxed">Connect directly with decision-makers via our secure chat system.</p>
-                </div>
-              </div>
-            </div>
-          )}
-          
-          {activeTab === 'company' && (
-            <div className="space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
-              <div className="glass-card p-8 rounded-3xl border border-white/5 flex gap-8 items-start hover:border-neon-purple/30 transition-colors group shadow-lg relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-neon-purple/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <div className="w-14 h-14 rounded-2xl bg-neon-purple/10 border-2 border-neon-purple/30 flex items-center justify-center shrink-0 text-neon-purple font-bold text-xl shadow-glow-purple relative z-10 group-hover:scale-110 transition-transform">1</div>
-                <div className="relative z-10">
-                  <h4 className="font-bold text-2xl text-white mb-2">Post Your Requirements</h4>
-                  <p className="text-on-surface-variant font-medium leading-relaxed">Define your role with granular technical requirements and culture-fit markers.</p>
-                </div>
-              </div>
-              <div className="glass-card p-8 rounded-3xl border border-white/5 flex gap-8 items-start hover:border-neon-cyan/30 transition-colors group shadow-lg relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-neon-cyan/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <div className="w-14 h-14 rounded-2xl bg-neon-cyan/10 border-2 border-neon-cyan/30 flex items-center justify-center shrink-0 text-neon-cyan font-bold text-xl shadow-glow-cyan relative z-10 group-hover:scale-110 transition-transform">2</div>
-                <div className="relative z-10">
-                  <h4 className="font-bold text-2xl text-white mb-2">Smart Candidate Screening</h4>
-                  <p className="text-on-surface-variant font-medium leading-relaxed">HireHub automatically ranks applicants based on data points, saving hours of manual review.</p>
-                </div>
-              </div>
-              <div className="glass-card p-8 rounded-3xl border border-white/5 flex gap-8 items-start hover:border-neon-mint/30 transition-colors group shadow-lg relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-neon-mint/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <div className="w-14 h-14 rounded-2xl bg-neon-mint/10 border-2 border-neon-mint/30 flex items-center justify-center shrink-0 text-neon-mint font-bold text-xl shadow-glow-mint relative z-10 group-hover:scale-110 transition-transform">3</div>
-                <div className="relative z-10">
-                  <h4 className="font-bold text-2xl text-white mb-2">Scale Your Team</h4>
-                  <p className="text-on-surface-variant font-medium leading-relaxed">Manage the full pipeline from technical test to final offer in one centralized dashboard.</p>
-                </div>
-              </div>
-            </div>
-          )}
+          <div className="space-y-6">
+            {activeTab === 'company' ? (
+              <>
+                <StepCard num="01" title="Define Requirements" desc="Create detailed job postings. Our AI helps suggest the right skills and market-rate salaries." />
+                <StepCard num="02" title="Review Ranked Matches" desc="Instantly receive a shortlist of the most qualified talent, scored objectively by our algorithm." />
+                <StepCard num="03" title="Interview & Hire" desc="Manage the process via our Kanban ATS and make data-driven hiring decisions effortlessly." />
+              </>
+            ) : (
+              <>
+                <StepCard num="01" title="Build Your Profile" desc="Upload your resume and let our system parse your experience into a structured, searchable profile." />
+                <StepCard num="02" title="Receive Opportunities" desc="Get matched with companies looking for your exact skill set. No more endless scrolling on job boards." />
+                <StepCard num="03" title="Secure Your Future" desc="Communicate directly with hiring managers and schedule interviews smoothly within the platform." />
+              </>
+            )}
+          </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-32 px-gutter relative overflow-hidden">
-        <div className="max-w-6xl mx-auto glass-panel border border-neon-cyan/30 shadow-glow-cyan rounded-[3rem] p-12 md:p-24 text-center relative overflow-hidden bg-gradient-to-br from-neon-cyan/10 to-neon-purple/10">
-          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-neon-cyan/20 rounded-full -translate-y-1/2 translate-x-1/3 blur-[100px] pointer-events-none"></div>
-          <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-neon-purple/20 rounded-full translate-y-1/2 -translate-x-1/3 blur-[100px] pointer-events-none"></div>
+      {/* ── CTA Section ────────────────────────────────────────── */}
+      <section className="py-32 px-gutter relative z-10 flex justify-center">
+        <div className="max-w-5xl w-full glass-card-pro rounded-[2.5rem] p-16 text-center relative overflow-hidden bg-[#0F172A]/80 border-white/10">
+          <div className="absolute inset-0 bg-gradient-to-br from-emerald-600/10 via-transparent to-blue-600/10" />
           
           <div className="relative z-10">
-            <h2 className="font-bold text-5xl md:text-7xl text-white mb-8">Ready to start your journey?</h2>
-            <p className="text-white/80 font-medium text-xl mb-12 max-w-2xl mx-auto leading-relaxed">Join the largest community of tech professionals today and unlock your true potential.</p>
-            <div className="flex flex-col sm:flex-row justify-center gap-6">
+            <h2 className="font-bold text-5xl md:text-6xl mb-6 text-white tracking-tight">
+              Ready to transform your hiring?
+            </h2>
+            <p className="font-medium text-xl mb-12 max-w-2xl mx-auto text-slate-300">
+              Join the platform that is setting the new standard for professional tech recruitment.
+            </p>
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Link to="/register">
-                <button className="bg-gradient-to-r from-neon-cyan to-neon-purple text-white px-10 py-5 rounded-2xl font-bold uppercase tracking-wider text-sm hover:opacity-90 transition-all shadow-[0_0_20px_rgba(0,255,255,0.4)] active:scale-95">Create Free Account</button>
+                <button className="w-full sm:w-auto px-10 py-4 rounded-xl font-bold text-sm btn-pro-primary">
+                  Get Started for Free
+                </button>
               </Link>
-              <button className="glass-card border border-white/20 text-white px-10 py-5 rounded-2xl font-bold uppercase tracking-wider text-sm hover:bg-white/10 hover:border-white/40 transition-all active:scale-95">Contact Sales</button>
+              <Link to="/contact">
+                 <button className="w-full sm:w-auto px-10 py-4 rounded-xl font-bold text-sm btn-pro-outline">
+                  Contact Sales
+                </button>
+              </Link>
             </div>
           </div>
         </div>
       </section>
+    </div>
+  );
+}
+
+/* ── Helper Components ───────────────────────────────────── */
+
+function StatBox({ value, label }) {
+  return (
+    <div className="text-center py-4 px-6">
+      <div className="text-4xl font-extrabold text-white mb-2">{value}</div>
+      <div className="text-xs font-semibold uppercase tracking-wider text-slate-400">{label}</div>
+    </div>
+  );
+}
+
+function FeatureCard({ icon, title, description }) {
+  return (
+    <div className="glass-card-pro p-8 relative overflow-hidden group border-white/5">
+      <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 bg-white/5 border border-white/10 group-hover:bg-white/10 transition-colors">
+        {icon}
+      </div>
+      <h3 className="font-bold text-2xl mb-3 text-white">{title}</h3>
+      <p className="font-medium text-slate-400 leading-relaxed text-sm">{description}</p>
+    </div>
+  );
+}
+
+function StepCard({ num, title, desc }) {
+  return (
+    <div className="p-8 glass-card-pro flex gap-8 items-start hover:bg-white/5 transition-colors border-white/5">
+      <div className="text-3xl font-extrabold text-emerald-500/50 shrink-0 font-mono">
+        {num}
+      </div>
+      <div>
+        <h4 className="font-bold text-xl mb-2 text-white">{title}</h4>
+        <p className="font-medium text-slate-400">{desc}</p>
+      </div>
     </div>
   );
 }
