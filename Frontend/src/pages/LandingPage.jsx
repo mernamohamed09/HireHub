@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Rocket, BrainCircuit, MessageSquare, KanbanSquare, Network, Sparkles, Binary, Building2, UserCircle2, CheckCircle2 } from 'lucide-react';
+import { BackgroundScene } from '../components/ui/BackgroundScene';
 
 /* 
   🎨 THEME: "Executive Glass & Emerald" 
@@ -87,12 +88,7 @@ export function LandingPage() {
       <style>{styleSheet}</style>
 
       {/* ── Ambient Background Glows ───────────────────────────── */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-[-10%] left-[-10%] w-[40vw] h-[40vw] rounded-full bg-teal-600 opacity-20 filter blur-[100px] animate-[pulse-slow_8s_infinite]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] rounded-full bg-blue-600 opacity-10 filter blur-[120px] animate-[pulse-slow_12s_infinite]" />
-        <div className="absolute top-[40%] left-[50%] w-[30vw] h-[30vw] rounded-full bg-emerald-600 opacity-10 filter blur-[90px]" />
-        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/noise-pattern-with-subtle-cross-lines.png')] opacity-[0.02]" />
-      </div>
+      <BackgroundScene />
 
       {/* ── Hero Section ───────────────────────────────────────── */}
       <section className="relative pt-40 pb-32 px-gutter min-h-screen flex items-center z-10 border-b border-white/5">
@@ -134,65 +130,107 @@ export function LandingPage() {
           </div>
 
           {/* Right side: Mockup / Hero Visual */}
-          <div className="w-full md:w-1/2 relative h-[500px] flex items-center justify-center z-10">
-            {/* Main Mockup Card */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] max-w-[600px] glass-card-pro p-1 border border-white/10 rounded-3xl overflow-hidden shadow-2xl" style={{ animation: 'subtle-float 8s ease-in-out infinite' }}>
-              
-              {/* Mockup Header */}
-              <div className="bg-[#111827]/80 backdrop-blur-md p-4 border-b border-white/5 flex items-center justify-between">
-                <div className="flex gap-2">
-                  <div className="w-3 h-3 rounded-full bg-slate-600" />
-                  <div className="w-3 h-3 rounded-full bg-slate-600" />
-                  <div className="w-3 h-3 rounded-full bg-slate-600" />
-                </div>
-                <div className="text-xs font-semibold text-slate-400">Senior React Engineer • Pipeline</div>
-                <div className="w-8" />
+          <div className="w-full md:w-1/2 relative h-[600px] flex items-center justify-center z-10" style={{ perspective: '1200px' }}>
+            
+            {/* Orbiting Icons Background Ring - Centering Wrapper */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] z-0 pointer-events-none">
+              <div className="w-full h-full rounded-full border border-white/5 animate-[spin_40s_linear_infinite]">
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 bg-[#0F172A]/80 backdrop-blur-xl border border-emerald-500/30 rounded-2xl flex items-center justify-center shadow-lg animate-[spin_40s_linear_infinite_reverse]">
+                    <BrainCircuit className="text-emerald-400 w-6 h-6" />
+                  </div>
+                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-14 h-14 bg-[#0F172A]/80 backdrop-blur-xl border border-amber-500/30 rounded-2xl flex items-center justify-center shadow-lg animate-[spin_40s_linear_infinite_reverse]">
+                    <Rocket className="text-amber-400 w-6 h-6" />
+                  </div>
+                  <div className="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 bg-[#0F172A]/80 backdrop-blur-xl border border-teal-400/30 rounded-2xl flex items-center justify-center shadow-lg animate-[spin_40s_linear_infinite_reverse]">
+                    <KanbanSquare className="text-teal-400 w-6 h-6" />
+                  </div>
+                  <div className="absolute right-0 top-1/2 translate-x-1/2 -translate-y-1/2 w-14 h-14 bg-[#0F172A]/80 backdrop-blur-xl border border-blue-500/30 rounded-2xl flex items-center justify-center shadow-lg animate-[spin_40s_linear_infinite_reverse]">
+                    <MessageSquare className="text-blue-400 w-6 h-6" />
+                  </div>
               </div>
+            </div>
+
+            {/* Main Mockup Card Centering Wrapper */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-[450px] z-10 perspective-[1200px]">
               
-              {/* Mockup Body */}
-              <div className="bg-[#0F172A]/90 p-6 space-y-4">
-                <div className="flex justify-between items-center mb-6">
-                  <h3 className="text-white font-bold text-lg">Candidates (24)</h3>
-                  <div className="px-3 py-1 rounded-md bg-emerald-500/10 text-emerald-400 text-xs font-bold border border-emerald-500/20">Active</div>
+              <div 
+                className="w-full glass-card-pro p-1 border border-white/10 rounded-3xl overflow-hidden shadow-[0_40px_80px_rgba(0,0,0,0.8)] transition-transform duration-1000 ease-out group hover:rotate-0" 
+                style={{ 
+                  transform: 'rotateY(-5deg) rotateX(4deg) rotateZ(1deg)',
+                  transformStyle: 'preserve-3d'
+                }}
+              >
+                
+                {/* Mockup Header */}
+                <div className="bg-[#111827]/90 backdrop-blur-md p-4 border-b border-white/5 flex items-center justify-between">
+                  <div className="flex gap-2">
+                    <div className="w-3 h-3 rounded-full bg-slate-600" />
+                    <div className="w-3 h-3 rounded-full bg-slate-600" />
+                    <div className="w-3 h-3 rounded-full bg-slate-600" />
+                  </div>
+                  <div className="text-xs font-semibold text-slate-400 flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                    Senior React Engineer • Pipeline
+                  </div>
+                  <div className="w-8" />
                 </div>
                 
-                {/* Candidate Row 1 */}
-                <div className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30 text-emerald-400">
-                      JS
+                {/* Mockup Body */}
+                <div className="bg-[#0F172A]/95 p-6 space-y-4">
+                  <div className="flex justify-between items-center mb-6">
+                    <h3 className="text-white font-bold text-lg group-hover:text-emerald-400 transition-colors duration-500">Candidates (24)</h3>
+                    <div className="px-3 py-1 rounded-md bg-emerald-500/10 text-emerald-400 text-xs font-bold border border-emerald-500/20">Active</div>
+                  </div>
+                  
+                  {/* Candidate Row 1 */}
+                  <div className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/10 transition-all transform hover:scale-[1.02] cursor-pointer">
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30 text-emerald-400 font-bold">
+                        JS
+                      </div>
+                      <div>
+                        <div className="text-sm font-bold text-white">Jonathan Smith</div>
+                        <div className="text-xs text-slate-400">Ex-Google • 8 YOE</div>
+                      </div>
                     </div>
-                    <div>
-                      <div className="text-sm font-bold text-white">Jonathan Smith</div>
-                      <div className="text-xs text-slate-400">Ex-Google • 8 YOE</div>
+                    <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-1 text-xs text-emerald-400 font-bold bg-emerald-400/10 px-2 py-1 rounded border border-emerald-400/20 shadow-[0_0_10px_rgba(16,185,129,0.2)]">
+                        <CheckCircle2 size={12} /> 98% Match
+                      </div>
+                      <div className="text-xs font-semibold text-slate-300 bg-white/5 px-3 py-1.5 rounded-md border border-white/10 hidden sm:block">Technical Interview</div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-1 text-xs text-emerald-400 font-bold bg-emerald-400/10 px-2 py-1 rounded">
-                      <CheckCircle2 size={12} /> 98% Match
+                  
+                  {/* Candidate Row 2 */}
+                  <div className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/10 transition-all transform hover:scale-[1.02] cursor-pointer">
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center border border-blue-500/30 text-blue-400 font-bold">
+                        AM
+                      </div>
+                      <div>
+                        <div className="text-sm font-bold text-white">Alice Monroe</div>
+                        <div className="text-xs text-slate-400">Frontend Lead • 6 YOE</div>
+                      </div>
                     </div>
-                    <div className="text-xs font-semibold text-slate-300 bg-white/5 px-3 py-1.5 rounded-md border border-white/10">Technical Interview</div>
+                    <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-1 text-xs text-emerald-400 font-bold bg-emerald-400/10 px-2 py-1 rounded border border-emerald-400/20 shadow-[0_0_10px_rgba(16,185,129,0.2)]">
+                        <CheckCircle2 size={12} /> 92% Match
+                      </div>
+                      <div className="text-xs font-semibold text-slate-300 bg-white/5 px-3 py-1.5 rounded-md border border-white/10 hidden sm:block">Initial Screening</div>
+                    </div>
                   </div>
                 </div>
-                
-                {/* Candidate Row 2 */}
-                <div className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/5">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center border border-blue-500/30 text-blue-400">
-                      AM
-                    </div>
-                    <div>
-                      <div className="text-sm font-bold text-white">Alice Monroe</div>
-                      <div className="text-xs text-slate-400">Frontend Lead • 6 YOE</div>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-1 text-xs text-emerald-400 font-bold bg-emerald-400/10 px-2 py-1 rounded">
-                      <CheckCircle2 size={12} /> 92% Match
-                    </div>
-                    <div className="text-xs font-semibold text-slate-300 bg-white/5 px-3 py-1.5 rounded-md border border-white/10">Initial Screening</div>
-                  </div>
-                </div>
+              </div>
+            </div>
+
+            {/* Floating UI Badge - Bottom Right */}
+            <div className="absolute bottom-10 right-0 bg-[#0B111A]/80 backdrop-blur-xl border border-white/10 rounded-2xl p-4 flex items-center gap-4 shadow-[0_20px_40px_rgba(0,0,0,0.5)] z-20 pointer-events-none animate-[subtle-float_6s_ease-in-out_infinite_reverse]">
+              <div className="w-10 h-10 rounded-xl bg-teal-500/20 border border-teal-500/30 flex items-center justify-center text-teal-400 shadow-glow-cyan">
+                <BrainCircuit size={20} />
+              </div>
+              <div>
+                <div className="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Neural Matching</div>
+                <div className="text-sm font-bold text-white">Semantic AI Active</div>
               </div>
             </div>
             

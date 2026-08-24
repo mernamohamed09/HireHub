@@ -284,14 +284,16 @@ export function LoginRegister() {
           </Canvas>
         </div>
 
-        {/* Orbiting Icons */}
-        <div className="absolute w-[600px] h-[600px] z-10 animate-orbit pointer-events-none rounded-full border border-white/5">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-black/40 backdrop-blur-xl border border-emerald-500/30 rounded-full flex items-center justify-center shadow-lg animate-orbit" style={{ animationDirection: 'reverse' }}><FileText className="text-emerald-400 w-5 h-5" /></div>
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-12 h-12 bg-black/40 backdrop-blur-xl border border-amber-500/30 rounded-full flex items-center justify-center shadow-lg animate-orbit" style={{ animationDirection: 'reverse' }}><Bot className="text-amber-400 w-5 h-5" /></div>
-          <div className="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-black/40 backdrop-blur-xl border border-emerald-500/30 rounded-full flex items-center justify-center shadow-lg animate-orbit" style={{ animationDirection: 'reverse' }}><Briefcase className="text-emerald-400 w-5 h-5" /></div>
-          <div className="absolute right-0 top-1/2 translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-black/40 backdrop-blur-xl border border-amber-500/30 rounded-full flex items-center justify-center shadow-lg animate-orbit" style={{ animationDirection: 'reverse' }}><Brain className="text-white w-5 h-5" /></div>
-          <div className="absolute top-1/4 left-4 w-12 h-12 bg-black/40 backdrop-blur-xl border border-emerald-500/30 rounded-full flex items-center justify-center shadow-lg animate-orbit" style={{ animationDirection: 'reverse' }}><Video className="text-emerald-400 w-5 h-5" /></div>
-          <div className="absolute bottom-1/4 right-4 w-12 h-12 bg-black/40 backdrop-blur-xl border border-amber-500/30 rounded-full flex items-center justify-center shadow-lg animate-orbit" style={{ animationDirection: 'reverse' }}><Award className="text-amber-400 w-5 h-5" /></div>
+        {/* Orbiting Icons - Centering Wrapper */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] z-10 pointer-events-none">
+          <div className="w-full h-full rounded-full border border-white/5 animate-orbit">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-black/40 backdrop-blur-xl border border-emerald-500/30 rounded-full flex items-center justify-center shadow-lg animate-orbit" style={{ animationDirection: 'reverse' }}><FileText className="text-emerald-400 w-5 h-5" /></div>
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-12 h-12 bg-black/40 backdrop-blur-xl border border-amber-500/30 rounded-full flex items-center justify-center shadow-lg animate-orbit" style={{ animationDirection: 'reverse' }}><Bot className="text-amber-400 w-5 h-5" /></div>
+            <div className="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-black/40 backdrop-blur-xl border border-emerald-500/30 rounded-full flex items-center justify-center shadow-lg animate-orbit" style={{ animationDirection: 'reverse' }}><Briefcase className="text-emerald-400 w-5 h-5" /></div>
+            <div className="absolute right-0 top-1/2 translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-black/40 backdrop-blur-xl border border-amber-500/30 rounded-full flex items-center justify-center shadow-lg animate-orbit" style={{ animationDirection: 'reverse' }}><Brain className="text-white w-5 h-5" /></div>
+            <div className="absolute top-1/4 left-4 w-12 h-12 bg-black/40 backdrop-blur-xl border border-emerald-500/30 rounded-full flex items-center justify-center shadow-lg animate-orbit" style={{ animationDirection: 'reverse' }}><Video className="text-emerald-400 w-5 h-5" /></div>
+            <div className="absolute bottom-1/4 right-4 w-12 h-12 bg-black/40 backdrop-blur-xl border border-amber-500/30 rounded-full flex items-center justify-center shadow-lg animate-orbit" style={{ animationDirection: 'reverse' }}><Award className="text-amber-400 w-5 h-5" /></div>
+          </div>
         </div>
 
         {/* Layer 2: The Circular Video */}
