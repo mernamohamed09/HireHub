@@ -86,6 +86,13 @@ export function Sidebar({ links = [], user }) {
           alt="HireHub Logo" 
           className={cn("transition-all duration-300", isCollapsed ? "h-10 w-auto" : "h-14 w-auto")} 
         />
+        {!isCollapsed && (
+          <div className="flex flex-col">
+            <span className="font-h3 text-2xl font-bold tracking-tight text-white leading-none">
+              Hire<span className="text-emerald-400 drop-shadow-[0_0_8px_rgba(16,185,129,0.5)]">Hub</span>
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Navigation */}
