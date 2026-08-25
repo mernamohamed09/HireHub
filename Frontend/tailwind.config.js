@@ -12,16 +12,16 @@ export default {
     extend: {
       colors: {
         /* ── Midnight Horizon Core Palette ─────────────── */
-        "background":               "#0A0F1A",
-        "surface":                  "#111827",
-        "surface-dim":              "#0A0F1A",
-        "surface-bright":           "#1E293B",
-        "surface-container-lowest": "#070B14",
-        "surface-container-low":    "#0D1321",
-        "surface-container":        "#111827",
-        "surface-container-high":   "#1E293B",
-        "surface-container-highest":"#334155",
-        "surface-variant":          "#1E293B",
+        "background":               "#020A07",
+        "surface":                  "#0A2016",
+        "surface-dim":              "#020A07",
+        "surface-bright":           "#102E20",
+        "surface-container-lowest": "#04100B",
+        "surface-container-low":    "#061710",
+        "surface-container":        "#0A2016",
+        "surface-container-high":   "#102E20",
+        "surface-container-highest":"#17402B",
+        "surface-variant":          "#102E20",
         "surface-tint":             "#6366F1",
 
         /* ── On-Surface (Text) ──────────────────────────── */

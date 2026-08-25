@@ -7,12 +7,12 @@ import { formatPostedAt } from '../utils/dateUtils';
 import { CheckCheck, BellOff, Loader2, Briefcase, UserPlus, Calendar, Clock, MessageSquare, ClipboardCheck, Info } from 'lucide-react';
 
 const TYPE_CONFIG = {
-  application_update: { borderColor: 'border-neon-mint', icon: Briefcase, iconBg: 'bg-neon-mint/20 text-neon-mint' },
-  new_application: { borderColor: 'border-neon-cyan', icon: UserPlus, iconBg: 'bg-neon-cyan/20 text-neon-cyan' },
-  interview_scheduled: { borderColor: 'border-neon-orange', icon: Calendar, iconBg: 'bg-neon-orange/20 text-neon-orange' },
-  interview_reminder: { borderColor: 'border-neon-orange', icon: Clock, iconBg: 'bg-neon-orange/20 text-neon-orange' },
-  message: { borderColor: 'border-neon-pink', icon: MessageSquare, iconBg: 'bg-neon-pink/20 text-neon-pink' },
-  assessment_update: { borderColor: 'border-neon-purple', icon: ClipboardCheck, iconBg: 'bg-neon-purple/20 text-neon-purple' },
+  application_update: { borderColor: 'border-emerald-500', icon: Briefcase, iconBg: 'bg-emerald-500/20 text-emerald-500' },
+  new_application: { borderColor: 'border-emerald-300', icon: UserPlus, iconBg: 'bg-emerald-300/20 text-emerald-300' },
+  interview_scheduled: { borderColor: 'border-amber-500', icon: Calendar, iconBg: 'bg-amber-500/20 text-amber-500' },
+  interview_reminder: { borderColor: 'border-amber-500', icon: Clock, iconBg: 'bg-amber-500/20 text-amber-500' },
+  message: { borderColor: 'border-amber-400', icon: MessageSquare, iconBg: 'bg-amber-400/20 text-amber-400' },
+  assessment_update: { borderColor: 'border-emerald-400', icon: ClipboardCheck, iconBg: 'bg-emerald-400/20 text-emerald-400' },
   system: { borderColor: 'border-white/10', icon: Info, iconBg: 'bg-white/10 text-white' },
 };
 
@@ -130,18 +130,18 @@ export function Notifications() {
   return (
     <div className="w-full relative">
       {/* Header Section */}
-      <header className="glass-panel border-b border-white/10 sticky top-0 z-40 -mt-8 -mx-[24px] lg:-mx-[32px] px-8 py-6 flex flex-col gap-4 mb-8 bg-background/80 backdrop-blur-xl">
-        <div className="absolute top-0 right-10 w-48 h-48 bg-neon-purple/10 blur-[100px] rounded-full"></div>
+      <header className="glass-card-pro border-white/5 border-b border-white/10 sticky top-0 z-40 -mt-8 -mx-[24px] lg:-mx-[32px] px-8 py-6 flex flex-col gap-4 mb-8 bg-background/80 backdrop-blur-xl">
+        <div className="absolute top-0 right-10 w-48 h-48 bg-emerald-400/10 blur-[100px] rounded-full"></div>
         <div className="flex justify-between items-center w-full relative z-10">
           <div className="flex items-center gap-4">
             <h1 className="font-bold text-3xl text-white">Notifications</h1>
             {unreadCount > 0 && (
-              <span className="bg-neon-pink/20 text-neon-pink border border-neon-pink/50 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider shadow-glow-pink">{unreadCount} new</span>
+              <span className="bg-amber-400/20 text-amber-400 border border-amber-400/50 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider shadow-none">{unreadCount} new</span>
             )}
           </div>
           <button
             onClick={markAllRead}
-            className="flex items-center gap-2 text-neon-cyan text-sm font-bold hover:text-white transition-all group"
+            className="flex items-center gap-2 text-emerald-300 text-sm font-bold hover:text-white transition-all group"
           >
             <CheckCheck size={18} className="group-hover:drop-shadow-[0_0_8px_rgba(0,255,255,0.8)]" />
             <span>Mark all as read</span>
@@ -149,10 +149,10 @@ export function Notifications() {
         </div>
         <div className="flex gap-2 flex-wrap relative z-10 mt-2">
           {filters.map(f => {
-            let activeClass = 'bg-neon-purple/20 text-neon-purple border-neon-purple/50 shadow-glow-purple';
-            if (f === 'Unread') activeClass = 'bg-neon-orange/20 text-neon-orange border-neon-orange/50 drop-shadow-[0_0_8px_rgba(255,165,0,0.3)]';
-            else if (f === 'Applications') activeClass = 'bg-neon-cyan/20 text-neon-cyan border-neon-cyan/50 shadow-glow-cyan';
-            else if (f === 'Messages') activeClass = 'bg-neon-pink/20 text-neon-pink border-neon-pink/50 shadow-glow-pink';
+            let activeClass = 'bg-emerald-400/20 text-emerald-400 border-emerald-400/50 shadow-none';
+            if (f === 'Unread') activeClass = 'bg-amber-500/20 text-amber-500 border-amber-500/50 drop-shadow-[0_0_8px_rgba(255,165,0,0.3)]';
+            else if (f === 'Applications') activeClass = 'bg-emerald-300/20 text-emerald-300 border-emerald-300/50 shadow-none';
+            else if (f === 'Messages') activeClass = 'bg-amber-400/20 text-amber-400 border-amber-400/50 shadow-none';
 
             return (
               <button
@@ -175,7 +175,7 @@ export function Notifications() {
       <div className="space-y-4 max-w-3xl relative z-10">
         {isLoading ? (
           <div className="flex items-center justify-center py-32">
-            <Loader2 size={40} className="animate-spin text-neon-purple" />
+            <Loader2 size={40} className="animate-spin text-emerald-400" />
           </div>
         ) : filteredNotifications.length === 0 ? (
           <div className="glass-card rounded-2xl p-12 text-center flex flex-col items-center">
@@ -206,13 +206,13 @@ export function Notifications() {
                   <div className="mt-2 flex gap-4 flex-wrap items-center justify-end">
                     <button
                       onClick={(e) => { e.stopPropagation(); dismiss(n._id); }}
-                      className="text-xs font-bold text-on-surface-variant hover:text-neon-pink transition-colors"
+                      className="text-xs font-bold text-on-surface-variant hover:text-amber-400 transition-colors"
                     >
                       Dismiss
                     </button>
                   </div>
                 </div>
-                {!n.isRead && <div className="w-2.5 h-2.5 rounded-full bg-neon-purple shadow-glow-purple mt-1 shrink-0"></div>}
+                {!n.isRead && <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-none mt-1 shrink-0"></div>}
               </div>
             );
           })

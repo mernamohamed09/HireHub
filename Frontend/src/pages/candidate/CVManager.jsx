@@ -143,14 +143,14 @@ export function CVManager() {
       </header>
 
       {error && (
-        <div className="bg-neon-pink/10 border border-neon-pink/30 text-neon-pink shadow-glow-pink rounded-xl p-6 text-center mb-6 font-bold">
+        <div className="bg-red-400/10 border border-red-400/30 text-red-400 shadow-none rounded-xl p-6 text-center mb-6 font-bold">
           {error}
         </div>
       )}
 
       {isLoading ? (
         <div className="flex items-center justify-center py-32">
-          <Loader2 size={40} className="animate-spin text-neon-purple" />
+          <Loader2 size={40} className="animate-spin text-emerald-400" />
         </div>
       ) : (
         <div className="grid grid-cols-12 gap-8 flex-1">
@@ -163,12 +163,12 @@ export function CVManager() {
               onDrop={handleDrop}
               className={`border-2 border-dashed rounded-2xl p-12 flex flex-col items-center justify-center text-center transition-all ${
                 isDragging
-                  ? 'border-neon-purple bg-neon-purple/10 shadow-glow-purple'
-                  : 'border-white/20 hover:border-neon-cyan hover:bg-neon-cyan/5 hover:shadow-glow-cyan glass-panel'
+                  ? 'border-emerald-400 bg-emerald-400/10 shadow-none'
+                  : 'border-white/20 hover:border-emerald-300 hover:bg-emerald-300/5 hover:shadow-none glass-card-pro border-white/5'
               } ${isUploading ? 'cursor-wait opacity-80' : 'cursor-pointer'}`}
             >
               <div className="w-20 h-20 rounded-full bg-surface-container border border-white/10 shadow-inner flex items-center justify-center mb-6">
-                <UploadCloud size={40} className="text-neon-cyan" />
+                <UploadCloud size={40} className="text-emerald-300" />
               </div>
               <h3 className="font-bold text-2xl text-white mb-2">
                 {isUploading
@@ -186,21 +186,21 @@ export function CVManager() {
                 <div className="w-full max-w-xs">
                   <div className="h-3 w-full bg-surface-container-high rounded-full overflow-hidden border border-white/10">
                     <div
-                      className="h-full bg-neon-purple transition-all duration-200 shadow-glow-purple"
+                      className="h-full bg-emerald-400 transition-all duration-200 shadow-none"
                       style={{ width: `${uploadProgress}%` }}
                     />
                   </div>
-                  <p className="text-xs font-bold text-neon-purple mt-2">{uploadProgress}%</p>
+                  <p className="text-xs font-bold text-emerald-400 mt-2">{uploadProgress}%</p>
                 </div>
               ) : (
-                <div className="px-6 py-2 bg-surface-container border border-white/10 hover:border-neon-cyan hover:text-neon-cyan rounded-xl text-xs font-bold text-white transition-all shadow-md uppercase tracking-wider">
+                <div className="px-6 py-2 bg-surface-container border border-white/10 hover:border-emerald-300 hover:text-emerald-300 rounded-xl text-xs font-bold text-white transition-all shadow-md uppercase tracking-wider">
                   BROWSE FILES
                 </div>
               )}
             </div>
 
             {/* Current CV */}
-            <div className="glass-panel rounded-2xl overflow-hidden group hover:border-neon-purple/50 transition-all relative">
+            <div className="glass-card-pro border-white/5 rounded-2xl overflow-hidden group hover:border-emerald-400/50 transition-all relative">
               <div className="px-6 py-4 border-b border-white/10 bg-surface-container-high/50 flex justify-between items-center">
                 <span className="font-bold text-white text-sm">Current CV</span>
               </div>
@@ -213,15 +213,15 @@ export function CVManager() {
                     rel="noreferrer"
                     className="flex items-center gap-4 flex-1 overflow-hidden group/link"
                   >
-                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 border ${cvMeta?.isPdf ? 'bg-red-900/20 text-neon-pink border-neon-pink/30 shadow-glow-pink' : 'bg-blue-900/20 text-neon-cyan border-neon-cyan/30 shadow-glow-cyan'}`}>
+                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 border ${cvMeta?.isPdf ? 'bg-red-900/20 text-red-400 border-red-400/30 shadow-none' : 'bg-blue-900/20 text-emerald-300 border-emerald-300/30 shadow-none'}`}>
                       <FileText size={24} />
                     </div>
                     <div className="flex-1 overflow-hidden">
                       <div className="flex items-center gap-3 mb-1">
-                        <p className="font-bold text-white text-base truncate group-hover/link:text-neon-cyan transition-colors">
+                        <p className="font-bold text-white text-base truncate group-hover/link:text-emerald-300 transition-colors">
                           {cvMeta?.label || 'My Resume'}
                         </p>
-                        <span className="shrink-0 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-surface-container-high text-neon-mint border border-neon-mint/30 shadow-glow-mint">
+                        <span className="shrink-0 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-surface-container-high text-emerald-500 border border-emerald-500/30 shadow-none">
                           {cvMeta?.ext || 'FILE'}
                         </span>
                       </div>
@@ -229,14 +229,14 @@ export function CVManager() {
                         Active • Click to view{cvMeta?.uploadedLabel ? ` • Uploaded ${cvMeta.uploadedLabel}` : ''}
                       </p>
                     </div>
-                    <ExternalLink size={20} className="text-on-surface-variant group-hover/link:text-neon-cyan transition-colors" />
+                    <ExternalLink size={20} className="text-on-surface-variant group-hover/link:text-emerald-300 transition-colors" />
                   </a>
                   <button
                     onClick={handleDelete}
                     disabled={isDeleting}
                     title="Delete CV"
                     aria-label="Delete CV"
-                    className="w-12 h-12 rounded-xl flex items-center justify-center text-on-surface-variant hover:text-neon-pink hover:bg-neon-pink/10 hover:border-neon-pink/50 hover:shadow-glow-pink border border-transparent transition-all disabled:opacity-50"
+                    className="w-12 h-12 rounded-xl flex items-center justify-center text-on-surface-variant hover:text-red-400 hover:bg-red-400/10 hover:border-red-400/50 hover:shadow-none border border-transparent transition-all disabled:opacity-50"
                   >
                     {isDeleting ? <Loader2 size={20} className="animate-spin" /> : <Trash2 size={20} />}
                   </button>
@@ -248,28 +248,28 @@ export function CVManager() {
 
             {/* CV Tips Card */}
             <div className="glass-card rounded-2xl p-8 relative overflow-hidden">
-              <div className="absolute -right-10 -top-10 w-32 h-32 bg-neon-cyan/20 blur-3xl rounded-full"></div>
+              <div className="absolute -right-10 -top-10 w-32 h-32 bg-emerald-300/20 blur-3xl rounded-full"></div>
               <div className="flex items-center gap-3 mb-6 relative z-10">
-                <Lightbulb size={24} className="text-neon-cyan" />
+                <Lightbulb size={24} className="text-emerald-300" />
                 <h4 className="font-bold text-sm uppercase tracking-wider text-white">Expert CV Tips</h4>
               </div>
               <ul className="space-y-6 relative z-10">
                 <li className="flex gap-4 items-start">
-                  <CheckCircle2 size={20} className="text-neon-cyan shrink-0 mt-0.5" />
+                  <CheckCircle2 size={20} className="text-emerald-300 shrink-0 mt-0.5" />
                   <div className="flex-1">
                     <p className="text-white text-sm font-bold mb-1">Use keywords</p>
                     <p className="text-xs text-on-surface-variant">Match your skills with job descriptions to pass ATS filters.</p>
                   </div>
                 </li>
                 <li className="flex gap-4 items-start">
-                  <CheckCircle2 size={20} className="text-neon-cyan shrink-0 mt-0.5" />
+                  <CheckCircle2 size={20} className="text-emerald-300 shrink-0 mt-0.5" />
                   <div className="flex-1">
                     <p className="text-white text-sm font-bold mb-1">Quantify results</p>
                     <p className="text-xs text-on-surface-variant">Use numbers (e.g., "Increased sales by 20%") to show impact.</p>
                   </div>
                 </li>
                 <li className="flex gap-4 items-start">
-                  <CheckCircle2 size={20} className="text-neon-cyan shrink-0 mt-0.5" />
+                  <CheckCircle2 size={20} className="text-emerald-300 shrink-0 mt-0.5" />
                   <div className="flex-1">
                     <p className="text-white text-sm font-bold mb-1">Keep it to 2 pages</p>
                     <p className="text-xs text-on-surface-variant">Conciseness is key. Focus on the last 10 years of experience.</p>

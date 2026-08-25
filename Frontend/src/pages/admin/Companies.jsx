@@ -87,7 +87,7 @@ export function Companies() {
       <div className="w-full px-4 md:px-8 max-w-6xl mx-auto space-y-8 py-8 relative">
 
         {/* Background decoration */}
-        <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-neon-purple/5 blur-[120px] rounded-full pointer-events-none -z-10 translate-x-1/3 -translate-y-1/3" />
+        <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-emerald-500/5 blur-[120px] rounded-full pointer-events-none -z-10 translate-x-1/3 -translate-y-1/3" />
 
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
@@ -105,7 +105,7 @@ export function Companies() {
           {/* Search + Refresh */}
           <div className="flex items-center gap-3 w-full md:w-auto">
 
-            <div className="flex items-center bg-white/5 rounded-lg px-4 py-2 border border-white/10 flex-1 md:flex-none backdrop-blur-md focus-within:border-neon-cyan focus-within:shadow-glow-cyan transition-all">
+            <div className="flex items-center bg-white/5 rounded-lg px-4 py-2 border border-white/10 flex-1 md:flex-none backdrop-blur-md focus-within:border-emerald-400 focus-within:shadow-lg transition-all">
               <Search className="text-white/40 mr-2" size={16} />
               <input
                 className="bg-transparent border-none focus:ring-0 text-sm text-white placeholder-white/40 w-full md:w-48 outline-none"
@@ -133,7 +133,7 @@ export function Companies() {
 
         {/* Error */}
         {error && (
-          <div className="bg-neon-pink/10 border border-neon-pink/30 text-neon-pink rounded-xl p-4 text-center text-sm font-bold shadow-glow-pink">
+          <div className="bg-amber-500/10 border border-amber-500/30 text-amber-500 rounded-xl p-4 text-center text-sm font-bold shadow-lg">
             {error}
           </div>
         )}
@@ -142,7 +142,7 @@ export function Companies() {
         {isLoading ? (
           <div className="flex items-center justify-center py-20">
             <Loader2
-              className="animate-spin text-neon-purple"
+              className="animate-spin text-emerald-500"
               size={32}
             />
           </div>
@@ -222,11 +222,11 @@ export function Companies() {
                           }
                         >
 
-                          <div className="w-10 h-10 rounded-xl bg-neon-purple/20 text-neon-purple border border-neon-purple/30 flex items-center justify-center font-bold text-sm shadow-glow-purple group-hover:scale-110 transition-transform">
+                          <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-500 border border-emerald-500/30 flex items-center justify-center font-bold text-sm shadow-lg group-hover:scale-110 transition-transform">
                             {company.name?.[0]?.toUpperCase() || '?'}
                           </div>
 
-                          <span className="font-bold text-white group-hover:text-neon-cyan transition-colors">
+                          <span className="font-bold text-white group-hover:text-emerald-400 transition-colors">
                             {company.name}
                           </span>
 
@@ -303,7 +303,7 @@ export function Companies() {
                             onClick={() =>
                               handleDelete(company._id)
                             }
-                            className="w-8 h-8 rounded-lg bg-surface-container border border-white/10 flex items-center justify-center text-on-surface-variant hover:text-neon-pink hover:border-neon-pink/30 hover:bg-neon-pink/10 hover:shadow-glow-pink transition-all"
+                            className="w-8 h-8 rounded-lg bg-surface-container border border-white/10 flex items-center justify-center text-on-surface-variant hover:text-amber-500 hover:border-amber-500/30 hover:bg-amber-500/10 hover:shadow-lg transition-all"
                             title="Delete company"
                           >
                             <Trash2 size={14} />

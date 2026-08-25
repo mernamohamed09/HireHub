@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 export function Footer() {
   return (
-    <footer className="bg-surface border-t border-outline-variant py-xl px-gutter mt-auto">
+    <footer className="bg-black/10 border-t border-white/5 py-xl px-gutter mt-auto backdrop-blur-sm">
       <div className="max-w-container_max_width mx-auto grid grid-cols-1 md:grid-cols-4 gap-xl">
         <div className="space-y-md">
           <h4 className="font-h3 text-on-surface font-bold">HireHub</h4>

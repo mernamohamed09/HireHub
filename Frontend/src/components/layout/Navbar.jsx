@@ -16,35 +16,21 @@ export function Navbar() {
 
   const dashboardPath = user?.role ? `/${user.role}/dashboard` : '/';
 
-  const navLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'Browse Jobs', path: '/jobs' },
-    { name: 'For Companies', path: '/companies' },
-    { name: 'For Candidates', path: '/candidates' },
-  ];
-
   return (
-    <header className="bg-surface/95 backdrop-blur-md border-b border-outline-variant shadow-md docked full-width top-0 sticky z-50">
+    <nav className={`fixed w-full z-50 border-b border-white/5 transition-all duration-300 ${location.pathname === '/' ? 'bg-[#0B111A]/80 backdrop-blur-md' : 'navbar-pro'}`}>
       <div className="flex justify-between items-center h-16 px-gutter w-full max-w-container_max_width mx-auto">
         <div className="flex items-center gap-xl">
           <Link to="/" className="font-h3 text-h3 font-bold text-on-surface">HireHub</Link>
           <nav className="hidden md:flex items-center gap-lg">
-            {navLinks.map((link) => {
-              const isActive = location.pathname === link.path;
-              return (
-                <Link
-                  key={link.name}
-                  to={link.path}
-                  className={`font-body text-body transition-colors duration-200 ${
-                    isActive 
-                      ? 'text-tertiary border-b-2 border-tertiary pb-1' 
-                      : 'text-on-surface-variant hover:text-primary'
-                  }`}
-                >
-                  {link.name}
-                </Link>
-              );
-            })}
+            <Link to="/" className="nav-link-pro hover:text-white transition-colors">
+              Home
+            </Link>
+            <Link to="/jobs" className="nav-link-pro hover:text-white transition-colors">
+              Browse Jobs
+            </Link>
+            <Link to="/companies" className="nav-link-pro hover:text-white transition-colors">
+              Companies
+            </Link>
           </nav>
         </div>
         <div className="flex items-center gap-md">
@@ -67,6 +53,6 @@ export function Navbar() {
           )}
         </div>
       </div>
-    </header>
+    </nav>
   );
 }

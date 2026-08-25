@@ -70,12 +70,12 @@ const CandidateResultsList = () => {
         </div>
       </header>
 
-      <div className="glass-panel border-neon-cyan/30 rounded-2xl p-6 flex items-start text-white text-sm shrink-0 shadow-lg hover:shadow-glow-cyan transition-shadow duration-300 relative z-10 bg-neon-cyan/5">
-        <ExternalLink className="w-5 h-5 mr-3 flex-shrink-0 mt-0.5 text-neon-cyan" />
+      <div className="glass-card-pro border-white/5 border-emerald-300/30 rounded-2xl p-6 flex items-start text-white text-sm shrink-0 shadow-lg hover:shadow-none transition-shadow duration-300 relative z-10 bg-emerald-300/5">
+        <ExternalLink className="w-5 h-5 mr-3 flex-shrink-0 mt-0.5 text-emerald-300" />
         <div>
-          <p className="font-bold text-neon-cyan">Looking for detailed AI feedback?</p>
+          <p className="font-bold text-emerald-300">Looking for detailed AI feedback?</p>
           <p className="mt-1 text-on-surface-variant">
-            For a detailed breakdown of your strengths, weaknesses, and code reviews, please check your <a href="https://ravenace.onrender.com" target="_blank" rel="noreferrer" className="underline font-bold text-neon-cyan hover:text-white transition-colors">RavenACE account directly</a>.
+            For a detailed breakdown of your strengths, weaknesses, and code reviews, please check your <a href="https://ravenace.onrender.com" target="_blank" rel="noreferrer" className="underline font-bold text-emerald-300 hover:text-white transition-colors">RavenACE account directly</a>.
           </p>
         </div>
       </div>
@@ -89,18 +89,18 @@ const CandidateResultsList = () => {
               placeholder="Search by company, job, or assessment..." 
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 border border-white/10 rounded-xl bg-background text-white focus:border-neon-purple focus:shadow-glow-purple outline-none transition-all"
+              className="w-full pl-12 pr-4 py-3 border border-white/10 rounded-xl bg-background text-white focus:border-emerald-400 focus:shadow-none outline-none transition-all"
             />
           </div>
         </div>
 
         {error ? (
-          <div className="p-8 text-center bg-neon-pink/10 border-t border-neon-pink/30 text-neon-pink flex-1 font-bold">
+          <div className="p-8 text-center bg-red-400/10 border-t border-red-400/30 text-red-400 flex-1 font-bold">
             {error}
           </div>
         ) : filteredResults.length === 0 ? (
           <div className="p-12 text-center flex-1 flex flex-col items-center justify-center">
-            <div className="w-20 h-20 bg-surface-container border border-white/10 text-neon-purple rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
+            <div className="w-20 h-20 bg-surface-container border border-white/10 text-emerald-400 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
               <CheckCircle className="w-10 h-10" />
             </div>
             <h3 className="font-bold text-2xl text-white mb-2">No assessments yet</h3>
@@ -120,15 +120,15 @@ const CandidateResultsList = () => {
               </thead>
               <tbody className="divide-y divide-white/5 bg-background/50">
                 {filteredResults.map(result => (
-                  <tr key={result._id} className="hover:bg-neon-purple/5 transition-colors group">
+                  <tr key={result._id} className="hover:bg-emerald-400/5 transition-colors group">
                     <td className="px-6 py-5">
-                      <div className="font-bold text-white group-hover:text-neon-cyan transition-colors">
+                      <div className="font-bold text-white group-hover:text-emerald-300 transition-colors">
                         {result.application?.job?.company || 'Unknown Company'}
                       </div>
                     </td>
                     <td className="px-6 py-5">
                       <div className="font-bold text-sm text-white mb-1">{result.application?.job?.title || 'Unknown Job'}</div>
-                      <div className="text-xs text-neon-purple font-bold uppercase tracking-wider">{result.assessment?.title || 'Assessment'}</div>
+                      <div className="text-xs text-emerald-400 font-bold uppercase tracking-wider">{result.assessment?.title || 'Assessment'}</div>
                     </td>
                     <td className="px-6 py-5">
                       {result.status === 'completed' ? (
@@ -142,11 +142,11 @@ const CandidateResultsList = () => {
                     </td>
                     <td className="px-6 py-5">
                       {result.status === 'completed' ? (
-                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider transition-shadow duration-300 ${result.passed ? 'bg-neon-mint/20 text-neon-mint border border-neon-mint/30 hover:shadow-glow-mint' : 'bg-neon-pink/20 text-neon-pink border border-neon-pink/30 hover:shadow-glow-pink'}`}>
+                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider transition-shadow duration-300 ${result.passed ? 'bg-emerald-500/20 text-emerald-500 border border-emerald-500/30 hover:shadow-none' : 'bg-red-400/20 text-red-400 border border-red-400/30 hover:shadow-none'}`}>
                           {result.passed ? 'Passed' : 'Failed'}
                         </span>
                       ) : (
-                        <span className="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-neon-cyan/20 text-neon-cyan border border-neon-cyan/30 shadow-sm hover:shadow-glow-cyan transition-shadow duration-300">
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-300/20 text-emerald-300 border border-emerald-300/30 shadow-sm hover:shadow-none transition-shadow duration-300">
                           {result.status.replace('_', ' ')}
                         </span>
                       )}
@@ -158,13 +158,13 @@ const CandidateResultsList = () => {
                         </span>
                       ) : startedStatus[result._id] ? (
                         <div className="text-xs font-medium text-on-surface-variant max-w-[200px] leading-relaxed">
-                          You've already started this assessment. Check your email for the original link or log in to <a href="https://ravenace.onrender.com" target="_blank" rel="noreferrer" className="text-neon-cyan hover:underline font-bold">RavenACE</a>.
+                          You've already started this assessment. Check your email for the original link or log in to <a href="https://ravenace.onrender.com" target="_blank" rel="noreferrer" className="text-emerald-300 hover:underline font-bold">RavenACE</a>.
                         </div>
                       ) : (
                         <button
                           onClick={() => handleStartAssessment(result._id)}
                           disabled={startingId === result._id}
-                          className="px-4 py-2 bg-gradient-to-r from-neon-purple to-neon-cyan text-white border-none rounded-xl font-bold text-xs hover:opacity-90 shadow-md hover:shadow-glow-cyan transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wider"
+                          className="px-4 py-2 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 text-white border-none rounded-xl font-bold text-xs hover:opacity-90 shadow-md hover:shadow-none transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wider"
                         >
                           {startingId === result._id ? 'Starting...' : 'Start Assessment'}
                         </button>

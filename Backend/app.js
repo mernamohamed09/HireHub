@@ -21,8 +21,7 @@ const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
 // to cross-origin while keeping the rest of helmet's headers.
 app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
 app.use(express.json());
-// app.use(cors({ origin: FRONTEND_URL, credentials: true }));
-app.use(cors());
+app.use(cors({ origin: [FRONTEND_URL, 'http://localhost:8080'], credentials: true }));
 app.use('/uploads/avatars', express.static(path.join(__dirname, 'uploads', 'avatars')));
 
 // Throttle credential endpoints against brute force / enumeration. Disabled

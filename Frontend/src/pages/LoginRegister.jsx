@@ -11,7 +11,7 @@ import {
   Search, Bell, Globe, Moon, FileText, Bot, Brain, Video, Award, BarChart, TrendingUp, User, ShieldCheck, Zap
 } from 'lucide-react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Torus, MeshDistortMaterial, OrthographicCamera, PresentationControls } from '@react-three/drei';
+import { Torus, MeshDistortMaterial, OrthographicCamera, OrbitControls } from '@react-three/drei';
 import { BackgroundScene } from '../components/ui/BackgroundScene';
 
 function VisionOSGyroscope() {
@@ -123,7 +123,7 @@ export function LoginRegister() {
   };
 
   return (
-    <main className="min-h-screen w-full bg-executive text-slate-200 relative overflow-hidden flex flex-col md:flex-row">
+    <main className="min-h-screen w-full bg-[#0A0F1A] text-slate-200 relative overflow-hidden flex flex-col md:flex-row">
       
       {/* Moving 3D Stars Background */}
       <BackgroundScene />
@@ -238,7 +238,7 @@ export function LoginRegister() {
               </div>
 
               <button 
-                className="w-full bg-emerald-500 text-black font-bold py-3.5 rounded-xl mt-6 hover:bg-emerald-400 transition-colors shadow-[0_0_15px_rgba(16,185,129,0.3)] disabled:opacity-50" 
+                className="w-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-bold hover:bg-emerald-500/20 hover:text-white py-3.5 rounded-xl mt-6 hover:bg-emerald-400 transition-colors shadow-none disabled:opacity-50" 
                 type="submit"
                 disabled={isLoading}
               >
@@ -271,16 +271,16 @@ export function LoginRegister() {
             <directionalLight position={[10, 10, 5]} intensity={2} color="#10b981" />
             <directionalLight position={[-10, -10, -5]} intensity={2} color="#f59e0b" />
             
-            <PresentationControls 
-              global 
-              config={{ mass: 2, tension: 500 }} 
-              snap={{ mass: 4, tension: 1500 }} 
-              rotation={[0, 0, 0]} 
-              polar={[-Math.PI / 6, Math.PI / 6]} 
-              azimuth={[-Math.PI / 6, Math.PI / 6]}
-            >
-              <VisionOSGyroscope />
-            </PresentationControls>
+            <OrbitControls 
+              enableZoom={false}
+              enablePan={false}
+              enableRotate={true}
+              minAzimuthAngle={-Math.PI / 4}
+              maxAzimuthAngle={Math.PI / 4}
+              minPolarAngle={Math.PI / 3}
+              maxPolarAngle={2 * Math.PI / 3}
+            />
+            <VisionOSGyroscope />
           </Canvas>
         </div>
 
@@ -308,7 +308,7 @@ export function LoginRegister() {
         
         {/* Top Right LIVE AI Badge */}
         <div className="absolute top-[10%] right-[15%] z-30 bg-black/60 backdrop-blur-md border border-white/10 rounded-full px-4 py-2 flex items-center gap-3 pointer-events-none animate-float">
-          <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.8)]"></div>
+          <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.3)]"></div>
           <span className="text-[10px] font-bold text-white uppercase tracking-widest">LIVE AI</span>
           <span className="text-white/20">|</span>
           <span className="text-xs font-bold text-emerald-400 min-w-[120px]">{aiStatuses[aiStatusIdx]}</span>

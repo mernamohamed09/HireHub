@@ -172,11 +172,11 @@ export function ChatInbox() {
 
   return (
     <div className="flex -mt-lg -mx-[24px] lg:-mx-[32px] h-[calc(100vh-80px)] bg-background relative overflow-hidden">
-      <div className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-neon-purple/10 blur-[120px] rounded-full pointer-events-none z-0"></div>
-      <div className="absolute bottom-0 left-1/4 w-[400px] h-[400px] bg-neon-cyan/10 blur-[120px] rounded-full pointer-events-none z-0"></div>
+      <div className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-emerald-400/10 blur-[120px] rounded-full pointer-events-none z-0"></div>
+      <div className="absolute bottom-0 left-1/4 w-[400px] h-[400px] bg-emerald-300/10 blur-[120px] rounded-full pointer-events-none z-0"></div>
       
       {/* Inbox Panel (Left ~30%) */}
-      <section className="w-[280px] lg:w-[30%] h-full glass-panel border-r border-white/10 flex flex-col shrink-0 relative z-10">
+      <section className="w-[280px] lg:w-[30%] h-full glass-card-pro border-white/5 border-r border-white/10 flex flex-col shrink-0 relative z-10">
         <div className="p-6 border-b border-white/10 shrink-0">
           <div className="flex justify-between items-center">
             <h2 className="font-bold text-xl text-white">Messages</h2>
@@ -185,7 +185,7 @@ export function ChatInbox() {
         <div className="flex-grow overflow-y-auto custom-scrollbar p-4 space-y-2">
           {isLoading ? (
             <div className="flex items-center justify-center py-12">
-              <Loader2 className="animate-spin text-neon-cyan" size={32} />
+              <Loader2 className="animate-spin text-emerald-300" size={32} />
             </div>
           ) : conversations.length === 0 ? (
             <div className="text-center py-12 px-6">
@@ -201,12 +201,12 @@ export function ChatInbox() {
                   key={conv._id}
                   onClick={() => selectConversation(conv)}
                   className={`p-4 rounded-xl cursor-pointer transition-all border ${isActive
-                    ? 'bg-neon-purple/20 border-neon-purple/50 shadow-glow-purple'
+                    ? 'bg-emerald-400/20 border-emerald-400/50 shadow-none'
                     : 'bg-surface-container/30 border-white/5 hover:bg-white/5 hover:border-white/10'}`}
                 >
                   <div className="flex gap-4">
                     <div className="relative shrink-0">
-                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-bold text-lg shadow-inner ${isActive ? 'bg-gradient-to-br from-neon-purple to-neon-cyan text-white shadow-glow-purple' : 'bg-surface-container border border-white/10 text-white'}`}>
+                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-bold text-lg shadow-inner ${isActive ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 text-white shadow-none' : 'bg-surface-container border border-white/10 text-white'}`}>
                         {other.name?.[0]?.toUpperCase() || '?'}
                       </div>
                     </div>
@@ -217,7 +217,7 @@ export function ChatInbox() {
                           {conv.lastMessage?.timestamp ? formatPostedAt(conv.lastMessage.timestamp) : ''}
                         </span>
                       </div>
-                      <p className={`text-[10px] font-bold uppercase tracking-wider ${isActive ? 'text-neon-cyan' : 'text-neon-purple'}`}>{other.role}</p>
+                      <p className={`text-[10px] font-bold uppercase tracking-wider ${isActive ? 'text-emerald-300' : 'text-emerald-400'}`}>{other.role}</p>
                       <p className="text-xs truncate mt-1 text-on-surface-variant font-medium">
                         {conv.lastMessage?.text || 'No messages yet'}
                       </p>
@@ -242,9 +242,9 @@ export function ChatInbox() {
         ) : (
           <>
             {/* Thread Header */}
-            <header className="glass-panel border-b border-white/10 h-20 px-8 flex items-center justify-between shrink-0 z-10">
+            <header className="glass-card-pro border-white/5 border-b border-white/10 h-20 px-8 flex items-center justify-between shrink-0 z-10">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-neon-purple to-neon-cyan text-white shadow-glow-purple flex items-center justify-center font-bold text-xl border border-white/20">
+                <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 text-white shadow-none flex items-center justify-center font-bold text-xl border border-white/20">
                   {getOtherParticipant(activeConversation).name?.[0]?.toUpperCase() || '?'}
                 </div>
                 <div>
@@ -252,7 +252,7 @@ export function ChatInbox() {
                   <p className="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant mt-0.5">
                     {getOtherParticipant(activeConversation).email}
                   </p>
-                  <p className={`text-[10px] font-bold uppercase tracking-wider mt-1 ${isConnected ? 'text-neon-mint drop-shadow-[0_0_5px_rgba(0,255,170,0.8)]' : 'text-neon-pink drop-shadow-[0_0_5px_rgba(255,0,128,0.8)]'}`}>
+                  <p className={`text-[10px] font-bold uppercase tracking-wider mt-1 ${isConnected ? 'text-emerald-500 drop-shadow-[0_0_5px_rgba(0,255,170,0.8)]' : 'text-amber-400 drop-shadow-[0_0_5px_rgba(255,0,128,0.8)]'}`}>
                     {isConnected ? (typingUser ? 'Typing…' : 'Connected') : 'Reconnecting…'}
                   </p>
                 </div>
@@ -263,7 +263,7 @@ export function ChatInbox() {
             <div className="flex-grow overflow-y-auto custom-scrollbar p-8 space-y-6">
               {messagesLoading ? (
                 <div className="flex items-center justify-center py-12">
-                  <Loader2 className="animate-spin text-neon-purple" size={32} />
+                  <Loader2 className="animate-spin text-emerald-400" size={32} />
                 </div>
               ) : messages.length === 0 ? (
                 <div className="text-center py-12 glass-card rounded-2xl border border-white/5 mx-auto max-w-sm">
@@ -299,14 +299,14 @@ export function ChatInbox() {
                     bubbleStyle = {}; // No border radius needed for pure emoji
                   } else {
                     bubbleClasses = isMe 
-                      ? "bg-neon-purple/20 border border-neon-purple/30 text-white p-4 shadow-lg text-left backdrop-blur-md" 
+                      ? "bg-emerald-400/20 border border-emerald-400/30 text-white p-4 shadow-lg text-left backdrop-blur-md" 
                       : "bg-surface-container/50 border border-white/10 p-4 text-white shadow-lg backdrop-blur-md";
                     textClasses = "text-lg md:text-xl leading-relaxed";
                   }
 
                   return isMe ? (
                     <div key={msg._id} className="flex flex-row-reverse gap-4 max-w-[80%] ml-auto group">
-                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-neon-purple to-neon-cyan text-white shadow-glow-purple border border-white/20 flex items-center justify-center font-bold text-sm shrink-0 mt-1">
+                      <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 text-white shadow-none border border-white/20 flex items-center justify-center font-bold text-sm shrink-0 mt-1">
                         {user?.name?.[0]?.toUpperCase() || 'M'}
                       </div>
                       <div className="space-y-1 text-right">
@@ -339,7 +339,7 @@ export function ChatInbox() {
             </div>
 
             {/* Input Area */}
-            <footer className="p-6 glass-panel border-t border-white/10 shrink-0 relative !overflow-visible z-20">
+            <footer className="p-6 glass-card-pro border-white/5 border-t border-white/10 shrink-0 relative !overflow-visible z-20">
               {showEmojiPicker && (
                 <div className="absolute bottom-[90px] left-6 z-50 shadow-2xl">
                   <EmojiPicker
@@ -351,10 +351,10 @@ export function ChatInbox() {
                   />
                 </div>
               )}
-              <div className="flex items-end gap-2 bg-surface-container/50 rounded-2xl p-2 pl-2 border border-white/10 focus-within:border-neon-cyan focus-within:shadow-glow-cyan transition-all">
+              <div className="flex items-end gap-2 bg-surface-container/50 rounded-2xl p-2 pl-2 border border-white/10 focus-within:border-emerald-300 focus-within:shadow-none transition-all">
                 <button
                   onClick={() => setShowEmojiPicker(prev => !prev)}
-                  className="p-2 text-white/40 hover:text-neon-cyan transition-colors rounded-full hover:bg-white/5 self-end mb-1"
+                  className="p-2 text-white/40 hover:text-emerald-300 transition-colors rounded-full hover:bg-white/5 self-end mb-1"
                 >
                   <Smile size={24} />
                 </button>
@@ -379,7 +379,7 @@ export function ChatInbox() {
                 <button
                   onClick={handleSend}
                   disabled={!isConnected}
-                  className="bg-gradient-to-r from-neon-purple to-neon-cyan text-white px-6 py-3 rounded-xl font-bold uppercase tracking-wider text-xs flex items-center gap-2 hover:opacity-90 active:scale-95 transition-all shrink-0 disabled:opacity-50 border border-white/10 shadow-[0_0_15px_rgba(188,19,254,0.3)] mb-1"
+                  className="bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 text-white px-6 py-3 rounded-xl font-bold uppercase tracking-wider text-xs flex items-center gap-2 hover:opacity-90 active:scale-95 transition-all shrink-0 disabled:opacity-50 border border-white/10 shadow-none mb-1"
                 >
                   <span>Send</span>
                   <Send size={16} />

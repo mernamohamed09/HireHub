@@ -6,10 +6,10 @@ import { formatPostedAt } from '../../utils/dateUtils';
 import { Briefcase, Search, ExternalLink, XCircle, Info, MapPin, DollarSign, Loader2 } from 'lucide-react';
 
 const STATUS_STYLES = {
-  pending: 'bg-neon-orange/10 text-neon-orange border-neon-orange/30 shadow-glow-orange',
-  reviewed: 'bg-neon-cyan/10 text-neon-cyan border-neon-cyan/30 shadow-glow-cyan',
-  accepted: 'bg-neon-mint/10 text-neon-mint border-neon-mint/30 shadow-glow-mint',
-  rejected: 'bg-neon-pink/10 text-neon-pink border-neon-pink/30 shadow-glow-pink',
+  pending: 'bg-amber-500/10 text-amber-500 border-amber-500/30 shadow-none',
+  reviewed: 'bg-emerald-300/10 text-emerald-300 border-emerald-300/30 shadow-none',
+  accepted: 'bg-emerald-500/10 text-emerald-500 border-emerald-500/30 shadow-none',
+  rejected: 'bg-red-400/10 text-red-400 border-red-400/30 shadow-none',
 };
 
 export function MyApplications() {
@@ -61,14 +61,14 @@ export function MyApplications() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-32 w-full">
-        <Loader2 size={40} className="animate-spin text-neon-purple" />
+        <Loader2 size={40} className="animate-spin text-emerald-400" />
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="bg-neon-pink/10 border border-neon-pink/30 text-neon-pink shadow-glow-pink rounded-xl p-6 text-center w-full font-bold">
+      <div className="bg-red-400/10 border border-red-400/30 text-red-400 shadow-none rounded-xl p-6 text-center w-full font-bold">
         {error}
       </div>
     );
@@ -78,8 +78,8 @@ export function MyApplications() {
     <div className="flex-1 max-w-full overflow-hidden flex flex-col md:flex-row gap-6 h-full p-4">
       {/* Application List Section */}
       <div className="flex-1 overflow-hidden flex flex-col">
-        <header className="mb-8 shrink-0 glass-panel p-6 rounded-2xl relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-neon-purple/20 blur-3xl rounded-full"></div>
+        <header className="mb-8 shrink-0 glass-card-pro border-white/5 p-6 rounded-2xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-400/20 blur-3xl rounded-full"></div>
           <div className="relative z-10">
             <h1 className="font-bold text-3xl md:text-4xl text-white">My Applications</h1>
             <p className="text-on-surface-variant font-medium mt-2">Track your professional journey across {applications.length} application{applications.length !== 1 ? 's' : ''}.</p>
@@ -88,8 +88,8 @@ export function MyApplications() {
 
         {applications.length === 0 ? (
           <div className="glass-card rounded-2xl p-10 flex flex-col items-center justify-center text-center flex-1">
-            <div className="w-16 h-16 rounded-full bg-neon-cyan/10 flex items-center justify-center mb-6 border border-neon-cyan/20 shadow-glow-cyan">
-              <Briefcase size={32} className="text-neon-cyan" />
+            <div className="w-16 h-16 rounded-full bg-emerald-300/10 flex items-center justify-center mb-6 border border-emerald-300/20 shadow-none">
+              <Briefcase size={32} className="text-emerald-300" />
             </div>
             <h3 className="font-bold text-xl text-white mb-2">No applications yet</h3>
             <p className="text-on-surface-variant mb-8 max-w-sm text-sm">
@@ -97,7 +97,7 @@ export function MyApplications() {
             </p>
             <Link
               to="/jobs"
-              className="px-6 py-3 bg-neon-purple/20 text-neon-purple border border-neon-purple/30 rounded-lg font-bold hover:bg-neon-purple hover:text-white transition-all flex items-center gap-2 shadow-glow-purple"
+              className="px-6 py-3 bg-emerald-400/20 text-emerald-400 border border-emerald-400/30 rounded-lg font-bold hover:bg-emerald-400 hover:text-white transition-all flex items-center gap-2 shadow-none"
             >
               <Search size={18} />
               Browse Jobs
@@ -112,7 +112,7 @@ export function MyApplications() {
                 key={app._id}
                 onClick={() => setActiveId(app._id)}
                 className={`w-full text-left glass-card p-4 transition-all group ${
-                  activeId === app._id ? 'border-neon-purple shadow-glow-purple bg-neon-purple/5' : 'hover:border-white/20'
+                  activeId === app._id ? 'border-emerald-400 shadow-none bg-emerald-400/5' : 'hover:border-white/20'
                 }`}
               >
                 <div className="flex items-center gap-4 mb-3">
@@ -134,7 +134,7 @@ export function MyApplications() {
             ))}
           </div>
 
-          <div className="hidden md:block glass-panel rounded-2xl overflow-y-auto custom-scrollbar flex-1">
+          <div className="hidden md:block glass-card-pro border-white/5 rounded-2xl overflow-y-auto custom-scrollbar flex-1">
             <table className="w-full text-left border-collapse">
               <thead className="sticky top-0 bg-surface-container-high/90 backdrop-blur-md border-b border-white/5 z-10">
                 <tr>
@@ -151,11 +151,11 @@ export function MyApplications() {
                     <tr
                       key={app._id}
                       onClick={() => setActiveId(app._id)}
-                      className={`hover:bg-white/5 transition-colors cursor-pointer group ${isActive ? 'bg-neon-purple/10' : ''}`}
+                      className={`hover:bg-white/5 transition-colors cursor-pointer group ${isActive ? 'bg-emerald-400/10' : ''}`}
                     >
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-4">
-                          <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-lg border transition-colors ${isActive ? 'bg-neon-purple text-black border-neon-purple shadow-glow-purple' : 'bg-surface-container text-white border-white/10 group-hover:border-white/20'}`}>
+                          <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-lg border transition-colors ${isActive ? 'bg-emerald-400 text-black border-emerald-400 shadow-none' : 'bg-surface-container text-white border-white/10 group-hover:border-white/20'}`}>
                             {app.job?.company?.[0] || '?'}
                           </div>
                           <span className="font-bold text-white text-sm">{app.job?.company || 'Unknown company'}</span>
@@ -166,7 +166,7 @@ export function MyApplications() {
                           <Link
                             to={`/jobs/${app.job._id}`}
                             onClick={(e) => e.stopPropagation()}
-                            className="hover:text-neon-cyan hover:underline transition-colors line-clamp-1"
+                            className="hover:text-emerald-300 hover:underline transition-colors line-clamp-1"
                           >
                             {app.job.title}
                           </Link>
@@ -190,20 +190,20 @@ export function MyApplications() {
 
       {/* Detail Drawer (Right Side) */}
       {activeApp && (
-        <aside className="w-full md:w-[35%] shrink-0 glass-panel rounded-2xl p-6 relative overflow-y-auto custom-scrollbar flex flex-col transition-opacity duration-300">
-          <div className="absolute top-0 right-0 w-48 h-48 bg-neon-purple/10 blur-3xl rounded-full"></div>
+        <aside className="w-full md:w-[35%] shrink-0 glass-card-pro border-white/5 rounded-2xl p-6 relative overflow-y-auto custom-scrollbar flex flex-col transition-opacity duration-300">
+          <div className="absolute top-0 right-0 w-48 h-48 bg-emerald-400/10 blur-3xl rounded-full"></div>
           
           <div className="sticky top-0 bg-background/80 backdrop-blur-md z-10 pb-4 mb-6 border-b border-white/10 flex items-center justify-between mx-[-24px] px-6 pt-[-24px]">
             <h3 className="font-bold text-white">Application Detail</h3>
           </div>
 
           <div className="mb-8 flex items-center gap-4 relative z-10">
-            <div className="w-16 h-16 rounded-2xl bg-surface-container border border-white/10 shadow-inner flex items-center justify-center font-bold text-3xl text-neon-purple">
+            <div className="w-16 h-16 rounded-2xl bg-surface-container border border-white/10 shadow-inner flex items-center justify-center font-bold text-3xl text-emerald-400">
               {activeApp.job?.company?.[0] || '?'}
             </div>
             <div>
               <h4 className="font-bold text-xl text-white leading-tight mb-1">{activeApp.job?.title || 'Job removed'}</h4>
-              <p className="text-neon-cyan font-bold text-sm">{activeApp.job?.company}</p>
+              <p className="text-emerald-300 font-bold text-sm">{activeApp.job?.company}</p>
             </div>
           </div>
 
@@ -220,7 +220,7 @@ export function MyApplications() {
 
           <div className="mb-8 relative z-10">
             <h5 className="font-bold text-white text-sm mb-3 flex items-center gap-2">
-              <Info size={16} className="text-neon-purple" />
+              <Info size={16} className="text-emerald-400" />
               Current Status
             </h5>
             <span className={`inline-block border font-bold text-[10px] px-4 py-1.5 rounded-full uppercase ${STATUS_STYLES[activeApp.status] || STATUS_STYLES.pending}`}>
@@ -254,7 +254,7 @@ export function MyApplications() {
               <button
                 onClick={() => handleWithdraw(activeApp)}
                 disabled={isWithdrawing}
-                className="w-full border border-neon-pink/50 text-neon-pink bg-neon-pink/10 py-3 rounded-xl font-bold hover:bg-neon-pink hover:text-black transition-all flex items-center justify-center gap-2 text-sm disabled:opacity-50"
+                className="w-full border border-red-400/50 text-red-400 bg-red-400/10 py-3 rounded-xl font-bold hover:bg-red-400 hover:text-black transition-all flex items-center justify-center gap-2 text-sm disabled:opacity-50"
               >
                 <XCircle size={16} />
                 {isWithdrawing ? 'Withdrawing…' : 'Withdraw Application'}

@@ -75,8 +75,8 @@ export function BrowseJobs() {
     <>
       <div className="max-w-7xl mx-auto px-4 pb-12 w-full pt-8">
         {/* Header Section */}
-        <div className="glass-panel p-8 rounded-2xl mb-8 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-neon-purple/20 blur-[100px] rounded-full"></div>
+        <div className="glass-card-pro border-white/5 p-8 rounded-2xl mb-8 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-400/20 blur-[100px] rounded-full"></div>
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 relative z-10">
             <div>
               <h1 className="font-bold text-3xl text-white mb-2">Find Your Dream Role</h1>
@@ -85,7 +85,7 @@ export function BrowseJobs() {
             <div className="flex items-center gap-3">
               <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Sort by:</span>
               <select
-                className="bg-surface-container border border-white/10 rounded-xl text-white text-sm px-4 py-2 focus:border-neon-purple focus:shadow-glow-purple outline-none transition-all"
+                className="bg-surface-container border border-white/10 rounded-xl text-white text-sm px-4 py-2 focus:border-emerald-400 focus:shadow-[0_0_8px_rgba(16,185,129,0.15)] outline-none transition-all"
                 value={sort}
                 onChange={(e) => { setSort(e.target.value); setPage(1); setAppliedFilters(prev => ({ ...prev, sort: e.target.value, page: 1 })); }}
               >
@@ -100,9 +100,9 @@ export function BrowseJobs() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Filters Sidebar */}
           <aside className="lg:col-span-3 space-y-6">
-            <div className="glass-panel p-6 rounded-2xl relative overflow-hidden">
+            <div className="glass-card-pro border-white/5 p-6 rounded-2xl relative overflow-hidden">
               <div className="flex items-center gap-2 mb-6">
-                <Filter size={18} className="text-neon-cyan" />
+                <Filter size={18} className="text-amber-400" />
                 <h3 className="font-bold text-white text-lg">Filters</h3>
               </div>
 
@@ -111,7 +111,7 @@ export function BrowseJobs() {
                 <div className="relative">
                   <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" />
                   <input
-                    className="w-full pl-10 pr-4 py-2.5 bg-background border border-white/10 rounded-xl focus:border-neon-purple focus:shadow-glow-purple outline-none text-white transition-all text-sm"
+                    className="w-full pl-10 pr-4 py-2.5 bg-background border border-white/10 rounded-xl focus:border-emerald-400 focus:shadow-[0_0_8px_rgba(16,185,129,0.15)] outline-none text-white transition-all text-sm"
                     type="text"
                     placeholder="Job title, keyword..."
                     value={q}
@@ -126,7 +126,7 @@ export function BrowseJobs() {
                 <div className="relative">
                   <MapPin size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" />
                   <input
-                    className="w-full pl-10 pr-4 py-2.5 bg-background border border-white/10 rounded-xl focus:border-neon-purple focus:shadow-glow-purple outline-none text-white transition-all text-sm"
+                    className="w-full pl-10 pr-4 py-2.5 bg-background border border-white/10 rounded-xl focus:border-emerald-400 focus:shadow-[0_0_8px_rgba(16,185,129,0.15)] outline-none text-white transition-all text-sm"
                     type="text"
                     placeholder="e.g. Cairo, Remote..."
                     value={location}
@@ -139,10 +139,10 @@ export function BrowseJobs() {
               <div className="mb-8">
                 <div className="flex justify-between items-center mb-3">
                   <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">MIN SALARY</label>
-                  <span className="text-neon-mint font-bold text-xs">{minSalary > 0 ? `EGP ${minSalary / 1000}k+` : 'Any'}</span>
+                  <span className="text-emerald-400 font-bold text-xs">{minSalary > 0 ? `EGP ${minSalary / 1000}k+` : 'Any'}</span>
                 </div>
                 <input
-                  className="w-full accent-neon-mint cursor-pointer"
+                  className="w-full accent-emerald-400 cursor-pointer"
                   max="100000" min="0" step="5000"
                   type="range"
                   value={minSalary}
@@ -154,7 +154,7 @@ export function BrowseJobs() {
                 </div>
               </div>
 
-              <Button variant="primary" className="w-full bg-gradient-to-r from-neon-purple to-neon-cyan border-none shadow-[0_0_15px_rgba(0,255,255,0.4)]" onClick={applyFilters}>
+              <Button variant="primary" className="w-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-bold hover:bg-emerald-500/20 hover:text-white shadow-none" onClick={applyFilters}>
                 Apply Filters
               </Button>
             </div>
@@ -164,18 +164,18 @@ export function BrowseJobs() {
           <div className="lg:col-span-9">
             {isLoading && (
               <div className="flex items-center justify-center py-32">
-                <Loader2 size={40} className="animate-spin text-neon-purple" />
+                <Loader2 size={40} className="animate-spin text-emerald-400" />
               </div>
             )}
 
             {!isLoading && error && (
-              <div className="bg-neon-pink/10 border border-neon-pink/30 text-neon-pink shadow-glow-pink rounded-xl p-6 text-center font-bold">
+              <div className="bg-amber-400/10 border border-amber-400/30 text-amber-400 shadow-[0_0_8px_rgba(245,158,11,0.15)] rounded-xl p-6 text-center font-bold">
                 {error}
               </div>
             )}
 
             {!isLoading && !error && jobs.length === 0 && (
-              <div className="glass-card rounded-2xl p-12 text-center text-on-surface-variant flex flex-col items-center">
+              <div className="glass-card-pro rounded-2xl p-12 text-center text-on-surface-variant flex flex-col items-center">
                 <Briefcase size={48} className="text-white/10 mb-4" />
                 <p>No jobs match your filters. Try broadening your search.</p>
               </div>
@@ -184,22 +184,22 @@ export function BrowseJobs() {
             {!isLoading && !error && jobs.length > 0 && (
               <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
                 {jobs.map(job => (
-                  <div key={job._id} className="glass-card p-6 relative overflow-hidden group hover:border-neon-purple/50 hover:bg-neon-purple/5 transition-all flex flex-col h-full">
+                  <div key={job._id} className="glass-card-pro p-6 relative overflow-hidden group hover:border-emerald-400/50 hover:bg-emerald-400/5 transition-all flex flex-col h-full">
                     <div className="flex justify-between items-start mb-4 relative z-10">
                       <div className="w-14 h-14 rounded-xl bg-surface-container border border-white/10 shadow-inner flex items-center justify-center shrink-0">
-                        <Building2 size={28} className="text-neon-cyan" />
+                        <Building2 size={28} className="text-amber-400" />
                       </div>
                     </div>
                     <div className="mb-6 flex-1 relative z-10">
-                      <h3 className="font-bold text-xl text-white group-hover:text-neon-cyan transition-colors mb-2 line-clamp-2">{job.title}</h3>
+                      <h3 className="font-bold text-xl text-white group-hover:text-amber-400 transition-colors mb-2 line-clamp-2">{job.title}</h3>
                       <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-on-surface-variant mb-4">
                         <span className="bg-surface-container-high px-2 py-1 rounded-md border border-white/5">{job.company}</span>
-                        <span className="flex items-center gap-1 bg-surface-container-high px-2 py-1 rounded-md border border-white/5"><MapPin size={12} className="text-neon-orange" />{job.location}</span>
+                        <span className="flex items-center gap-1 bg-surface-container-high px-2 py-1 rounded-md border border-white/5"><MapPin size={12} className="text-amber-500" />{job.location}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         {job.salary ? (
                           <>
-                            <span className="text-sm font-bold text-neon-mint flex items-center gap-1"><DollarSign size={14} /> {job.salary.toLocaleString()}</span>
+                            <span className="text-sm font-bold text-emerald-400 flex items-center gap-1"><DollarSign size={14} /> {job.salary.toLocaleString()}</span>
                             <span className="text-[10px] text-on-surface-variant uppercase tracking-wider font-bold mt-0.5">/ month</span>
                           </>
                         ) : (
@@ -210,7 +210,7 @@ export function BrowseJobs() {
                     <div className="flex items-center justify-between pt-4 border-t border-white/10 relative z-10">
                       <span className="text-[10px] text-on-surface-variant uppercase tracking-wider font-bold">{formatPostedAt(job.createdAt)}</span>
                       <Link to={`/jobs/${job._id}`}>
-                        <Button variant="ghost" size="sm" className="border border-neon-cyan/50 text-neon-cyan hover:bg-neon-cyan hover:text-black">Apply Now</Button>
+                        <Button variant="ghost" size="sm" className="border border-amber-400/50 text-amber-400 hover:bg-amber-400 hover:text-black">Apply Now</Button>
                       </Link>
                     </div>
                   </div>
@@ -226,7 +226,7 @@ export function BrowseJobs() {
             <button
               onClick={() => goToPage(page - 1)}
               disabled={page <= 1}
-              className="w-10 h-10 flex items-center justify-center rounded-xl bg-surface-container border border-white/10 text-white hover:border-neon-purple hover:text-neon-purple hover:shadow-glow-purple transition-all disabled:opacity-40 disabled:hover:border-white/10 disabled:hover:shadow-none disabled:hover:text-white"
+              className="w-10 h-10 flex items-center justify-center rounded-xl bg-surface-container border border-white/10 text-white hover:border-emerald-400 hover:text-emerald-400 hover:shadow-[0_0_8px_rgba(16,185,129,0.15)] transition-all disabled:opacity-40 disabled:hover:border-white/10 disabled:hover:shadow-none disabled:hover:text-white"
             >
               <ChevronLeft size={20} />
             </button>
@@ -234,7 +234,7 @@ export function BrowseJobs() {
             <button
               onClick={() => goToPage(page + 1)}
               disabled={page >= totalPages}
-              className="w-10 h-10 flex items-center justify-center rounded-xl bg-surface-container border border-white/10 text-white hover:border-neon-purple hover:text-neon-purple hover:shadow-glow-purple transition-all disabled:opacity-40 disabled:hover:border-white/10 disabled:hover:shadow-none disabled:hover:text-white"
+              className="w-10 h-10 flex items-center justify-center rounded-xl bg-surface-container border border-white/10 text-white hover:border-emerald-400 hover:text-emerald-400 hover:shadow-[0_0_8px_rgba(16,185,129,0.15)] transition-all disabled:opacity-40 disabled:hover:border-white/10 disabled:hover:shadow-none disabled:hover:text-white"
             >
               <ChevronRight size={20} />
             </button>

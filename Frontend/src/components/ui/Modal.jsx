@@ -20,7 +20,7 @@ export function Modal({ isOpen, onClose, title, children }) {
         className="absolute inset-0 bg-black/60 backdrop-blur-sm" 
         onClick={onClose}
       ></div>
-      <div className="relative w-full max-w-lg glass-panel neon-border-purple p-6 shadow-glow-purple scale-100 transition-transform duration-300">
+      <div className="relative w-full max-w-lg glass-panel border border-emerald-500/30 p-6 shadow-lg scale-100 transition-transform duration-300">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-bold text-white">{title}</h2>
           <button 

@@ -63,35 +63,44 @@ export function Sidebar({ links = [], user }) {
 
   return (
     <aside className={cn(
-      "h-full glass-card-purple flex flex-col py-6 transition-all duration-300 relative z-50",
-      isCollapsed ? "w-[80px] items-center" : "w-[260px] px-4"
+      "h-full flex flex-col py-6 transition-all duration-500 relative z-50 border-r border-white/5 overflow-hidden",
+      "bg-gradient-to-b from-black/80 via-[#0a1510]/90 to-black/90 backdrop-blur-3xl shadow-[4px_0_24px_rgba(0,0,0,0.5)]",
+      isCollapsed ? "w-[80px] items-center" : "w-[280px] px-5"
     )}>
+      {/* Decorative blurred spots */}
+      <div className="absolute -top-20 -left-20 w-64 h-64 bg-emerald-500/10 blur-[100px] rounded-full pointer-events-none"></div>
+      <div className="absolute bottom-0 right-0 w-48 h-48 bg-amber-500/5 blur-[80px] rounded-full pointer-events-none"></div>
+
       {/* Toggle Button */}
       <button 
         onClick={() => setIsCollapsed(!isCollapsed)}
-        className="absolute -right-3 top-8 w-6 h-6 bg-surface-container-high border border-white/10 rounded-full flex items-center justify-center text-on-surface-variant hover:text-white hover:border-neon-cyan hover:shadow-glow-cyan transition-all z-50 shadow-lg"
+        className="absolute -right-3.5 top-8 w-7 h-7 bg-[#0A0F1A] border border-white/10 rounded-full flex items-center justify-center text-slate-400 hover:text-white hover:border-emerald-400 hover:shadow-none hover:scale-110 transition-all z-50 shadow-xl"
       >
-        <Menu size={12} />
+        <Menu size={14} />
       </button>
 
       {/* Logo */}
-      <div className={cn("flex items-center mb-8", isCollapsed ? "justify-center" : "gap-3")}>
-        <div className="w-10 h-10 rounded-xl neon-border-cyan flex-shrink-0 flex items-center justify-center bg-surface-container-high shadow-glow-cyan">
-          <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan to-neon-purple">HH</span>
+      <div className={cn("flex items-center mb-10 relative z-10", isCollapsed ? "justify-center" : "gap-4")}>
+        <div className="w-12 h-12 rounded-2xl border border-white/10 flex-shrink-0 flex items-center justify-center bg-gradient-to-br from-white/10 to-transparent shadow-[0_0_20px_rgba(16,185,129,0.15)] relative group overflow-hidden">
+          <div className="absolute inset-0 bg-emerald-400/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <span className="font-bold text-transparent bg-clip-text bg-gradient-to-br from-emerald-400 to-amber-200 text-lg relative z-10">HH</span>
         </div>
         {!isCollapsed && (
-          <span className="font-h3 text-xl font-bold tracking-wide text-white">
-            Hire<span className="text-neon-cyan">Hub</span>
-          </span>
+          <div className="flex flex-col">
+            <span className="font-h3 text-2xl font-bold tracking-tight text-white leading-none">
+              Hire<span className="text-emerald-400 drop-shadow-[0_0_8px_rgba(16,185,129,0.5)]">Hub</span>
+            </span>
+            <span className="text-[10px] text-emerald-400/80 font-bold tracking-widest uppercase mt-1">Executive</span>
+          </div>
         )}
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 space-y-2 overflow-y-auto custom-scrollbar w-full">
+      <nav className="flex-1 space-y-2 overflow-y-auto custom-scrollbar w-full relative z-10 pr-1">
         {links.map((link, index) => {
           const isActive = location.pathname === link.path || location.pathname.startsWith(link.path + '/');
           if (link.type === 'divider') {
-            return <div key={`div-${index}`} className="w-full border-t border-white/5 my-4" />;
+            return <div key={`div-${index}`} className="w-full border-t border-white/5 my-5" />;
           }
           const Icon = iconMap[link.icon] || FileText;
           
@@ -100,11 +109,11 @@ export function Sidebar({ links = [], user }) {
               key={link.path}
               to={link.path}
               className={cn(
-                "flex items-center gap-3 py-3 w-full transition-all duration-300 relative group",
-                isCollapsed ? "justify-center px-0" : "px-4",
+                "flex items-center gap-3.5 py-3.5 w-full transition-all duration-300 relative group overflow-hidden",
+                isCollapsed ? "justify-center px-0 rounded-2xl" : "px-4 rounded-2xl",
                 isActive 
-                  ? "text-white bg-white/5 rounded-xl shadow-[inset_1px_0_0_rgba(255,255,255,0.05)]" 
-                  : "text-on-surface-variant hover:bg-white/5 hover:text-white rounded-xl"
+                  ? "text-white shadow-[0_4px_20px_rgba(0,0,0,0.2)] border border-emerald-500/20" 
+                  : "text-slate-400 hover:text-white border border-transparent"
               )}
               onClick={() => {
                 if (link.path.includes('notifications')) {
@@ -112,19 +121,31 @@ export function Sidebar({ links = [], user }) {
                 }
               }}
             >
+              {/* Active Background Glow */}
               {isActive && (
-                <div className="absolute -left-4 top-1/2 -translate-y-1/2 w-5 h-10 border-r-[3px] border-neon-mint rounded-r-[100%] shadow-[4px_0_12px_rgba(45,212,191,0.5)] bg-gradient-to-r from-transparent to-neon-mint/10"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/20 via-emerald-500/5 to-transparent"></div>
               )}
-              <Icon size={isCollapsed ? 22 : 20} className={cn("transition-transform relative z-10", isActive ? "scale-110 text-neon-mint drop-shadow-[0_0_8px_rgba(45,212,191,0.8)]" : "group-hover:scale-110")} />
+              
+              {/* Hover Background */}
+              {!isActive && (
+                <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              )}
+
+              {/* Active Left Bar */}
+              {isActive && (
+                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-8 bg-emerald-400 rounded-r-full shadow-[0_0_12px_rgba(16,185,129,0.8)]"></div>
+              )}
+
+              <Icon size={isCollapsed ? 24 : 20} className={cn("transition-transform relative z-10 duration-500", isActive ? "scale-110 text-emerald-400 drop-shadow-[0_0_8px_rgba(16,185,129,0.8)]" : "group-hover:scale-110 group-hover:text-emerald-400/70")} />
               
               {!isCollapsed && (
-                <span className="font-medium text-[13px] whitespace-nowrap">{link.label || link.name}</span>
+                <span className={cn("font-medium text-[14px] whitespace-nowrap relative z-10 transition-colors", isActive ? "text-white font-bold" : "group-hover:text-white")}>{link.label || link.name}</span>
               )}
 
               {link.path.includes('notifications') && unreadCount > 0 && (
                 <span className={cn(
-                  "bg-neon-pink text-white text-[10px] font-bold flex items-center justify-center rounded-full shadow-glow-pink",
-                  isCollapsed ? "absolute top-1 right-3 w-4 h-4" : "ml-auto px-2 py-0.5"
+                  "bg-amber-500 text-black text-[11px] font-black flex items-center justify-center rounded-full shadow-[0_0_10px_rgba(245,158,11,0.8)] relative z-10 transition-transform group-hover:scale-110",
+                  isCollapsed ? "absolute top-1.5 right-2 w-4 h-4" : "ml-auto px-2 py-0.5"
                 )}>
                   {unreadCount > 99 ? '99+' : unreadCount}
                 </span>
@@ -134,34 +155,33 @@ export function Sidebar({ links = [], user }) {
         })}
       </nav>
 
-
       {/* User Profile & Settings */}
       {user && (
         <div className={cn(
-          "mt-auto pt-6 border-t border-white/10 flex items-center gap-3",
+          "mt-auto pt-6 border-t border-white/10 flex items-center gap-4 relative z-10",
           isCollapsed ? "flex-col justify-center" : ""
         )}>
-          <div className="w-10 h-10 rounded-full neon-border-cyan overflow-hidden flex-shrink-0 flex items-center justify-center text-neon-cyan font-bold bg-surface-container relative">
+          <div className="w-11 h-11 rounded-2xl border border-white/10 overflow-hidden flex-shrink-0 flex items-center justify-center text-emerald-400 font-bold bg-black/40 relative shadow-lg group-hover:border-emerald-400/50 transition-colors">
             {avatarUrl(user.avatar) ? (
               <img src={avatarUrl(user.avatar)} alt={user.name || 'Avatar'} className="w-full h-full object-cover" />
             ) : (
               avatarInitial(user.name)
             )}
-            <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-neon-mint rounded-full border-2 border-background shadow-glow-mint"></span>
+            <span className="absolute bottom-[-2px] right-[-2px] w-3 h-3 bg-emerald-400 rounded-full border-[2px] border-[#0a1510] shadow-[0_0_8px_rgba(16,185,129,1)]"></span>
           </div>
           
           {!isCollapsed && (
             <div className="flex-1 min-w-0">
               <p className="text-sm font-bold text-white truncate">{user.name}</p>
-              <p className="text-xs text-on-surface-variant truncate">{user.role}</p>
+              <p className="text-[11px] text-emerald-400/80 uppercase tracking-wider font-bold truncate mt-0.5">{user.role}</p>
             </div>
           )}
 
           <button
             onClick={handleLogout}
             className={cn(
-              "text-on-surface-variant hover:text-neon-pink transition-colors p-2 rounded-xl hover:bg-white/10 hover:shadow-glow-pink",
-              isCollapsed && "mt-2"
+              "text-slate-400 hover:text-red-400 transition-all p-2.5 rounded-xl hover:bg-red-500/10 hover:shadow-[0_0_15px_rgba(239,68,68,0.2)]",
+              isCollapsed && "mt-3"
             )}
             title="Logout"
           >
@@ -172,4 +192,3 @@ export function Sidebar({ links = [], user }) {
     </aside>
   );
 }
-

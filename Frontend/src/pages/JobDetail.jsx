@@ -113,7 +113,7 @@ export function JobDetail() {
       <>
         <DashboardHeader />
         <div className="max-w-6xl mx-auto px-4 py-8 w-full">
-          <div className="bg-amber-500/10 border border-amber-500/30 text-amber-400 shadow-[0_0_15px_rgba(245,158,11,0.3)] rounded-xl p-6 text-center font-bold">
+          <div className="bg-amber-500/10 border border-amber-500/30 text-amber-400 shadow-none rounded-xl p-6 text-center font-bold">
             {error || 'Job not found'}
           </div>
         </div>
@@ -145,7 +145,7 @@ export function JobDetail() {
                     <p className="text-amber-400 font-bold mb-4">{job.company}</p>
                     <div className="flex flex-wrap gap-3">
                       <div className="flex items-center gap-1.5 bg-surface-container-high px-3 py-1.5 rounded-lg border border-white/5 text-xs text-on-surface-variant font-medium">
-                        <MapPin size={14} className="text-neon-orange" />
+                        <MapPin size={14} className="text-amber-500" />
                         {job.location}
                       </div>
                     </div>
@@ -195,7 +195,7 @@ export function JobDetail() {
                 <div className="space-y-4 relative z-10">
                   <button
                     onClick={() => setIsApplyModalOpen(true)}
-                    className="w-full bg-gradient-to-r from-neon-purple to-neon-pink text-white py-3 rounded-xl font-bold hover:opacity-90 transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(99,102,241,0.4)]"
+                    className="w-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-bold hover:bg-emerald-500/20 hover:text-white py-3 rounded-xl font-bold hover:opacity-90 transition-all flex items-center justify-center gap-2 shadow-none"
                   >
                     Submit Application
                     <Send size={18} />
@@ -205,7 +205,7 @@ export function JobDetail() {
                     aria-pressed={isSaved}
                     className={`w-full border py-3 rounded-xl font-bold transition-all flex items-center justify-center gap-2 ${
                       isSaved
-                        ? 'border-neon-mint text-emerald-400 bg-neon-mint/10 shadow-glow-mint'
+                        ? 'border-emerald-500 text-emerald-400 bg-emerald-500/10 shadow-none'
                         : 'border-white/10 hover:bg-white/5 text-white'
                     }`}
                   >
@@ -265,7 +265,7 @@ export function JobDetail() {
             <label className="block text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Cover Note (Optional)</label>
             <textarea
               {...register("coverNote")}
-              className="w-full bg-surface-container border border-white/10 rounded-xl py-3 px-4 text-white focus:border-emerald-500 focus:shadow-[0_0_15px_rgba(16,185,129,0.3)] focus:outline-none resize-none transition-all"
+              className="w-full bg-surface-container border border-white/10 rounded-xl py-3 px-4 text-white focus:border-emerald-500 focus:shadow-none focus:outline-none resize-none transition-all"
               placeholder="Explain why you're a great fit for this role..."
               rows="5"
             ></textarea>
@@ -286,7 +286,7 @@ export function JobDetail() {
             <Button
               variant="primary"
               type="submit"
-              className="flex-1 bg-gradient-to-r from-neon-purple to-neon-pink text-white border-none shadow-[0_0_15px_rgba(99,102,241,0.4)]"
+              className="flex-1 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-bold hover:bg-emerald-500/20 hover:text-white shadow-none"
               disabled={isSubmitting || !hasDefaultCv}
               title={!hasDefaultCv ? 'Upload a CV in your profile before applying' : undefined}
             >

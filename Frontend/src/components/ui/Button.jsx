@@ -9,12 +9,12 @@ export const Button = React.forwardRef(({
   ...props 
 }, ref) => {
   const variants = {
-    primary: 'bg-gradient-to-r from-neon-purple to-neon-pink text-white shadow-glow-purple hover:shadow-[0_0_30px_rgba(99,102,241,0.4)] hover:-translate-y-1 hover:brightness-110',
-    cyan: 'bg-gradient-to-r from-neon-purple to-neon-cyan text-white shadow-glow-cyan hover:shadow-[0_0_30px_rgba(34,211,238,0.4)] hover:-translate-y-1 hover:brightness-110',
-    mint: 'bg-gradient-to-r from-neon-mint to-neon-cyan text-[#042F2E] shadow-glow-mint hover:shadow-[0_0_30px_rgba(45,212,191,0.4)] hover:-translate-y-1 hover:brightness-110',
-    outline: 'border border-outline text-on-surface hover:bg-surface-container-high hover:border-neon-purple/50 hover:shadow-glow-purple',
-    ghost: 'text-on-surface-variant hover:text-white hover:bg-white/10',
-    danger: 'bg-gradient-to-r from-neon-red to-neon-pink text-white shadow-glow-pink hover:shadow-[0_0_30px_rgba(248,113,113,0.4)] hover:-translate-y-1',
+    primary: 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 shadow-none hover:bg-emerald-500/20 hover:text-white hover:-translate-y-1 transition-all',
+    secondary: 'bg-surface-container-highest text-white border border-white/10 hover:border-emerald-500 hover:text-emerald-400 hover:-translate-y-1 shadow-none',
+    mint: 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 shadow-none hover:bg-emerald-500/20 hover:-translate-y-1 transition-all',
+    ghost: 'bg-transparent text-on-surface-variant hover:text-white hover:bg-white/5',
+    outline: 'bg-transparent border border-white/20 text-white hover:border-emerald-500 hover:text-emerald-400 shadow-none',
+    danger: 'bg-red-500/10 border border-red-500/30 text-red-400 shadow-none hover:bg-red-500/20 hover:text-white hover:-translate-y-1 transition-all',
   };
 
   const sizes = {

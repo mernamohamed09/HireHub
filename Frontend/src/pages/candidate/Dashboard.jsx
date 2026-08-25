@@ -5,7 +5,7 @@ import { applicationService } from '../../services/applicationService';
 import { candidateService } from '../../services/candidateService';
 import { jobService } from '../../services/jobService';
 import { formatPostedAt } from '../../utils/dateUtils';
-import { Search, Send, Hourglass, Eye, CheckCircle, Bell, Briefcase } from 'lucide-react';
+import { Search, Send, Hourglass, Eye, CheckCircle, Bell, Briefcase, Compass } from 'lucide-react';
 
 const PROFILE_FIELDS = ['title', 'bio', 'skills', 'experience', 'education', 'resumeUrl'];
 
@@ -55,107 +55,131 @@ export function Dashboard() {
 
   return (
     <div className="w-full relative">
-      <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-neon-purple/5 blur-[120px] rounded-full pointer-events-none -z-10 translate-x-1/3 -translate-y-1/3"></div>
-      
       {/* Header Section */}
-      <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 p-4 bg-surface-container/30 backdrop-blur-md rounded-3xl border border-white/5 shadow-lg">
+      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 pb-6 border-b border-white/5">
         <div>
-          <h1 className="font-bold text-3xl md:text-4xl text-white">
-            Good morning, <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-purple to-neon-cyan">{user?.name?.split(' ')[0] || 'there'}</span>
-          </h1>
-          <p className="text-on-surface-variant mt-2 text-sm font-medium">
-            {new Date().toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} • Welcome back to your recruitment command center.
+          <p className="text-emerald-400 font-medium text-sm tracking-wide mb-1">
+            {new Date().toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
           </p>
+          <h1 className="font-bold text-3xl md:text-4xl text-white tracking-tight">
+            Welcome back, {user?.name?.split(' ')[0] || 'there'}
+          </h1>
         </div>
         <Link to="/jobs">
-          <button className="flex items-center gap-2 bg-gradient-to-r from-neon-purple to-neon-cyan text-white px-6 py-3 rounded-xl font-bold uppercase tracking-wider text-xs hover:opacity-90 transition-all shadow-[0_0_20px_rgba(188,19,254,0.4)] active:scale-95">
-            <Search size={16} /> Browse New Roles
+          <button className="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 hover:from-emerald-400 hover:to-emerald-500 text-white px-6 py-2.5 rounded-lg font-semibold tracking-wide text-sm transition-all shadow-[0_2px_8px_rgba(,,,0.15)] hover:shadow-[0_4px_12px_rgba(,,,0.15)] active:scale-95 border border-emerald-400/20">
+            <Search size={16} /> Browse Roles
           </button>
         </Link>
       </header>
 
       {isLoading ? (
         <div className="flex items-center justify-center py-32">
-          <div className="w-10 h-10 border-4 border-neon-purple border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-10 h-10 border-4 border-emerald-400 border-t-transparent rounded-full animate-spin shadow-none"></div>
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 auto-rows-[auto] p-4">
           
           {/* Stats Grid (Top row in masonry) */}
-          <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="glass-card p-6 rounded-2xl flex flex-col justify-between border border-white/5 hover:border-neon-purple/50 transition-all group relative overflow-hidden shadow-lg">
-              <div className="absolute inset-0 bg-gradient-to-br from-neon-purple/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-              <p className="text-[10px] text-on-surface-variant font-bold uppercase tracking-widest mb-2 z-10">Applications Sent</p>
-              <div className="flex justify-between items-end z-10">
-                <span className="text-4xl font-bold text-white">{applications.length}</span>
-                <div className="w-10 h-10 rounded-xl bg-neon-purple/10 flex items-center justify-center border border-neon-purple/20 group-hover:scale-110 transition-transform"><Send className="text-neon-purple" size={20} /></div>
+          <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            
+            <div className="glass-card-pro p-5 rounded-xl flex flex-col justify-between hover-lift relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/10 blur-[30px] rounded-full pointer-events-none group-hover:bg-emerald-500/20 transition-all"></div>
+              <div className="flex items-center gap-2 mb-4 relative z-10">
+                <div className="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center text-emerald-400 border border-emerald-500/30">
+                  <Send size={14} />
+                </div>
+                <p className="text-xs text-slate-300 font-medium">Applications Sent</p>
               </div>
+              <span className="text-3xl font-black text-white tracking-tight relative z-10">{applications.length}</span>
             </div>
-            <div className="glass-card p-6 rounded-2xl flex flex-col justify-between border border-white/5 hover:border-neon-orange/50 transition-all group relative overflow-hidden shadow-lg">
-              <div className="absolute inset-0 bg-gradient-to-br from-neon-orange/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-              <p className="text-[10px] text-on-surface-variant font-bold uppercase tracking-widest mb-2 z-10">Pending Review</p>
-              <div className="flex justify-between items-end z-10">
-                <span className="text-4xl font-bold text-white">{pendingCount}</span>
-                <div className="w-10 h-10 rounded-xl bg-neon-orange/10 flex items-center justify-center border border-neon-orange/20 group-hover:scale-110 transition-transform"><Hourglass className="text-neon-orange" size={20} /></div>
+
+            <div className="glass-card-pro p-5 rounded-xl flex flex-col justify-between hover-lift relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-amber-500/10 blur-[30px] rounded-full pointer-events-none group-hover:bg-amber-500/20 transition-all"></div>
+              <div className="flex items-center gap-2 mb-4 relative z-10">
+                <div className="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center text-amber-400 border border-amber-500/30">
+                  <Hourglass size={14} />
+                </div>
+                <p className="text-xs text-slate-300 font-medium">Pending Review</p>
               </div>
+              <span className="text-3xl font-black text-white tracking-tight relative z-10">{pendingCount}</span>
             </div>
-            <div className="glass-card p-6 rounded-2xl flex flex-col justify-between border border-white/5 hover:border-neon-cyan/50 transition-all group relative overflow-hidden shadow-lg">
-              <div className="absolute inset-0 bg-gradient-to-br from-neon-cyan/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-              <p className="text-[10px] text-on-surface-variant font-bold uppercase tracking-widest mb-2 z-10">Reviewed</p>
-              <div className="flex justify-between items-end z-10">
-                <span className="text-4xl font-bold text-white">{reviewedCount}</span>
-                <div className="w-10 h-10 rounded-xl bg-neon-cyan/10 flex items-center justify-center border border-neon-cyan/20 group-hover:scale-110 transition-transform"><Eye className="text-neon-cyan" size={20} /></div>
+
+            <div className="glass-card-pro p-5 rounded-xl flex flex-col justify-between hover-lift relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/10 blur-[30px] rounded-full pointer-events-none group-hover:bg-blue-500/20 transition-all"></div>
+              <div className="flex items-center gap-2 mb-4 relative z-10">
+                <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-400 border border-blue-500/30">
+                  <Eye size={14} />
+                </div>
+                <p className="text-xs text-slate-300 font-medium">Reviewed</p>
               </div>
+              <span className="text-3xl font-black text-white tracking-tight relative z-10">{reviewedCount}</span>
             </div>
-            <div className="glass-card p-6 rounded-2xl flex flex-col justify-between border border-white/5 hover:border-neon-mint/50 transition-all group relative overflow-hidden shadow-lg">
-              <div className="absolute inset-0 bg-gradient-to-br from-neon-mint/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-              <p className="text-[10px] text-on-surface-variant font-bold uppercase tracking-widest mb-2 z-10">Accepted</p>
-              <div className="flex justify-between items-end z-10">
-                <span className="text-4xl font-bold text-white">{acceptedCount}</span>
-                <div className="w-10 h-10 rounded-xl bg-neon-mint/10 flex items-center justify-center border border-neon-mint/20 group-hover:scale-110 transition-transform"><CheckCircle className="text-neon-mint" size={20} /></div>
+
+            <div className="glass-card-pro p-5 rounded-xl flex flex-col justify-between hover-lift relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/10 blur-[30px] rounded-full pointer-events-none group-hover:bg-emerald-500/20 transition-all"></div>
+              <div className="flex items-center gap-2 mb-4 relative z-10">
+                <div className="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center text-emerald-400 border border-emerald-500/30">
+                  <CheckCircle size={14} />
+                </div>
+                <p className="text-xs text-slate-300 font-medium">Accepted</p>
               </div>
+              <span className="text-3xl font-black text-white tracking-tight relative z-10">{acceptedCount}</span>
             </div>
+
           </div>
 
           {/* Main Section: Recent Applications */}
           <div className="lg:col-span-2 space-y-6">
-            <section className="glass-card p-8 rounded-3xl border border-white/5 space-y-6 relative overflow-hidden shadow-2xl">
-              <div className="flex justify-between items-center z-10 relative">
-                <h3 className="font-bold text-xl text-white">Recent Applications</h3>
-                <Link to="/candidate/applications" className="text-neon-cyan text-sm font-bold hover:underline">View All</Link>
+            <section className="glass-card-pro p-6 md:p-8 hover-lift">
+              {/* Hero Section */}
+              <section className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                <div>
+                  <h1 className="font-bold text-3xl md:text-4xl text-white tracking-tight">Welcome back, <span className="text-gradient-emerald font-extrabold drop-shadow-sm">{user?.name}</span></h1>
+                  <p className="text-slate-400 font-medium mt-2">Here is your daily activity and recommended opportunities.</p>
+                </div>
+                <Link to="/candidate/jobs" className="w-full md:w-auto mt-4 md:mt-0">
+                  <button className="btn-pro-primary flex items-center justify-center gap-2 px-8 py-3 rounded-xl font-bold w-full md:w-auto text-sm shadow-none">
+                    <Compass size={18} />
+                    Browse Jobs
+                  </button>
+                </Link>
+              </section>
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="font-bold text-xl text-white tracking-wide">Recent Applications</h3>
+                <Link to="/candidate/applications" className="text-emerald-400 text-sm font-bold hover:text-emerald-300 transition-colors">View All</Link>
               </div>
               
               {recentApplications.length === 0 ? (
-                <div className="text-center py-8 bg-surface-container/30 rounded-2xl border border-white/5">
-                  <p className="text-on-surface-variant font-medium relative z-10">You haven't applied to any jobs yet.</p>
+                <div className="text-center py-10 bg-black/20 rounded-xl border border-white/5">
+                  <p className="text-slate-400 font-medium text-sm">You haven't applied to any jobs yet.</p>
                 </div>
               ) : (
-                <div className="space-y-4 relative z-10">
+                <div className="space-y-3">
                   {recentApplications.map(app => {
                     const statusColors = {
-                      pending: 'text-neon-orange border-neon-orange/30 bg-neon-orange/10 shadow-glow-orange',
-                      reviewed: 'text-neon-cyan border-neon-cyan/30 bg-neon-cyan/10 shadow-glow-cyan',
-                      accepted: 'text-neon-mint border-neon-mint/30 bg-neon-mint/10 shadow-glow-mint',
-                      rejected: 'text-neon-pink border-neon-pink/30 bg-neon-pink/10 shadow-glow-pink',
+                      pending: 'text-slate-400 bg-white/5 border-white/10',
+                      reviewed: 'text-blue-400 bg-blue-500/10 border-blue-500/20',
+                      accepted: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20',
+                      rejected: 'text-red-400 bg-red-500/10 border-red-500/20',
                     };
                     const colorClass = statusColors[app.status] || statusColors.pending;
 
                     return (
-                      <div key={app._id} className="bg-surface-container/50 border border-white/5 rounded-2xl p-4 flex items-center justify-between hover:bg-white/5 hover:border-white/20 transition-all group">
+                      <div key={app._id} className="bg-black/20 border border-white/5 rounded-xl p-4 flex items-center justify-between hover:bg-black/40 hover:border-white/10 transition-all group">
                         <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 bg-surface-container rounded-xl flex items-center justify-center font-bold text-xl text-white border border-white/10 shadow-inner group-hover:border-neon-purple/50 transition-colors">
+                          <div className="w-10 h-10 bg-white/5 rounded-lg flex items-center justify-center font-bold text-lg text-slate-300 border border-white/10 group-hover:border-emerald-500/30 transition-colors">
                             {app.job?.company?.[0] || '?'}
                           </div>
                           <div>
-                            <p className="font-bold text-white text-sm group-hover:text-neon-purple transition-colors">{app.job?.company || 'Unknown company'}</p>
-                            <p className="text-xs text-on-surface-variant font-medium">{app.job?.title || 'Job removed'}</p>
+                            <p className="font-bold text-white text-sm group-hover:text-emerald-400 transition-colors">{app.job?.company || 'Unknown company'}</p>
+                            <p className="text-xs text-slate-400 mt-0.5">{app.job?.title || 'Job removed'}</p>
                           </div>
                         </div>
                         <div className="flex flex-col items-end gap-2">
-                          <span className={`text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full border ${colorClass}`}>
+                          <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md border ${colorClass}`}>
                             {app.status}
                           </span>
-                          <span className="text-[10px] text-on-surface-variant font-bold uppercase tracking-wider">{formatPostedAt(app.appliedAt || app.createdAt)}</span>
+                          <span className="text-[10px] text-slate-500 font-medium">{formatPostedAt(app.appliedAt || app.createdAt)}</span>
                         </div>
                       </div>
                     )
@@ -165,28 +189,28 @@ export function Dashboard() {
             </section>
 
             {/* Latest Job Openings Grid */}
-            <section className="space-y-6">
-              <div className="flex justify-between items-center px-2">
-                <h3 className="font-bold text-xl text-white">Latest Job Openings</h3>
+            <section className="space-y-4 mt-8">
+              <div className="flex justify-between items-center px-1">
+                <h3 className="font-bold text-xl text-white tracking-wide">Latest Job Openings</h3>
               </div>
               {recommendedJobs.length === 0 ? (
-                <div className="glass-card p-8 rounded-3xl border border-white/5 text-center">
-                  <p className="text-on-surface-variant font-medium">No jobs available right now.</p>
+                <div className="glass-card-pro p-8 text-center">
+                  <p className="text-slate-400 font-medium text-sm">No jobs available right now.</p>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {recommendedJobs.map(job => (
-                    <div key={job._id} className="glass-card p-6 rounded-3xl border border-white/5 hover:border-neon-mint/50 transition-all group flex flex-col justify-between shadow-lg relative overflow-hidden">
-                      <div className="absolute inset-0 bg-gradient-to-b from-neon-mint/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div key={job._id} className="glass-card-pro p-5 hover-lift flex flex-col justify-between group overflow-hidden relative">
+                      <div className="absolute -top-10 -right-10 w-32 h-32 bg-amber-500/10 blur-[40px] rounded-full pointer-events-none group-hover:bg-amber-500/20 transition-all"></div>
                       <div className="relative z-10">
-                        <div className="w-12 h-12 bg-surface-container border border-white/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-neon-mint/20 group-hover:border-neon-mint/30 group-hover:shadow-glow-mint transition-all">
-                          <Briefcase className="text-white/40 group-hover:text-neon-mint transition-colors" size={20} />
+                        <div className="w-10 h-10 bg-white/5 border border-white/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-emerald-500/10 group-hover:border-emerald-500/20 transition-all">
+                          <Briefcase className="text-slate-400 group-hover:text-emerald-400 transition-colors" size={18} />
                         </div>
-                        <h4 className="font-bold text-white text-lg mb-2 line-clamp-1 group-hover:text-neon-mint transition-colors">{job.title}</h4>
-                        <p className="text-sm text-on-surface-variant font-medium mb-6 line-clamp-1">{job.company} • {job.location}</p>
+                        <h4 className="font-bold text-white text-base mb-1 line-clamp-1 group-hover:text-emerald-300 transition-colors">{job.title}</h4>
+                        <p className="text-xs text-slate-400 font-medium mb-5 line-clamp-1">{job.company} • {job.location}</p>
                       </div>
-                      <Link to={`/jobs/${job._id}`} className="relative z-10">
-                        <button className="w-full py-3 bg-surface-container border border-white/10 text-white text-xs font-bold uppercase tracking-wider rounded-xl group-hover:bg-neon-mint group-hover:border-neon-mint/50 group-hover:text-black group-hover:shadow-glow-mint transition-all">
+                      <Link to={`/jobs/${job._id}`} className="relative z-10 mt-auto">
+                        <button className="w-full py-2.5 bg-white/5 border border-white/10 text-white text-[11px] font-bold uppercase tracking-wider rounded-lg group-hover:bg-emerald-500 group-hover:border-emerald-500 group-hover:shadow-none transition-all">
                           View Job
                         </button>
                       </Link>
@@ -199,41 +223,40 @@ export function Dashboard() {
 
           {/* Right Panel: Profile Strength & AI Insight mockup */}
           <div className="lg:col-span-1 space-y-6">
-            <div className="glass-card p-8 rounded-3xl border border-neon-purple/30 shadow-glow-purple relative overflow-hidden group">
-              <div className="absolute inset-0 bg-gradient-to-br from-neon-purple/10 to-transparent"></div>
-              <div className="flex justify-between items-center mb-6 relative z-10">
+            <div className="glass-card-pro p-6 md:p-8 hover-lift">
+              <div className="flex justify-between items-center mb-6">
                 <h3 className="font-bold text-white text-lg">Profile Strength</h3>
-                <span className="text-neon-purple font-bold text-2xl drop-shadow-[0_0_5px_rgba(188,19,254,0.5)]">{completion}%</span>
+                <span className="text-amber-400 font-black text-xl">{completion}%</span>
               </div>
-              <div className="w-full h-3 bg-surface-container rounded-full mb-6 overflow-hidden relative z-10 border border-white/10">
-                <div className="h-full bg-gradient-to-r from-neon-purple to-neon-cyan shadow-[0_0_10px_rgba(188,19,254,0.8)]" style={{ width: `${completion}%` }}></div>
+              <div className="w-full h-2 bg-black/40 rounded-full mb-6 overflow-hidden border border-white/5">
+                <div className="h-full bg-gradient-to-r from-amber-500 to-emerald-500 transition-all duration-1000 ease-out shadow-[0_0_10px_rgba(16,185,129,0.5)]" style={{ width: `${completion}%` }}></div>
               </div>
-              <p className="text-sm text-on-surface-variant font-medium mb-8 relative z-10 leading-relaxed">
+              <p className="text-xs text-slate-400 font-medium mb-6 leading-relaxed">
                 {completion < 100 ? 'Complete your profile to stand out to companies and improve AI matching.' : 'Your profile is fully complete! You are ready for top matches.'}
               </p>
-              <Link to="/candidate/profile" className="block relative z-10">
-                <button className="w-full bg-white/5 border border-white/10 hover:bg-white/10 text-white font-bold text-xs uppercase tracking-wider py-3 rounded-xl transition-all">
+              <Link to="/candidate/profile" className="block">
+                <button className="btn-pro-outline w-full font-bold text-[11px] uppercase tracking-wider py-3 rounded-lg">
                   Update Profile
                 </button>
               </Link>
             </div>
             
             {/* Contextual Widget: Activity */}
-            <div className="glass-card p-8 rounded-3xl border border-white/5 shadow-lg">
-              <h3 className="font-bold text-white mb-6 flex items-center gap-3 text-lg">
-                <div className="w-8 h-8 rounded-lg bg-neon-cyan/20 border border-neon-cyan/30 flex items-center justify-center shadow-glow-cyan">
-                  <Bell className="text-neon-cyan" size={16} />
+            <div className="glass-card-pro p-6 md:p-8 hover-lift">
+              <h3 className="font-bold text-white mb-6 flex items-center gap-2 text-lg">
+                <div className="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30">
+                  <Bell className="text-emerald-400" size={14} />
                 </div>
                 Recent Activity
               </h3>
-              <div className="space-y-6 relative before:absolute before:inset-0 before:ml-[11px] before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-[2px] before:bg-gradient-to-b before:from-neon-cyan/50 before:to-transparent">
-                <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
-                  <div className="flex items-center justify-center w-6 h-6 rounded-full border-2 border-neon-cyan bg-surface text-neon-cyan shadow-glow-cyan z-10 md:absolute md:left-1/2 md:-translate-x-1/2">
-                    <div className="w-2 h-2 bg-neon-cyan rounded-full animate-pulse"></div>
+              <div className="space-y-6 relative before:absolute before:inset-0 before:ml-[11px] before:-translate-x-px before:h-full before:w-[1px] before:bg-white/10">
+                <div className="relative flex items-center gap-4 group">
+                  <div className="flex items-center justify-center w-6 h-6 rounded-full border border-white/10 bg-[#0f172a] text-emerald-400 z-10">
+                    <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]"></div>
                   </div>
-                  <div className="w-[calc(100%-3rem)] md:w-[calc(50%-2rem)] p-4 rounded-2xl border border-white/10 bg-surface-container/50 hover:bg-white/5 transition-colors">
-                    <p className="font-bold text-white text-sm">Welcome to HireHub!</p>
-                    <p className="text-xs text-on-surface-variant font-medium mt-1">Start by completing your profile.</p>
+                  <div className="flex-1 p-3.5 rounded-xl border border-white/[0.05] bg-black/20 hover:bg-black/40 transition-colors">
+                    <p className="font-bold text-white text-xs">Welcome to HireHub!</p>
+                    <p className="text-[11px] text-slate-400 mt-0.5">Start by completing your profile.</p>
                   </div>
                 </div>
               </div>

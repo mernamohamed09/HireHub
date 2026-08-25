@@ -197,8 +197,8 @@ export function Scheduling() {
   return (
     <div className="w-full relative">
       {/* Header */}
-      <header className="glass-panel border-b border-white/10 sticky top-0 z-40 bg-background/80 backdrop-blur-xl flex justify-between items-center h-20 px-8 -mt-8 mx-[-24px] lg:mx-[-32px] w-[calc(100%+48px)] lg:w-[calc(100%+64px)] mb-8">
-        <div className="absolute top-0 right-10 w-48 h-48 bg-neon-purple/10 blur-[100px] rounded-full"></div>
+      <header className="glass-card-pro border-b border-white/5 sticky top-0 z-40 bg-black/40 backdrop-blur-xl flex justify-between items-center h-20 px-8 -mt-8 mx-[-24px] lg:mx-[-32px] w-[calc(100%+48px)] lg:w-[calc(100%+64px)] mb-8">
+        <div className="absolute top-0 right-10 w-48 h-48 bg-emerald-500/10 blur-[100px] rounded-full"></div>
         <div className="flex items-center gap-6 relative z-10">
           <h2 className="font-bold text-3xl text-white">Interview Scheduling</h2>
         </div>
@@ -207,8 +207,8 @@ export function Scheduling() {
       <div className="grid grid-cols-12 gap-8 max-w-7xl mx-auto w-full relative z-10">
         {/* Left Column: Calendar */}
         <div className="col-span-12 lg:col-span-8 space-y-8">
-          <section className="glass-card rounded-2xl border border-white/10 p-8 shadow-lg relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-neon-purple to-neon-cyan"></div>
+          <section className="glass-card-pro rounded-2xl border border-white/5 p-8 shadow-lg relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 to-amber-400"></div>
             <div className="flex justify-between items-center mb-8">
               <div className="flex items-center gap-4">
                 <h3 className="font-bold text-2xl text-white">{monthNames[month]} {year}</h3>
@@ -223,18 +223,18 @@ export function Scheduling() {
               </div>
               <div className="flex gap-4 text-xs font-bold uppercase tracking-wider">
                 <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-neon-purple shadow-glow-purple inline-block"></span>
-                  <span className="text-on-surface-variant">Scheduled</span>
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(16,185,129,0.8)] inline-block"></span>
+                  <span className="text-slate-400">Scheduled</span>
                 </div>
               </div>
             </div>
 
-            <div className="grid grid-cols-7 gap-[1px] bg-white/10 border border-white/10 rounded-xl overflow-hidden shadow-inner">
+            <div className="grid grid-cols-7 gap-[1px] bg-white/5 border border-white/5 rounded-xl overflow-hidden shadow-inner">
               {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(d => (
-                <div key={d} className="bg-surface-container/80 py-3 text-center text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">{d}</div>
+                <div key={d} className="bg-black/40 py-3 text-center text-[10px] font-bold text-slate-400 uppercase tracking-wider">{d}</div>
               ))}
               {Array.from({ length: startOffset }).map((_, i) => (
-                <div key={`empty-${i}`} className="bg-surface-container/30 h-24 sm:h-32 p-2 backdrop-blur-sm" />
+                <div key={`empty-${i}`} className="bg-black/20 h-24 sm:h-32 p-2 backdrop-blur-sm" />
               ))}
               {Array.from({ length: daysInMonth }, (_, i) => i + 1).map(day => {
                 const dayInterviews = getInterviewsForDay(day);
@@ -244,13 +244,13 @@ export function Scheduling() {
                   <div
                     key={day}
                     onClick={() => setSelectedDay(day)}
-                    className={`bg-surface-container/50 h-24 sm:h-32 p-2 transition-all hover:bg-white/5 cursor-pointer relative ${isSelected ? 'ring-2 ring-inset ring-neon-purple bg-neon-purple/5' : ''}`}
+                    className={`bg-black/20 h-24 sm:h-32 p-2 transition-all hover:bg-white/5 cursor-pointer relative ${isSelected ? 'ring-2 ring-inset ring-emerald-400 bg-emerald-500/5' : ''}`}
                   >
-                    <span className={`font-bold text-xs inline-flex items-center justify-center ${isToday ? 'bg-gradient-to-br from-neon-purple to-neon-cyan text-white w-7 h-7 rounded-full shadow-[0_0_10px_rgba(0,255,255,0.5)]' : 'text-on-surface-variant'}`}>
+                    <span className={`font-bold text-xs inline-flex items-center justify-center ${isToday ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-bold hover:bg-emerald-500/20 hover:text-white w-7 h-7 rounded-full shadow-[0_0_10px_rgba(16,185,129,0.5)]' : 'text-slate-400'}`}>
                       {day}
                     </span>
                     {dayInterviews.length > 0 && (
-                      <div className="mt-2 p-1.5 bg-neon-cyan/20 border-l-2 border-neon-cyan text-[10px] font-bold text-neon-cyan truncate rounded-r-md hidden sm:block shadow-glow-cyan">
+                      <div className="mt-2 p-1.5 bg-emerald-500/20 border-l-2 border-emerald-400 text-[10px] font-bold text-emerald-400 truncate rounded-r-md hidden sm:block shadow-[0_0_8px_rgba(16,185,129,0.3)]">
                         {dayInterviews.length} Interview{dayInterviews.length > 1 ? 's' : ''}
                       </div>
                     )}
@@ -262,15 +262,15 @@ export function Scheduling() {
 
           {/* Add Interview Form (Only for Company / Recruiters) */}
           {(user?.role === 'company' || user?.role === 'admin') && (
-            <section className="glass-card rounded-2xl border border-white/10 p-8 shadow-lg relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-neon-cyan/5 blur-[50px] rounded-full pointer-events-none"></div>
+            <section className="glass-card-pro rounded-2xl border border-white/5 p-8 shadow-lg relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 blur-[50px] rounded-full pointer-events-none"></div>
               <div className="flex items-center justify-between gap-4 mb-8">
                 <div className="flex items-center gap-4">
-                  {editingId ? <Edit className="text-neon-cyan w-6 h-6" /> : <PlusCircle className="text-neon-purple w-6 h-6" />}
+                  {editingId ? <Edit className="text-amber-400 w-6 h-6" /> : <PlusCircle className="text-emerald-400 w-6 h-6" />}
                   <h3 className="font-bold text-2xl text-white">{editingId ? 'Reschedule Interview' : 'Schedule an Interview'}</h3>
                 </div>
                 {editingId && (
-                  <button type="button" onClick={resetForm} className="text-xs font-bold uppercase tracking-wider text-on-surface-variant hover:text-neon-pink transition-colors">
+                  <button type="button" onClick={resetForm} className="text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-red-400 transition-colors">
                     Cancel edit
                   </button>
                 )}
@@ -278,12 +278,12 @@ export function Scheduling() {
               <form className="space-y-6 relative z-10" onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Select Job</label>
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Select Job</label>
                     <select
                       value={selectedJobId}
                       onChange={(e) => setSelectedJobId(e.target.value)}
                       disabled={!!editingId}
-                      className="w-full bg-surface-container/50 border border-white/10 rounded-xl px-4 py-3 focus:border-neon-purple focus:ring-1 focus:ring-neon-purple outline-none transition-all text-white disabled:opacity-50"
+                      className="w-full bg-black/40 border border-white/5 rounded-xl px-4 py-3 focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400 outline-none transition-all text-white disabled:opacity-50"
                       required
                     >
                       {myJobs.map(job => (
@@ -293,12 +293,12 @@ export function Scheduling() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Select Candidate</label>
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Select Candidate</label>
                     <select
                       value={form.candidateId}
                       onChange={(e) => setForm({ ...form, candidateId: e.target.value })}
                       disabled={!!editingId}
-                      className="w-full bg-surface-container/50 border border-white/10 rounded-xl px-4 py-3 focus:border-neon-purple focus:ring-1 focus:ring-neon-purple outline-none transition-all text-white disabled:opacity-50"
+                      className="w-full bg-black/40 border border-white/5 rounded-xl px-4 py-3 focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400 outline-none transition-all text-white disabled:opacity-50"
                       required
                     >
                       {applicants.map(app => (
@@ -311,32 +311,32 @@ export function Scheduling() {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div>
-                    <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Date</label>
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Date</label>
                     <input 
                       type="date"
                       value={form.date} 
                       onChange={(e) => setForm({ ...form, date: e.target.value })}
-                      className="w-full bg-surface-container/50 border border-white/10 rounded-xl px-4 py-3 focus:border-neon-purple focus:ring-1 focus:ring-neon-purple outline-none transition-all text-white"
+                      className="w-full bg-black/40 border border-white/5 rounded-xl px-4 py-3 focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400 outline-none transition-all text-white"
                       required
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Start Time</label>
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Start Time</label>
                     <input 
                       type="time" 
                       value={form.startTime} 
                       onChange={(e) => setForm({ ...form, startTime: e.target.value })}
-                      className="w-full bg-surface-container/50 border border-white/10 rounded-xl px-4 py-3 focus:border-neon-purple focus:ring-1 focus:ring-neon-purple outline-none transition-all text-white"
+                      className="w-full bg-black/40 border border-white/5 rounded-xl px-4 py-3 focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400 outline-none transition-all text-white"
                       required
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">End Time</label>
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">End Time</label>
                     <input 
                       type="time" 
                       value={form.endTime} 
                       onChange={(e) => setForm({ ...form, endTime: e.target.value })}
-                      className="w-full bg-surface-container/50 border border-white/10 rounded-xl px-4 py-3 focus:border-neon-purple focus:ring-1 focus:ring-neon-purple outline-none transition-all text-white"
+                      className="w-full bg-black/40 border border-white/5 rounded-xl px-4 py-3 focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400 outline-none transition-all text-white"
                       required
                     />
                   </div>
@@ -344,11 +344,11 @@ export function Scheduling() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Interview Type</label>
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Interview Type</label>
                     <select 
                       value={form.type} 
                       onChange={(e) => setForm({ ...form, type: e.target.value })}
-                      className="w-full bg-surface-container/50 border border-white/10 rounded-xl px-4 py-3 focus:border-neon-purple focus:ring-1 focus:ring-neon-purple outline-none transition-all text-white"
+                      className="w-full bg-black/40 border border-white/5 rounded-xl px-4 py-3 focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400 outline-none transition-all text-white"
                     >
                       <option value="video" className="bg-background">Video Call</option>
                       <option value="phone" className="bg-background">Phone Call</option>
@@ -356,24 +356,24 @@ export function Scheduling() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Meeting Link (e.g., Google Meet)</label>
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Meeting Link (e.g., Google Meet)</label>
                     <input 
                       type="url" 
                       value={form.meetingLink} 
                       onChange={(e) => setForm({ ...form, meetingLink: e.target.value })}
                       placeholder="https://meet.google.com/..."
-                      className="w-full bg-surface-container/50 border border-white/10 rounded-xl px-4 py-3 focus:border-neon-purple focus:ring-1 focus:ring-neon-purple outline-none transition-all text-white placeholder-white/30"
+                      className="w-full bg-black/40 border border-white/5 rounded-xl px-4 py-3 focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400 outline-none transition-all text-white placeholder-white/30"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Additional Notes</label>
+                  <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Additional Notes</label>
                   <textarea 
                     value={form.notes} 
                     onChange={(e) => setForm({ ...form, notes: e.target.value })}
                     rows={3}
-                    className="w-full bg-surface-container/50 border border-white/10 rounded-xl px-4 py-3 focus:border-neon-purple focus:ring-1 focus:ring-neon-purple outline-none transition-all text-white resize-none"
+                    className="w-full bg-black/40 border border-white/5 rounded-xl px-4 py-3 focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400 outline-none transition-all text-white resize-none"
                     placeholder="Enter details for the candidate..."
                   />
                 </div>
@@ -381,7 +381,7 @@ export function Scheduling() {
                 <button
                   type="submit"
                   disabled={isSubmitting || (!editingId && applicants.length === 0)}
-                  className="w-full bg-gradient-to-r from-neon-purple to-neon-cyan text-white py-4 rounded-xl font-bold text-sm uppercase tracking-wider hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-50 shadow-[0_0_20px_rgba(188,19,254,0.3)] border-none"
+                  className="w-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-bold hover:bg-emerald-500/20 hover:text-white py-4 rounded-xl font-bold text-sm uppercase tracking-wider hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-50 shadow-none border-none"
                 >
                   {isSubmitting ? 'Saving...' : editingId ? 'Save Changes' : 'Schedule Interview'}
                 </button>
@@ -393,15 +393,15 @@ export function Scheduling() {
         {/* Right Column */}
         <div className="col-span-12 lg:col-span-4 space-y-8">
           {/* Upcoming Interviews */}
-          <section className="glass-card rounded-2xl border border-white/10 p-6 shadow-lg relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-neon-cyan/10 blur-[50px] rounded-full pointer-events-none"></div>
+          <section className="glass-card-pro rounded-2xl border border-white/5 p-6 shadow-lg relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 blur-[50px] rounded-full pointer-events-none"></div>
             <h3 className="font-bold text-xl text-white mb-6 relative z-10">Upcoming Interviews</h3>
             {isLoading ? (
               <div className="flex items-center justify-center py-12">
-                <Loader2 size={32} className="animate-spin text-neon-purple" />
+                <Loader2 size={32} className="animate-spin text-emerald-400" />
               </div>
             ) : upcomingInterviews.length === 0 ? (
-              <p className="text-on-surface-variant text-sm font-medium">No upcoming interviews.</p>
+              <p className="text-slate-400 text-sm font-medium">No upcoming interviews.</p>
             ) : (
               <div className="space-y-4 relative z-10">
                 {upcomingInterviews.map(interview => {
@@ -409,42 +409,42 @@ export function Scheduling() {
                   const isToday = interviewDate.toDateString() === new Date().toDateString();
                   const otherPerson = user?.role === 'company' ? interview.candidate : interview.interviewer;
                   return (
-                    <div key={interview._id} className="p-4 bg-surface-container/50 rounded-xl border border-white/5 hover:border-neon-cyan/50 hover:bg-white/5 transition-all group relative overflow-hidden">
-                      <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-neon-purple to-neon-cyan group-hover:shadow-[0_0_10px_rgba(0,255,255,0.8)] transition-all"></div>
+                    <div key={interview._id} className="p-4 bg-black/20 rounded-xl border border-white/5 hover:border-emerald-400/50 hover:bg-white/5 transition-all group relative overflow-hidden">
+                      <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-emerald-500 to-amber-500 group-hover:shadow-[0_0_8px_rgba(16,185,129,0.3)] transition-all"></div>
                       <div className="flex justify-between items-start mb-4">
                         <div className="flex gap-4">
-                          <div className="w-12 h-12 rounded-xl border border-white/10 bg-surface-container text-white flex items-center justify-center font-bold text-lg shrink-0 shadow-inner group-hover:border-neon-cyan/30 transition-colors">
+                          <div className="w-12 h-12 rounded-xl border border-white/5 bg-black/40 text-white flex items-center justify-center font-bold text-lg shrink-0 shadow-inner group-hover:border-emerald-400/30 transition-colors">
                             {otherPerson?.name?.[0]?.toUpperCase() || '?'}
                           </div>
                           <div>
-                            <h4 className="font-bold text-sm text-white group-hover:text-neon-cyan transition-colors">{otherPerson?.name || 'Unknown'}</h4>
-                            <p className="text-xs text-on-surface-variant mt-1">{interview.job?.title || 'Interview'}</p>
+                            <h4 className="font-bold text-sm text-white group-hover:text-emerald-400 transition-colors">{otherPerson?.name || 'Unknown'}</h4>
+                            <p className="text-xs text-slate-400 mt-1">{interview.job?.title || 'Interview'}</p>
                           </div>
                         </div>
-                        {isToday && <span className="bg-neon-mint/20 text-neon-mint text-[10px] px-2.5 py-1 rounded-full font-bold uppercase tracking-wider border border-neon-mint/30 shadow-glow-mint whitespace-nowrap">Today</span>}
+                        {isToday && <span className="bg-emerald-500/20 text-emerald-400 text-[10px] px-2.5 py-1 rounded-full font-bold uppercase tracking-wider border border-emerald-500/30 shadow-[0_0_8px_rgba(16,185,129,0.3)] whitespace-nowrap">Today</span>}
                       </div>
-                      <div className="flex items-center gap-4 text-xs font-medium text-on-surface-variant mb-4 bg-background/50 p-2.5 rounded-lg border border-white/5">
+                      <div className="flex items-center gap-4 text-xs font-medium text-slate-400 mb-4 bg-black/40 p-2.5 rounded-lg border border-white/5">
                         <div className="flex items-center gap-2">
-                          <Calendar size={14} className="text-neon-purple" />
+                          <Calendar size={14} className="text-emerald-400" />
                           {interviewDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                         </div>
                         <div className="flex items-center gap-2">
-                          <Clock size={14} className="text-neon-cyan" />
+                          <Clock size={14} className="text-amber-400" />
                           {interview.startTime} - {interview.endTime}
                         </div>
                       </div>
                       {interview.meetingLink && (
                         <a href={interview.meetingLink} target="_blank" rel="noopener noreferrer"
-                          className="w-full bg-neon-cyan/10 border border-neon-cyan/30 text-neon-cyan py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider hover:bg-neon-cyan hover:text-background hover:shadow-glow-cyan transition-all flex items-center justify-center gap-2 mb-3">
+                          className="w-full bg-amber-500/10 border border-amber-500/30 text-amber-400 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider hover:bg-amber-500 hover:text-black hover:shadow-[0_0_8px_rgba(245,158,11,0.5)] transition-all flex items-center justify-center gap-2 mb-3">
                           <Video size={16} />
                           Join Meeting
                         </a>
                       )}
                       <div className="flex gap-4 mt-2">
                         {(user?.role === 'company' || user?.role === 'admin') && (
-                          <button onClick={() => startEdit(interview)} className="flex-1 text-neon-purple text-xs font-bold uppercase tracking-wider hover:text-white transition-colors text-left">Reschedule</button>
+                          <button onClick={() => startEdit(interview)} className="flex-1 text-emerald-400 text-xs font-bold uppercase tracking-wider hover:text-white transition-colors text-left">Reschedule</button>
                         )}
-                        <button onClick={() => handleCancel(interview._id)} className="flex-1 text-neon-pink text-xs font-bold uppercase tracking-wider hover:text-white transition-colors text-right">Cancel</button>
+                        <button onClick={() => handleCancel(interview._id)} className="flex-1 text-red-500 text-xs font-bold uppercase tracking-wider hover:text-white transition-colors text-right">Cancel</button>
                       </div>
                     </div>
                   );
@@ -455,15 +455,15 @@ export function Scheduling() {
 
           {/* Stats */}
           <div className="grid grid-cols-2 gap-4">
-            <div className="p-6 glass-card rounded-2xl border border-white/10 hover:border-neon-purple/50 transition-all hover:bg-white/5 relative overflow-hidden group">
-              <div className="absolute top-0 right-0 w-24 h-24 bg-neon-purple/10 blur-[30px] rounded-full pointer-events-none group-hover:bg-neon-purple/20 transition-all"></div>
-              <p className="text-[10px] text-on-surface-variant uppercase font-bold tracking-wider mb-2 relative z-10">Scheduled</p>
-              <p className="font-bold text-4xl text-neon-purple relative z-10 drop-shadow-[0_0_8px_rgba(188,19,254,0.5)]">{totalScheduled}</p>
+            <div className="p-6 glass-card-pro rounded-2xl border border-white/5 hover:border-emerald-400/50 transition-all hover:bg-white/5 relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/10 blur-[30px] rounded-full pointer-events-none group-hover:bg-emerald-500/20 transition-all"></div>
+              <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-2 relative z-10">Scheduled</p>
+              <p className="font-bold text-4xl text-emerald-400 relative z-10 drop-shadow-[0_0_8px_rgba(16,185,129,0.5)]">{totalScheduled}</p>
             </div>
-            <div className="p-6 glass-card rounded-2xl border border-white/10 hover:border-neon-cyan/50 transition-all hover:bg-white/5 relative overflow-hidden group">
-              <div className="absolute top-0 right-0 w-24 h-24 bg-neon-cyan/10 blur-[30px] rounded-full pointer-events-none group-hover:bg-neon-cyan/20 transition-all"></div>
-              <p className="text-[10px] text-on-surface-variant uppercase font-bold tracking-wider mb-2 relative z-10">Completed</p>
-              <p className="font-bold text-4xl text-neon-cyan relative z-10 drop-shadow-[0_0_8px_rgba(0,255,255,0.5)]">{totalCompleted}</p>
+            <div className="p-6 glass-card-pro rounded-2xl border border-white/5 hover:border-amber-400/50 transition-all hover:bg-white/5 relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-amber-500/10 blur-[30px] rounded-full pointer-events-none group-hover:bg-amber-500/20 transition-all"></div>
+              <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-2 relative z-10">Completed</p>
+              <p className="font-bold text-4xl text-amber-400 relative z-10 drop-shadow-[0_0_8px_rgba(245,158,11,0.5)]">{totalCompleted}</p>
             </div>
           </div>
         </div>
