@@ -81,18 +81,11 @@ export function Sidebar({ links = [], user }) {
 
       {/* Logo */}
       <div className={cn("flex items-center mb-10 relative z-10", isCollapsed ? "justify-center" : "gap-4")}>
-        <div className="w-12 h-12 rounded-2xl border border-white/10 flex-shrink-0 flex items-center justify-center bg-gradient-to-br from-white/10 to-transparent shadow-[0_0_20px_rgba(16,185,129,0.15)] relative group overflow-hidden">
-          <div className="absolute inset-0 bg-emerald-400/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-          <span className="font-bold text-transparent bg-clip-text bg-gradient-to-br from-emerald-400 to-amber-200 text-lg relative z-10">HH</span>
-        </div>
-        {!isCollapsed && (
-          <div className="flex flex-col">
-            <span className="font-h3 text-2xl font-bold tracking-tight text-white leading-none">
-              Hire<span className="text-emerald-400 drop-shadow-[0_0_8px_rgba(16,185,129,0.5)]">Hub</span>
-            </span>
-            <span className="text-[10px] text-emerald-400/80 font-bold tracking-widest uppercase mt-1">Executive</span>
-          </div>
-        )}
+        <img 
+          src="/Logo.svg" 
+          alt="HireHub Logo" 
+          className={cn("transition-all duration-300", isCollapsed ? "h-10 w-auto" : "h-14 w-auto")} 
+        />
       </div>
 
       {/* Navigation */}

@@ -20,7 +20,9 @@ export function Navbar() {
     <nav className={`fixed w-full z-50 border-b border-white/5 transition-all duration-300 ${location.pathname === '/' ? 'bg-[#0B111A]/80 backdrop-blur-md' : 'navbar-pro'}`}>
       <div className="flex justify-between items-center h-16 px-gutter w-full max-w-container_max_width mx-auto">
         <div className="flex items-center gap-xl">
-          <Link to="/" className="font-h3 text-h3 font-bold text-on-surface">HireHub</Link>
+          <Link to="/" className="flex items-center">
+            <img src="/Logo.svg" alt="HireHub Logo" className="h-10 md:h-14 w-auto" />
+          </Link>
           <nav className="hidden md:flex items-center gap-lg">
             <Link to="/" className="nav-link-pro hover:text-white transition-colors">
               Home

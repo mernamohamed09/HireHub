@@ -5,7 +5,7 @@ export function Footer() {
     <footer className="bg-black/10 border-t border-white/5 py-xl px-gutter mt-auto backdrop-blur-sm">
       <div className="max-w-container_max_width mx-auto grid grid-cols-1 md:grid-cols-4 gap-xl">
         <div className="space-y-md">
-          <h4 className="font-h3 text-on-surface font-bold">HireHub</h4>
+          <img src="/Logo.svg" alt="HireHub Logo" className="h-10 md:h-12 w-auto mb-4" />
           <p className="text-body text-on-surface-variant max-w-xs">
             Egypt's Tech Recruitment Command Center. Connecting top talent with leading tech companies.
           </p>

@@ -130,11 +130,8 @@ export function LoginRegister() {
 
       {/* Top Navigation */}
       <nav className="absolute top-0 left-0 w-full p-8 flex justify-between items-center z-50 pointer-events-none">
-        <div className="flex items-center gap-3 ml-4">
-          <div className="w-10 h-10 bg-gradient-to-br from-amber-500 to-emerald-500 rounded-xl flex items-center justify-center border border-white/10 shadow-[0_0_20px_rgba(16,185,129,0.3)]">
-            <Orbit className="text-white w-6 h-6" />
-          </div>
-          <span className="font-bold text-2xl text-white tracking-tight drop-shadow-md">HireHub</span>
+        <div className="absolute top-12 left-12 z-20 flex items-center">
+          <img src="/Logo.svg" alt="HireHub Logo" className="h-14 md:h-16 w-auto" />
         </div>
       </nav>
 
