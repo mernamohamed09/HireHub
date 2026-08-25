@@ -80,11 +80,11 @@ export function Sidebar({ links = [], user }) {
       </button>
 
       {/* Logo */}
-      <div className={cn("flex items-center mb-10 relative z-10", isCollapsed ? "justify-center" : "gap-4")}>
+      <div className={cn("flex items-center mb-10 relative z-10", isCollapsed ? "justify-center" : "")}>
         <img 
           src="/Logo.svg" 
           alt="HireHub Logo" 
-          className={cn("transition-all duration-300", isCollapsed ? "h-10 w-auto" : "h-14 w-auto")} 
+          className={cn("transition-all duration-300 scale-125 -ml-2 -mr-6 md:-mr-8", isCollapsed ? "h-10 w-auto" : "h-14 w-auto")} 
         />
         {!isCollapsed && (
           <div className="flex flex-col">

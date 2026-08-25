@@ -5,8 +5,8 @@ export function Footer() {
     <footer className="bg-black/10 border-t border-white/5 py-xl px-gutter mt-auto backdrop-blur-sm">
       <div className="max-w-container_max_width mx-auto grid grid-cols-1 md:grid-cols-4 gap-xl">
         <div className="space-y-md">
-          <div className="flex items-center gap-2 mb-4">
-            <img src="/Logo.svg" alt="HireHub Logo" className="h-10 md:h-12 w-auto" />
+          <div className="flex items-center mb-4">
+            <img src="/Logo.svg" alt="HireHub Logo" className="h-10 md:h-12 w-auto -ml-2 -mr-6 md:-mr-8 scale-125" />
             <span className="font-h3 text-2xl font-bold text-white">HireHub</span>
           </div>
           <p className="text-body text-on-surface-variant max-w-xs">
