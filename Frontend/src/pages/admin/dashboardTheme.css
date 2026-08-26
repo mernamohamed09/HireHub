@@ -1,0 +1,34 @@
+.dashboardTheme {
+  --hh-bg-card: #121a2c;
+  --hh-bg-card-alt: #0f1626;
+  --hh-bg-hover: #182240;
+  --hh-bg-input: #0c1322;
+  --hh-bg-page: #0a0e1a;
+
+  --hh-border: #1e2940;
+  --hh-border-soft: #17203380;
+
+  --hh-accent: #38bdf8;
+  --hh-accent-strong: #22d3ee;
+  --hh-accent-soft: rgba(56, 189, 248, 0.12);
+  --hh-accent-soft-border: rgba(56, 189, 248, 0.28);
+
+  --hh-danger: #fb7185;
+  --hh-danger-strong: #f43f5e;
+  --hh-danger-soft: rgba(251, 113, 133, 0.12);
+  --hh-danger-soft-border: rgba(251, 113, 133, 0.3);
+  --hh-success: #34d399;
+  --hh-success-soft: rgba(52, 211, 153, 0.12);
+  --hh-warning: #fbbf24;
+
+  --hh-text-primary: #e8edf6;
+  --hh-text-secondary: #9aa6c0;
+  --hh-text-muted: #5c6883;
+
+  --hh-radius-lg: 18px;
+  --hh-radius-md: 12px;
+  --hh-radius-sm: 8px;
+  --hh-radius-pill: 999px;
+
+  --hh-shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.02) inset;
+}
