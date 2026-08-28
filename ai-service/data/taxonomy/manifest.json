@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "name": "core_en",
+      "path": "core_en.json",
+      "priority": 0,
+      "mode": "base",
+      "required": true
+    },
+    {
+      "name": "esco_en",
+      "path": "generated/esco_en.json",
+      "priority": 10,
+      "mode": "base",
+      "required": false
+    },
+    {
+      "name": "curated_tech",
+      "path": "curated_tech_extensions.json",
+      "priority": 50,
+      "mode": "extend",
+      "required": true
+    },
+    {
+      "name": "egyptian_overrides_en",
+      "path": "eg_local_overrides_en.json",
+      "priority": 100,
+      "mode": "override",
+      "required": true
+    }
+  ]
+}

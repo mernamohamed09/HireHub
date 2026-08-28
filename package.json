@@ -1,0 +1,20 @@
+{
+  "name": "hirehub",
+  "version": "2.4.0",
+  "private": true,
+  "description": "AI-powered recruitment platform with explainable ATS scoring, portfolio auto-fill, and real-time communication.",
+  "scripts": {
+    "install:all": "npm --prefix Backend ci && npm --prefix Frontend ci",
+    "dev:frontend": "npm --prefix Frontend run dev",
+    "dev:backend": "npm --prefix Backend run dev",
+    "dev:ai": "cd ai-service && python -m uvicorn app:app --reload --host 127.0.0.1 --port 8008",
+    "start:backend": "npm --prefix Backend start",
+    "start:ai": "cd ai-service && python -m uvicorn app:app --host 0.0.0.0 --port 8008",
+    "build": "npm --prefix Frontend run build"
+  },
+  "engines": {
+    "node": ">=20",
+    "npm": ">=10",
+    "python": ">=3.10"
+  }
+}
